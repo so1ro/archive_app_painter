@@ -43,10 +43,10 @@ const theme = extendTheme({
             // }
         }),
     },
-    fonts: {
-        body: `"RocknRollOne-Regular"`,
-        heading: `"RocknRollOne-Regular"`,
-    },
+    // fonts: {
+    //     body: `"RocknRollOne-Regular"`,
+    //     heading: `"RocknRollOne-Regular"`,
+    // },
     fontWeights: {
         normal: 400,
         medium: 600,
