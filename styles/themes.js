@@ -27,6 +27,7 @@ const theme = extendTheme({
                 padding: 0,
                 margin: 0,
                 overflowY: "scroll",
+                fontFamily: "'Merriweather', 'Times New Roman', 'YuMincho', 'Hiragino Mincho ProN', 'Yu Mincho', 'MS PMincho', serif",
             },
             "a": {
                 color: "inherit",
@@ -43,14 +44,16 @@ const theme = extendTheme({
             // }
         }),
     },
-    // fonts: {
-    //     body: `"RocknRollOne-Regular"`,
-    //     heading: `"RocknRollOne-Regular"`,
-    // },
     fontWeights: {
+        hairline: 100,
+        thin: 200,
+        light: 300,
         normal: 400,
-        medium: 600,
-        bold: 700
+        medium: 500,
+        semibold: 600,
+        bold: 700,
+        extrabold: 800,
+        black: 900,
     },
 });
 

@@ -1666,6 +1666,11 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
+"@fontsource/merriweather@^4.5.1":
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/merriweather/-/merriweather-4.5.1.tgz#f082e0e1ea92b39f16191ce05834123cdbfce741"
+  integrity sha512-6tkVHWgoq9wOZXLBOdyK5l/iWDi5Wsq4CL6yJNTUyTr/652j4UjlhIt2WLJAW94Mx3ObHNCA6Mv+CeoKKVmlig==
+
 "@graphql-typed-document-node/core@^3.0.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.0.tgz#0eee6373e11418bfe0b5638f654df7a4ca6a3950"

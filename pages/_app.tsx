@@ -15,6 +15,9 @@ import SimpleReactLightbox from 'simple-react-lightbox-pro'
 import "focus-visible/dist/focus-visible"
 
 // import '@/styles/globals.css'
+import "@fontsource/merriweather/400.css"
+import "@fontsource/merriweather/700.css"
+import "@fontsource/merriweather/900.css"
 import theme from '@/styles/themes'
 
 function App({ Component, pageProps }: AppProps) {
