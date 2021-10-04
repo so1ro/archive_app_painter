@@ -1,32 +1,36 @@
-import NextLink from 'next/link';
-import { TwitterIcon, InstagramIcon, MailIcon } from '@/styles/icons';
-import { useColorMode } from "@chakra-ui/react"
-import { MotionIconStack } from '@/components/Chakra_Framer/element';
-import { nav_link_variants } from '@/components/Chakra_Framer/variants';
+import NextLink from 'next/link'
+import { TwitterIcon, InstagramIcon, MailIcon } from '@/styles/icons'
+import { useColorMode, useColorModeValue } from "@chakra-ui/react"
+import { MotionIconStack } from '@/components/Chakra_Framer/element'
+import { nav_link_variants } from '@/components/Chakra_Framer/variants'
+import { highlight_color } from '@/styles/colorModeValue'
 
-export default function SnsIcons({ animation, type, onHandler }: { animation: boolean, type: string, onHandler: () => void | null }) {
+export default function SnsIcons({ animation, type, onHandler }:
+    { animation: boolean, type: string, onHandler: () => void | null }) {
 
     const { colorMode, toggleColorMode } = useColorMode()
     const colorHnadler = (mode) => mode === 'light' ? "#000" : "#fff"
+    const iconSize = type === 'nav' ? 5 : 6
+    const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
     return (
         <MotionIconStack
             direction={["row"]}
-            spacing={8}
-            pt={type === 'NavModal' ? 8 : 2}
+            spacing={type === 'nav' ? 7 : 8}
+            pt={type === 'nav' ? 0 : (type === 'NavModal' ? 8 : 2)}
             initial={animation ? "hidden" : ''}
             animate={animation ? "visible" : ''}
             variants={nav_link_variants}
         >
             <NextLink href={'/twitter'} passHref>
-                <TwitterIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} cursor='pointer' />
+                <TwitterIcon width={iconSize} height={iconSize} color={colorHnadler(colorMode)} onClick={onHandler} cursor='pointer' _hover={{ color: highLightColor }} />
             </NextLink>
             <NextLink href={'/instagram'} passHref>
-                <InstagramIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} cursor='pointer' />
+                <InstagramIcon width={iconSize} height={iconSize} color={colorHnadler(colorMode)} onClick={onHandler} cursor='pointer' _hover={{ color: highLightColor }} />
             </NextLink>
             <NextLink href={'/contact'} passHref>
-                <MailIcon width={6} height={6} color={colorHnadler(colorMode)} onClick={onHandler} cursor='pointer' />
+                <MailIcon width={iconSize} height={iconSize} color={colorHnadler(colorMode)} onClick={onHandler} cursor='pointer' _hover={{ color: highLightColor }} />
             </NextLink>
         </MotionIconStack>
-    );
+    )
 }

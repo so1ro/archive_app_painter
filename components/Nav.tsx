@@ -10,7 +10,8 @@ import UserMenu from '@/components/UserMenu';
 import UserLoginSignup from '@/components/UserLoginSignup';
 import ColorModeButton from '@/components/ColorModeButton';
 import NextLink from 'next/link';
-
+import Language from '@/components/Language'
+import SnsIcons from './SnsIcons';
 
 export default function Nav() {
     // Hooks
@@ -46,7 +47,9 @@ export default function Nav() {
             </Stack>
             <Flex alignItems="center">
                 <NavLinks />
-                <Stack spacing={[2, 2, 4]} isInline align="center" ml={6}>
+                <Stack spacing={[2, 2, 4]} isInline align="center" ml={10}>
+                    <Language />
+                    <SnsIcons animation={false} type={'nav'} onHandler={null} />
                     {isLoading ? '' : (user ? <UserMenu /> : <UserLoginSignup />)}
                     <ColorModeButton />
                 </Stack>
