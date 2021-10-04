@@ -5,9 +5,10 @@
 
 // All Archive
 export const limitSkipNum = 30
-export const maxImportContent = 5500
+export const maxImportContent = 1000
 // Contentful.ts の foreignRegion に 検索項目 として、下記反映すること
 // type.d.tsに Type definition として、下記反映すること
+
 export const query_allArchives =
   `{
     archiveVideosCollection ( order : publishDate_DESC, limit : ${maxImportContent} ) {
@@ -175,3 +176,49 @@ export const query_instagram_image_official = `{
     }
   }
 }`
+
+// ---------------------- for painter -------------------------- //
+export const query_allArchives2 =
+  `{
+    archive2Collection {
+      items {
+        sys{
+          id
+        }
+        archiveNumber
+        title
+        thumbnail {
+          url(transform: { resizeStrategy: FILL,  quality: 90,format: PNG })
+        }
+        image{
+          url(
+            transform: {
+              quality: 50
+              format: JPG
+            }
+          )
+        }
+        youtubeId
+        vimeoId
+        timestamp
+        publishDate
+        color
+        season
+        species
+        createdYear
+        size
+        learningVideoId
+        learningVideoTimestamp
+      }
+    }
+  }`
+
+export const query_storageUrl =
+  `{
+    storageUrl(id: "7khO83ZzLJXqWwts7X6aTB") {
+      sys {
+        id
+      }
+      path
+    }
+  }`

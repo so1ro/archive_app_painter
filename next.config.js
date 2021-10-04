@@ -5,6 +5,10 @@ const withPWA = require('next-pwa')
 //     images: {
 //         domains: ['images.ctfassets.net', 'pbs.twimg.com', 'abs.twimg.com', 'i.ytimg.com'],
 //     },
+//      i18n: {
+//          locales: ['en', 'ja'],
+//          defaultLocale: 'en',
+//      },
 //     pwa: {
 //         dest: 'public'
 //     },
@@ -14,6 +18,10 @@ const withPWA = require('next-pwa')
 module.exports = {
     images: {
         domains: ['images.ctfassets.net', 'pbs.twimg.com', 'abs.twimg.com', 'i.ytimg.com'],
+    },
+    i18n: {
+        locales: ['en', 'ja'],
+        defaultLocale: 'en',
     },
 }
 
