@@ -10,6 +10,15 @@ export const nav_link_variants = {
 }
 
 // Hero
+export const hero_video_variants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { duration: 2 }
+    }
+}
+
+
 export const hero_archive_link_variants = {
     hidden: { opacity: 0, y: 30, },
     visible: {

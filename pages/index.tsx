@@ -26,14 +26,10 @@ export default function Home(
 
   return (
     <>
-      <Hero todayImgPair={todayImgPair} />
-      <PageShell customPT={{ base: 24, lg: 32 }} customSpacing={null} >
+      <Hero todayImgPair={todayImgPair} introTextAvatar={introTextAvatar} />
+      {/* <PageShell customPT={{ base: 24, lg: 32 }} customSpacing={null} >
         <TopIntro introTextAvatar={introTextAvatar} />
-      </PageShell>
-      {/* {user && <div> Welcome {user.name}! <a href="/api/auth/logout">Logout</a> </div>}
-      {isLoading && <div>Loading...</div>}
-      {error && <div>{error.message}</div>}
-      {!user && <div><a href="/api/auth/login">Login</a></div>} */}
+      </PageShell> */}
     </>
   )
 }
