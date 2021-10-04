@@ -23,7 +23,6 @@ export default function Layout({ children }: { children: ReactNode }) {
                 <meta property="og:title" content={currentHeadData.title} key="title" />
                 {/* <meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no' /> */}
                 <meta name="viewport" content="initial-scale=1.0, width=device-width, viewport-fit=cover" />
-                <link rel="preload" href="/fonts/RocknRollOne-Regular.woff2" as="font" crossOrigin="" />
             </Head>
             <Flex flexDirection="column" minH="100vh" bg={useColorModeValue(bg_color.l, bg_color.d)}>
                 <Nav />
