@@ -160,17 +160,17 @@ const upsertOnePayRecord = async (event) => {
 }
 
 //// Send Favorite Video Id record to Auth0
-const upsertFavoriteVideo = async (auth0_UUID, favoriteVideo) => {
+const upsertFavoriteWork = async (auth0_UUID, favoriteWork) => {
 
     try {
         const auth0Token = await auth0AccessToken()
         const { user_metadata: { User_Detail: { past_charged_fee } } } = await getUserMetadata(auth0_UUID, auth0Token)
-        const metadata = { User_Detail: { past_charged_fee, favorite_video: favoriteVideo } }
+        const metadata = { User_Detail: { past_charged_fee, favorite_work: favoriteWork } }
         const data = await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
         return data
 
     } catch (e) {
-        console.error('Error in upsertFavoriteVideo:', e)
+        console.error('Error in upsertFavoriteWork:', e)
         throw new Error(err)
     }
 }
@@ -183,5 +183,5 @@ export {
     upsertSubscriptionRecord,
     upsertChargeRecord,
     upsertOnePayRecord,
-    upsertFavoriteVideo,
+    upsertFavoriteWork,
 }

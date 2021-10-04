@@ -24,7 +24,7 @@ export default function Archive1({ archive, path }:
 	// Hook
 	const { user } = useUser()
 	const { locale } = useRouter()
-	const [{ favoriteWork }, setFavoriteWork] = useState<{ favoriteWork: string[] }>({ favoriteWork: [] })
+	const { favoriteWork, setFavoriteWork } = useUserMetadata()
 	const toast = useToast()
 
 	// State

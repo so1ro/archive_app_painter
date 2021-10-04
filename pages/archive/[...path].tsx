@@ -17,7 +17,7 @@ import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 
 import Video from '@/components/Video'
-import VideoThumbnail from '@/components/VideoThumbnail'
+import ArchiveThumbnail from '@/components/ArchiveThumbnail'
 import ArchiveDrawer from "@/components/ArchiveDrawer"
 import ArchiveSideNav from '@/components/ArchiveSideNav'
 
@@ -36,15 +36,14 @@ export default function ArchiveRoute({
     pathObj,
     filter,
     totalNumOfArchives }: {
-        filteredDescArchive: AllArchivesInterface[],
-        filteredAscArchive: AllArchivesInterface[],
+        filteredDescArchive: AllArchives2Interface[],
+        filteredAscArchive: AllArchives2Interface[],
         currentPaths: string[],
         breadCrumbPaths: string[],
         pathObj: ArchivePath[],
         filter: string | null,
         totalNumOfArchives: number | null,
     }) {
-    // console.log('filteredDescArchive:', filteredDescArchive)
 
     // Hook
     const { user, error, isLoading } = useUser()
@@ -54,8 +53,8 @@ export default function ArchiveRoute({
         subscription_state,
         One_Pay_Detail,
         error_metadata,
-        favoriteVideo,
-        setFavoriteVideo } = useUserMetadata()
+        favoriteWork,
+        setFavoriteWork } = useUserMetadata()
     const {
         searchKeyword,
         isSeaching,
@@ -76,15 +75,15 @@ export default function ArchiveRoute({
     const toast = useToast()
     useBottomScrollListener(() => {
         // When Searching, not fetch
-        if (checkFavoriteRoute() && (skipNum >= favoriteVideo.length)) return
+        if (checkFavoriteRoute() && (skipNum >= favoriteWork.length)) return
         if (!checkFavoriteRoute() && isSeaching || (skipNum >= totalNumOfArchives) || isVideoMode) return
         fetchContentHandler()
     }, { offset: 300 })
 
     // State
-    const [{ descArchive }, setDescArchive] = useState<{ descArchive: AllArchivesInterface[] | null }>({ descArchive: null })
-    const [{ ascArchive }, setAscArchive] = useState<{ ascArchive: AllArchivesInterface[] | null }>({ ascArchive: null })
-    const [{ favoriteArchive }, setFavoriteArchive] = useState<{ favoriteArchive: AllArchivesInterface[] | null }>({ favoriteArchive: null })
+    const [{ descArchive }, setDescArchive] = useState<{ descArchive: AllArchives2Interface[] | null }>({ descArchive: null })
+    const [{ ascArchive }, setAscArchive] = useState<{ ascArchive: AllArchives2Interface[] | null }>({ ascArchive: null })
+    const [{ favoriteArchive }, setFavoriteArchive] = useState<{ favoriteArchive: AllArchives2Interface[] | null }>({ favoriteArchive: null })
     const [{ skipNum }, setSkipNum] = useState<{ skipNum: number }>({ skipNum: limitSkipNum })
     const [{ isFavoriteArchiveLoading }, setIsFavoriteArchiveLoading] = useState<{ isFavoriteArchiveLoading: boolean }>({ isFavoriteArchiveLoading: false })
 
@@ -124,21 +123,21 @@ export default function ArchiveRoute({
 
     // favorite
     useEffect(() => {
-        if (checkFavoriteRoute() && favoriteVideo.length > 0) {
+        if (checkFavoriteRoute() && favoriteWork.length > 0) {
             setIsFavoriteArchiveLoading({ isFavoriteArchiveLoading: true })
             const fetchFavoriteArchives = async () => {
-                const filter = generateFavoriteFilter(favoriteVideo.slice(0, limitSkipNum))
-                const { data: { archiveVideosCollection: { items } } } = await postData({
+                const filter = generateFavoriteFilter(favoriteWork.slice(0, limitSkipNum))
+                const { data: { archive2Collection: { items } } } = await postData({
                     url: '/api/graphqlSearch',
                     data: { order: false, keyword: null, filter, skipNum: 0, limit: limitSkipNum, desc: null }
                 })
-                const fetchedArchives = favoriteVideo.slice(0, limitSkipNum).map(id => items.find(item => item.youtubeId === id))
+                const fetchedArchives = favoriteWork.slice(0, limitSkipNum).map(id => items.find(item => item.archiveNumber === id))
                 setFavoriteArchive({ favoriteArchive: fetchedArchives })
                 setIsFavoriteArchiveLoading({ isFavoriteArchiveLoading: false })
             }
             fetchFavoriteArchives()
         }
-    }, [router.asPath, favoriteVideo])
+    }, [router.asPath, favoriteWork])
 
 
     // Functions
@@ -155,7 +154,7 @@ export default function ArchiveRoute({
                 data: { order: true, keyword: null, filter, skipNum, limit: limitSkipNum, desc: (currentPaths[0] === 'series' || currentPaths[0] === 'maniac') ? !isArchiveDesc : isArchiveDesc }
             })
         } else {
-            const filter = generateFavoriteFilter(favoriteVideo.slice(skipNum, skipNum + limitSkipNum))
+            const filter = generateFavoriteFilter(favoriteWork.slice(skipNum, skipNum + limitSkipNum))
             res = await postData({
                 url: '/api/graphqlSearch',
                 data: { order: false, keyword: null, filter, skipNum: null, limit: null, desc: null }
@@ -164,15 +163,15 @@ export default function ArchiveRoute({
 
         if (res.data && isArchiveDesc && !checkFavoriteRoute()) {
             const currentDescArchive = descArchive
-            setDescArchive({ descArchive: [...currentDescArchive, ...res.data.archiveVideosCollection.items] })
+            setDescArchive({ descArchive: [...currentDescArchive, ...res.data.archive2Collection.items] })
         }
         if (res.data && !isArchiveDesc && !checkFavoriteRoute()) {
             const currentAscArchive = ascArchive
-            setAscArchive({ ascArchive: [...currentAscArchive, ...res.data.archiveVideosCollection.items] })
+            setAscArchive({ ascArchive: [...currentAscArchive, ...res.data.archive2Collection.items] })
         }
         if (res.data && checkFavoriteRoute()) {
             const currentFavoriteArchive = favoriteArchive
-            const additionalArchive = favoriteVideo.slice(skipNum, skipNum + limitSkipNum).map(id => res.data.archiveVideosCollection.items.find(item => item.youtubeId === id))
+            const additionalArchive = favoriteWork.slice(skipNum, skipNum + limitSkipNum).map(id => res.data.archive2Collection.items.find(item => item.youtubeId === id))
             setFavoriteArchive({ favoriteArchive: [...currentFavoriteArchive, ...additionalArchive] })
         }
 
@@ -183,18 +182,18 @@ export default function ArchiveRoute({
         setIsFetchingMoreContent({ isFetchingMoreContent: false })
     }
 
-    const generateFavoriteFilter = (favoriteVideo) => {
-        const favoriteIds = favoriteVideo.map(v => (`{ youtubeId: '${v}' }`))
-        return `{ OR: [${favoriteIds}] }`
+    const generateFavoriteFilter = (favoriteWork) => {
+        const favoriteNums = favoriteWork.map(n => (`{ archiveNumber: '${n}' }`))
+        return `{ OR: [${favoriteNums}] }`
     }
 
     const deleteFavorite = async () => {
-        setFavoriteVideo({ favoriteVideo: [] })
+        setFavoriteWork({ favoriteWork: [] })
         setFavoriteArchive({ favoriteArchive: [] })
         try {
             const { data } = await postData({
-                url: '/api/auth/upsert-favorite-video',
-                data: { auth0_UUID: user.sub, favoriteVideo: [] }
+                url: '/api/auth/upsert-favorite-work',
+                data: { auth0_UUID: user.sub, favoriteWork: [] }
             }).then(data => data)
         } catch (e) {
             toast({ duration: 3000, render: () => (<ToastError text='サーバー上のお気に入り登録を削除できませんでした。' />) })
@@ -269,7 +268,7 @@ export default function ArchiveRoute({
                     <Flex flexGrow={1} direction='row' bg={bgColor}>
                         <Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }} w='full'>
                             {isLargerThan992 && <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />}
-                            <VStack spacing={8} px={{ base: 4, md: 8 }} py={{ base: 8, md: 8 }}>
+                            <VStack spacing={8} px={{ base: 4, md: 8 }} py={{ base: 8, md: 8 }} w='full'>
                                 <Flex justify={{ base: 'none', md: 'space-between' }} flexDirection={{ base: 'column', md: 'row' }} w='full' align='center'>
                                     <HStack spacing={4} mb={{ base: 2, md: 0 }}>
                                         <BreadcrumbNav paths={breadCrumbPaths} />
@@ -277,14 +276,14 @@ export default function ArchiveRoute({
                                     </HStack>
                                     <HStack spacing={{ base: 3, sm: 6, md: 8 }}>
                                         <SortArrow />
-                                        {totalNumOfArchives <= 1000 && <ArchiveSearch filter={!checkFavoriteRoute() ? filter : generateFavoriteFilter(favoriteVideo)} />}
+                                        {totalNumOfArchives <= 1000 && <ArchiveSearch filter={!checkFavoriteRoute() ? filter : generateFavoriteFilter(favoriteWork)} />}
                                     </HStack>
                                 </Flex>
                                 {isFavoriteArchiveLoading ? <SmallLoadingSpinner /> :
                                     !!selectedArchive?.length ?
                                         <>
-                                            <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', '3xl': 'repeat(3, 1fr)' }} gap={{ base: 4, md: 6 }} cursor='pointer'>
-                                                {selectedArchive.map((archive) => <VideoThumbnail archive={archive} inVideoCompo={false} currentRoot={currentRoot} key={archive.sys.id} setSkipTime={null} playing={false} />)}
+                                            <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', xl: 'repeat(4, 1fr)', '4xl': 'repeat(5, 1fr)' }} gap={{ base: 6, md: 8 }} cursor='pointer' w='full'>
+                                                {selectedArchive.map((archive) => <ArchiveThumbnail archive={archive} inVideoCompo={false} currentRoot={currentRoot} key={archive.sys.id} setSkipTime={null} playing={false} />)}
                                             </Grid>
                                             {isSeaching && isShowingSearchResult && (searchedArchiveResult.length === limitSkipNum) &&
                                                 <Box>{`上位${limitSkipNum}件の結果を表示しています。`}</Box>}
@@ -303,13 +302,13 @@ export default function ArchiveRoute({
                             </VStack>
                         </Grid>
                     </Flex>}
-                {isVideoMode &&
+                {/* {isVideoMode &&
                     <Video
                         selectedArchive={isSeaching ? searchedArchiveResult : filteredArchive}
                         currentRoot={currentRoot}
                         fetchContentHandler={fetchContentHandler}
                         skipNum={skipNum}
-                        totalNumOfArchives={totalNumOfArchives} />}
+                        totalNumOfArchives={totalNumOfArchives} />} */}
             </>
         )
     }
@@ -330,20 +329,27 @@ export default function ArchiveRoute({
 }
 
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 
     const { archivePathCollection: { items } } = await fetchContentful(query_archiveRoute)
     let paths = []
+
     items[0].archiveRouteArray.map((obj: ArchivePath) => {
-        if (!obj.paths) paths.push({ params: { path: [obj.link] } })
-        else obj.paths.map(p => paths.push({ params: { path: [obj.id, p.link] } }))
+        locales.forEach((locale) => {
+            if (!obj.paths) {
+                paths.push({ params: { path: [obj.link] }, locale })
+            }
+            else {
+                obj.paths.map(p => paths.push({ params: { path: [obj.id, p.link] }, locale }))
+            }
+        })
     })
 
     return { paths, fallback: false }
 }
 
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
 
     const { archivePathCollection: { items } } = await fetchContentful(query_archiveRoute)
 
@@ -353,29 +359,28 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     // ex: archive/season/1
     if (params.path.length === 2) {
         filter = currentPagePath.paths.find(p => p.link === params.path[1]).filter
-        breadCrumbPaths = [currentPagePath.categoryName, currentPagePath.paths.find(p => p.link === params.path[1]).name]
+        breadCrumbPaths = [currentPagePath.categoryName[locale], currentPagePath.paths.find(p => p.link === params.path[1]).name[locale]]
     }
     // ex: archive/all
     if (params.path.length === 1) {
         filter = items[0].archiveRouteArray.find(obj => obj.link === params.path[0]).filter
-        breadCrumbPaths = [currentPagePath.categoryName]
+        breadCrumbPaths = [currentPagePath.categoryName[locale]]
     }
 
     const descSearchQuery = generateSearchQuery(true, filter, null, limitSkipNum, true)
     const ascSearchQuery = generateSearchQuery(true, filter, null, limitSkipNum, false)
-    const { archiveVideosCollection: { items: allDescArchives } } = await fetchContentful(descSearchQuery)
-    const { archiveVideosCollection: { items: allAscArchives } } = await fetchContentful(ascSearchQuery)
+    const { archive2Collection: { items: allDescArchives } } = await fetchContentful(descSearchQuery)
+    const { archive2Collection: { items: allAscArchives } } = await fetchContentful(ascSearchQuery)
 
-    // スーツさんのアーカイブなので、vimeoIdではなく、youtubeIdを指定
-    // filter archives only having youtubeId
-    const allDescYoutubeArchives = allDescArchives.filter(ar => ar.youtubeId)
-    const allAscYoutubeArchives = allAscArchives.filter(ar => ar.youtubeId)
+    // filter archives only having archiveNumber
+    const allDescYoutubeArchives = allDescArchives.filter(ar => ar.archiveNumber)
+    const allAscYoutubeArchives = allAscArchives.filter(ar => ar.archiveNumber)
     const filteredDescArchive = (params.path[0] === 'series' || params.path[0] === 'maniac') ? allAscYoutubeArchives : allDescYoutubeArchives
     const filteredAscArchive = (params.path[0] === 'series' || params.path[0] === 'maniac') ? allDescYoutubeArchives : allAscYoutubeArchives
 
     // Total nubmber of archives
-    const { archiveVideosCollection: { total: totalNumOfArchives } } = await fetchContentful(`{
-        archiveVideosCollection ${filter ? ('(where: ' + filter.replace(new RegExp(/'/, 'gi'), '"') + ')') : ''} {
+    const { archive2Collection: { total: totalNumOfArchives } } = await fetchContentful(`{
+        archive2Collection ${filter ? ('(where: ' + filter.replace(new RegExp(/'/, 'gi'), '"') + ')') : ''} {
             total
         }}`)
 

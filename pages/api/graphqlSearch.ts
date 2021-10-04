@@ -45,25 +45,22 @@ const graphqlSearch = async (req: NextApiRequest, res: NextApiResponse) => {
         // ignoreFieldNorm: false,
         keys: [
           // contentful-queries.js の query_allArchives の項目を入れること
-          'title',
+          'title.en',
+          'title.ja',
           'publishDate',
-          'series',
-          'ride',
-          'special',
-          'domesticRegion',
-          'food',
-          'year',
           'timestamp',
-          'description',
           'keyword',
-          'prefecture',
+          'color',
+          'season',
+          'species',
+          'createdYear',
         ]
       }
 
       if (!keyword) {
         return res.status(200).json({ data })
       } else {
-        const fuse = new Fuse(data.archiveVideosCollection.items, options)
+        const fuse = new Fuse(data.archive2Collection.items, options)
         const result = await fuse.search(keyword)
         const searchedArchive = result?.map(archive => archive.item).slice(0, limitSkipNum)
 

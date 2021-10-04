@@ -22,7 +22,7 @@ export const UserMetadataProvider = (props) => {
   const [{ temporaryPaidCheck }, setTemporaryPaidCheck] = useState<{ temporaryPaidCheck: boolean }>({ temporaryPaidCheck: false })
 
   // State for Saved Data
-  const [{ favoriteVideo }, setFavoriteVideo] = useState<{ favoriteVideo: [] }>({ favoriteVideo: [] })
+  const [{ favoriteWork }, setFavoriteWork] = useState<{ favoriteWork: [] }>({ favoriteWork: [] })
 
   useEffect(() => {
     if (user && typeof window !== 'undefined') {
@@ -46,9 +46,9 @@ export const UserMetadataProvider = (props) => {
             setOnePayPermanentDetail({ One_Pay_Detail })
           }
 
-          // if favorite_video is saved on Auth0
-          if (user_metadata.User_Detail.favorite_video) {
-            setFavoriteVideo({ favoriteVideo: user_metadata.User_Detail.favorite_video })
+          // if favorite_archive is saved on Auth0
+          if (user_metadata.User_Detail.favorite_work) {
+            setFavoriteWork({ favoriteWork: user_metadata.User_Detail.favorite_work })
           }
 
           // サブスクリプション購入済み Subscription_Detailを取得
@@ -127,8 +127,8 @@ export const UserMetadataProvider = (props) => {
     error_metadata,
     isBeforeCancelDate,
     temporaryPaidCheck,
-    favoriteVideo,
-    setFavoriteVideo,
+    favoriteWork,
+    setFavoriteWork,
     setTemporaryPaidCheck,
   }
   return <UserMetadataContext.Provider value={value} {...props} />;

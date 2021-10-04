@@ -30,38 +30,40 @@ export async function fetchContentful(query: string) {
 export function generateSearchQuery(order: boolean | null, filter: string | null, skipNum: number | null, limit: number | null, desc: boolean | null) {
   const regex = new RegExp(/'/, 'gi')
   const searchQuery = `{
-    archiveVideosCollection ( 
+    archive2Collection ( 
       ${order ? (desc ? 'order : publishDate_DESC' : 'order : publishDate_ASC') : ''}
       ${filter ? (', where: ' + filter.replace(regex, '"')) : ''}
       ${skipNum ? (', skip: ' + skipNum) : ''}
       ${limit ? (', limit: ' + limit) : (', limit: ' + maxImportContent)}
       ) {
         items {
-        sys {
-          id
-        }
-        title
-        thumbnail {
-          url(transform: { resizeStrategy: FILL, cornerRadius: 20, quality: 90,format: PNG })
-        }
-        youtubeId
-        vimeoId
-        publishDate
-        series
-        ride
-        special
-        domesticRegion
-        foreignRegion
-        food
-        year
-        timestamp
-        description{
-          json
-        }
-        keyword
-        prefecture
-        maniac
-        map
+          sys{
+            id
+          }
+          archiveNumber
+          title
+          thumbnail {
+            url(transform: { resizeStrategy: FILL,  quality: 90,format: PNG })
+          }
+          image{
+            url(
+              transform: {
+                quality: 50
+                format: JPG
+              }
+            )
+          }
+          youtubeId
+          vimeoId
+          timestamp
+          publishDate
+          color
+          season
+          species
+          createdYear
+          size
+          learningVideoId
+          learningVideoTimestamp
       }
     }
   }`

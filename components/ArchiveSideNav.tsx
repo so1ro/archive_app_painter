@@ -19,6 +19,7 @@ import { highlight_color, text_color } from '@/styles/colorModeValue';
 export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: ArchivePath[], onCloseDrawer: () => void | null }) {
 
     const router = useRouter()
+    const { locale } = useRouter()
     const route = router.pathname.split('/')[1]
     const { setSearchKeyword } = useArchiveState()
 
@@ -55,7 +56,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                                 setSearchKeyword({ searchKeyword: '' })
                                 setIsExpanding({ isExpanding: false })
                             }}>
-                                <Box pb={5}>{obj.categoryName}</Box>
+                                <Box pb={5}>{obj.categoryName[locale]}</Box>
                             </Link>
                         </ArchiveActiveLink>
                     </Box>)
@@ -71,7 +72,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                                             flex="1"
                                             textAlign="left"
                                             color={useColorModeValue(text_color.l, text_color.d)}>
-                                            {obj.categoryName}
+                                            {obj.categoryName[locale]}
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -83,7 +84,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                                             if (onCloseDrawer !== null) onCloseDrawer()
                                             setSearchKeyword({ searchKeyword: '' })
                                         }}>
-                                            <AccordionPanel pt={0} pb={5} isTruncated>{p.name}</AccordionPanel>
+                                            <AccordionPanel pt={0} pb={5} isTruncated>{p.name[locale]}</AccordionPanel>
                                         </Link>
                                     </ArchiveActiveLink>))}
                             </Box>
