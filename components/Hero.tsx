@@ -52,7 +52,7 @@ export default function Hero({ todayImgPair, introTextAvatar }) {
                             <Spinner thickness="3px" speed="0.65s" emptyColor="gray.200"
                                 color={highLightColor} size="md"
                                 pos='absolute' top='50%' left='50%' transform='traslateX(-50%) traslateY(-50%)' />}
-                        <motion.video
+                        {/* <motion.video
                             src="/video/mov.mp4" ref={video}
                             muted autoPlay playsInline loop
                             onPlay={() => setIsVideoPlaying({ isVideoPlaying: true })}
@@ -61,7 +61,15 @@ export default function Hero({ todayImgPair, introTextAvatar }) {
                             onCanPlay={() => setIsVideoLoading({ isVideoLoading: false })}
                             initial={"hidden"}
                             animate={"visible"}
-                            variants={hero_video_variants} />
+                            variants={hero_video_variants} /> */}
+                        <video
+                            src="/video/mov.mp4" ref={video}
+                            muted autoPlay playsInline loop
+                            onPlay={() => setIsVideoPlaying({ isVideoPlaying: true })}
+                            onPause={() => setIsVideoPlaying({ isVideoPlaying: false })}
+                            onLoadStart={() => setIsVideoLoading({ isVideoLoading: true })}
+                            onCanPlay={() => setIsVideoLoading({ isVideoLoading: false })}
+                        />
                         {!isVideoLoading &&
                             <Button pos='absolute' top={24} right={8} onClick={handleVideo}>
                                 {!isVideoPlaying ? 'Play' : 'Stop'}
