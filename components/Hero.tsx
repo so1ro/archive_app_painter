@@ -70,7 +70,7 @@ export default function Hero({ todayImgPair, introTextAvatar }) {
                             onLoadStart={() => setIsVideoLoading({ isVideoLoading: true })}
                             onCanPlay={() => setIsVideoLoading({ isVideoLoading: false })}
                         >
-                            <source src="/video/mov.mp4" type="video/mp4"></source>
+                            <source src="/video/mov.mov" type="video/mp4"></source>
                         </video>
                         {!isVideoLoading &&
                             <Button pos='absolute' top={24} right={8} onClick={handleVideo}>
