@@ -2,7 +2,7 @@ import { Box, Link, HStack, Stack, useColorModeValue } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 import { TwitterIcon, InstagramIcon } from '@/styles/icons'
-import { DownloadIcon } from '@chakra-ui/icons'
+import { RepeatIcon } from '@chakra-ui/icons'
 import { text_humble_color } from '@/styles/colorModeValue'
 
 export default function NavSNS({ items }: { items?: NavItem[] }) {
@@ -41,7 +41,7 @@ export default function NavSNS({ items }: { items?: NavItem[] }) {
                     </NextLink>)
                 ))
                 }</HStack>}
-            <DownloadIcon
+            <RepeatIcon
                 width={repeatIconSize} height={repeatIconSize} cursor='pointer' alignSelf='flex-end'
                 color={textHumbleColor} onClick={() => router.reload()} />
         </Stack>
