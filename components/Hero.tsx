@@ -62,19 +62,16 @@ export default function Hero({ todayImgPair, introTextAvatar }) {
                             initial={"hidden"}
                             animate={"visible"}
                             variants={hero_video_variants} /> */}
-                        <motion.video
+                        <video
                             ref={video}
                             controls muted autoPlay playsInline loop
                             onPlay={() => setIsVideoPlaying({ isVideoPlaying: true })}
                             onPause={() => setIsVideoPlaying({ isVideoPlaying: false })}
                             onLoadStart={() => setIsVideoLoading({ isVideoLoading: true })}
                             onCanPlay={() => setIsVideoLoading({ isVideoLoading: false })}
-                            initial={"hidden"}
-                            animate={"visible"}
-                            variants={hero_video_variants}
                         >
                             <source src="/video/mov.mp4" type="video/mp4"></source>
-                        </motion.video>
+                        </video>
                         {!isVideoLoading &&
                             <Button pos='absolute' top={24} right={8} onClick={handleVideo}>
                                 {!isVideoPlaying ? 'Play' : 'Stop'}
