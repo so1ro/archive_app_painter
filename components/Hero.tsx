@@ -64,7 +64,7 @@ export default function Hero({ todayImgPair, introTextAvatar }) {
                             variants={hero_video_variants} /> */}
                         <video
                             ref={video}
-                            muted autoPlay playsInline loop
+                            controls muted autoPlay playsInline loop
                             onPlay={() => setIsVideoPlaying({ isVideoPlaying: true })}
                             onPause={() => setIsVideoPlaying({ isVideoPlaying: false })}
                             onLoadStart={() => setIsVideoLoading({ isVideoLoading: true })}
