@@ -8067,13 +8067,6 @@ swr@^1.0.0-beta.5:
   dependencies:
     dequal "2.0.2"
 
-swr@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/swr/-/swr-1.0.1.tgz#15f62846b87ee000e52fa07812bb65eb62d79483"
-  integrity sha512-EPQAxSjoD4IaM49rpRHK0q+/NzcwoT8c0/Ylu/u3/6mFj/CWnQVjNJ0MV2Iuw/U+EJSd2TX5czdAwKPYZIG0YA==
-  dependencies:
-    dequal "2.0.2"
-
 symbol-observable@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-2.0.3.tgz#5b521d3d07a43c351055fa43b8355b62d33fd16a"
