@@ -9,40 +9,6 @@ export const maxImportContent = 1000
 // Contentful.ts の foreignRegion に 検索項目 として、下記反映すること
 // type.d.tsに Type definition として、下記反映すること
 
-export const query_allArchives =
-  `{
-    archiveVideosCollection ( order : publishDate_DESC, limit : ${maxImportContent} ) {
-      items {
-        sys {
-          id
-        }
-        title
-        thumbnail {
-          url(transform: { resizeStrategy: FILL, cornerRadius: 20, quality: 90,format: PNG })
-        }
-        youtubeId
-        vimeoId
-        publishDate
-        series
-        ride
-        special
-        domesticRegion
-        foreignRegion
-        food
-        year
-        timestamp
-        description{
-          json
-        }
-        keyword
-        prefecture
-        maniac
-        map
-      }
-    }
-  }
-`
-
 // Archive Dynamic Route Paths
 export const query_archiveRoute =
   `{

@@ -8,7 +8,7 @@ import { useArchiveState } from "@/context/useArchiveState"
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 
-import { query_archiveRoute, query_allArchives, limitSkipNum } from "@/hook/contentful-queries"
+import { query_archiveRoute, limitSkipNum } from "@/hook/contentful-queries"
 import { fetchContentful, generateSearchQuery } from '@/hook/contentful'
 import { format, parseISO, compareDesc } from "date-fns"
 
