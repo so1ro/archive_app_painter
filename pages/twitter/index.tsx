@@ -2,7 +2,6 @@ import { GetStaticProps, GetStaticPaths } from "next"
 import { getTweets } from '@/lib/twitter'
 import { query_twitter } from "@/hook/contentful-queries"
 import { fetchContentful } from '@/hook/contentful'
-import useSWR, { SWRConfig } from "swr"
 
 import { fetchTweetAst } from 'static-tweets'
 import { Tweet } from 'react-static-tweets'
@@ -14,15 +13,7 @@ import { useColorModeValue } from "@chakra-ui/react"
 import { card_background_color, highlight_color } from '@/styles/colorModeValue'
 import NavSNS from '@/components/NavSNS'
 
-async function fetcher(url) {
-    const res = await fetch(url)
-    return res.json()
-}
-
-export default function Twitter({ fallback }) {
-
-    const url = '/api/twitter'
-    const { data, error } = useSWR(url, fetcher)
+export default function Twitter({ twitterAST }) {
 
     // const navItems = items.map(item => ({ id: item.sys.id, name: item.name, path: item.path }))
     const twitterBlockquoteWrap = css`
@@ -61,22 +52,11 @@ export default function Twitter({ fallback }) {
         overflow: hidden;
     }
 `
-
-    const TwitterDom = () => {
-        const { data: { twitterAST } } = useSWR('/api/twitter', fetcher)
-        return twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))
-    }
-
-    if (error) return <Box>failed to load...</Box>
-    if (!data) return <div>loading...</div>
-
     return (
         <Box css={twitterBlockquoteWrap}>
             <PageShell customPT={{ base: 0, lg: 0 }} customSpacing={{ base: 0 }}>
                 <NavSNS items={null} />
-                <SWRConfig value={{ fallback }}>
-                    <TwitterDom />
-                </SWRConfig>
+                {twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))}
             </PageShell>
         </Box>
     )
@@ -107,9 +87,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     return {
         props: {
-            fallback: {
-                '/api/twitter': twitterAST
-            },
+            twitterAST,
             // items: twitterCollection.items 
         },
         revalidate: 1,
