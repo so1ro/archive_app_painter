@@ -27,7 +27,12 @@ export async function fetchContentful(query: string) {
   }
 }
 
-export function generateSearchQuery(order: boolean | null, filter: string | null, skipNum: number | null, limit: number | null, desc: boolean | null) {
+export function generateSearchQuery(
+  order: boolean | null,
+  filter: string | null,
+  skipNum: number | null,
+  limit: number | null,
+  desc: boolean | null) {
   const regex = new RegExp(/'/, 'gi')
   const searchQuery = `{
     archive2Collection ( 

@@ -13,7 +13,7 @@ import { useRouter } from 'next/router'
 import { PlayVideoIcon } from '@/styles/icons'
 import { ArrowDownIcon } from '@chakra-ui/icons'
 
-export default function Hero({ todayImgPair, introTextAvatar }) {
+export default function Hero({ todayImgPair, introTextAvatar, newArchives }) {
 
     // Hook
     const { height: innerHeight } = useWindowSizeOrientation()
@@ -91,10 +91,13 @@ export default function Hero({ todayImgPair, introTextAvatar }) {
                         alt='Author' />
                 </Box>
             </HStack>
-            <HStack spacing={2} pos='absolute' px={6} py={3} bottom={4} right={6} bgColor={bgColorNav} borderRadius={48} cursor='pointer'>
-                <Text>{locale === 'en' ? 'News' : '新着'}</Text>
-                <ArrowDownIcon />
-            </HStack>
+            {newArchives &&
+                <a href="#news">
+                    <HStack spacing={2} pos='absolute' px={6} py={3} bottom={4} right={6} bgColor={bgColorNav} borderRadius={48} cursor='pointer'>
+                        <Text>{locale === 'en' ? 'News' : '新着'}</Text>
+                        <ArrowDownIcon />
+                    </HStack>
+                </a>}
         </Box>
     )
 }
