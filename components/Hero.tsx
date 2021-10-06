@@ -72,10 +72,9 @@ export default function Hero({ todayImgPair, introTextAvatar }) {
                             <source src="/video/mov.mp4" type="video/mp4" />
                             <source src="/video/mov.webm" type="video/webm" />
                         </motion.video>
-                        {!isVideoLoading &&
-                            <Button pos='absolute' top={24} right={8} onClick={handleVideo}>
-                                {!isVideoPlaying ? 'Play' : 'Stop'}
-                            </Button>}
+                        {/* <Button pos='absolute' top={24} right={8} onClick={handleVideo}>
+                            {!isVideoPlaying ? 'Play' : 'Stop'}
+                        </Button> */}
                     </Box>}
                 {/* ))} */}
             </Box>
