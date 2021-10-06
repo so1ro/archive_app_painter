@@ -14,7 +14,6 @@ const twitter = async (req: NextApiRequest, res: NextApiResponse) => {
 		let twitterAST = []
 		for (const id of allTweetId) {
 			const tweetAst = await fetchTweetAst(id)
-			console.log('tweetAst:', tweetAst)
 			twitterAST.push({ id, tweetAst })
 		}
 

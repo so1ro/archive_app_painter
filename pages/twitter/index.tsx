@@ -21,6 +21,10 @@ async function fetcher(url) {
 
 export default function Twitter({ fallback }) {
 
+    const url = '/api/twitter'
+    const { data, error } = useSWR(url, fetcher)
+
+    // const navItems = items.map(item => ({ id: item.sys.id, name: item.name, path: item.path }))
     const twitterBlockquoteWrap = css`
     .static-tweet{
         margin-bottom: 50px;
@@ -59,11 +63,12 @@ export default function Twitter({ fallback }) {
 `
 
     const TwitterDom = () => {
-        const { data } = useSWR('/api/twitter', fetcher)
-        return data.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))
-        // return <Box />
+        const { data: { twitterAST } } = useSWR('/api/twitter', fetcher)
+        return twitterAST.map(ast => (<Tweet key={ast.id} id={ast.id} ast={ast.tweetAst} />))
     }
 
+    if (error) return <Box>failed to load...</Box>
+    if (!data) return <div>loading...</div>
 
     return (
         <Box css={twitterBlockquoteWrap}>
