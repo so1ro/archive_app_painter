@@ -12,10 +12,21 @@ export default function News({ newArchives }: { newArchives: AllArchives2Interfa
 
 	const { locale } = useRouter()
 	const imgCSS = css`
-        img {
-          border-radius: .6rem;
-        }
+			width: 100%;
+					
+			> div {
+				position: unset !important;
+			}
+
+			.image {
+				object-fit: contain;
+				width: 100% !important;
+				position: relative !important;
+				height: unset !important;
+			}
     `
+	const boxShadow = `0px 16px 31px 7px rgba(0, 0, 0, 0.2);`
+
 
 	return (
 		<VStack spacing={24} w='full' maxW='640px'>
@@ -26,12 +37,12 @@ export default function News({ newArchives }: { newArchives: AllArchives2Interfa
 						<Text fontSize='xl' fontWeight='semibold'>{locale === 'en' ? `' ${arc.title[locale]} ' was archived.` : `「${arc.title[locale]}」をアーカイブに追加しました。`}</Text>
 						<Text fontSize='md'>{format(parseISO(arc.publishDate), 'yyyy/MM/dd')}</Text>
 					</VStack>
-					<Box css={imgCSS}>
+					<Box css={imgCSS} overflow="hidden" borderRadius={8} w='full' boxShadow={boxShadow}>
 						<Image
 							src={arc.image.url}
-							width='150px'
-							height='186px'
-							alt='Image' />
+							layout="fill"
+							alt='Image'
+							className={'image'} />
 					</Box>
 				</Grid>
 			))}
