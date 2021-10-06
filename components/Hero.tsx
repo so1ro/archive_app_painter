@@ -70,7 +70,6 @@ export default function Hero({ todayImgPair, introTextAvatar }) {
                             variants={hero_video_variants}
                         >
                             <source src="/video/mov.mp4" type="video/mp4" />
-                            <source src="/video/mov.mov" type="video/mov" />
                             <source src="/video/mov.webm" type="video/webm" />
                         </motion.video>
                         {!isVideoLoading &&
