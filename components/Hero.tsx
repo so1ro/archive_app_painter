@@ -24,7 +24,7 @@ export default function Hero({ todayImgPair, introTextAvatar }) {
     const { locale } = useRouter()
 
     // State
-    const [{ isVideoPlaying: isVideoPlaying }, setIsVideoPlaying] = useState<{ isVideoPlaying: boolean }>({ isVideoPlaying: false })
+    const [{ isVideoPlaying }, setIsVideoPlaying] = useState<{ isVideoPlaying: boolean }>({ isVideoPlaying: false })
     const [{ isVideoLoading }, setIsVideoLoading] = useState<{ isVideoLoading: boolean }>({ isVideoLoading: true })
 
     // Function
@@ -48,10 +48,10 @@ export default function Hero({ todayImgPair, introTextAvatar }) {
                     </Container>}
                 {isLargerThan992 &&
                     <Box h={`${innerHeight}px`} zIndex={'-1'} css={videoCss}>
-                        {isVideoLoading &&
+                        {/* {isVideoLoading &&
                             <Spinner thickness="3px" speed="0.65s" emptyColor="gray.200"
                                 color={highLightColor} size="md"
-                                pos='absolute' top='50%' left='50%' transform='traslateX(-50%) traslateY(-50%)' />}
+                                pos='absolute' top='50%' left='50%' transform='traslateX(-50%) traslateY(-50%)' />} */}
                         {/* <motion.video
                             src="/video/mov.mp4" ref={video}
                             muted autoPlay playsInline loop
@@ -62,18 +62,17 @@ export default function Hero({ todayImgPair, introTextAvatar }) {
                             initial={"hidden"}
                             animate={"visible"}
                             variants={hero_video_variants} /> */}
-                        <video
+                        <motion.video
                             ref={video}
                             muted autoPlay playsInline loop
-                            onPlay={() => setIsVideoPlaying({ isVideoPlaying: true })}
-                            onPause={() => setIsVideoPlaying({ isVideoPlaying: false })}
-                            onLoadStart={() => setIsVideoLoading({ isVideoLoading: true })}
-                            onCanPlay={() => setIsVideoLoading({ isVideoLoading: false })}
+                            initial={"hidden"}
+                            animate={"visible"}
+                            variants={hero_video_variants}
                         >
                             <source src="/video/mov.mp4" type="video/mp4" />
                             <source src="/video/mov.mov" type="video/mov" />
                             <source src="/video/mov.webm" type="video/webm" />
-                        </video>
+                        </motion.video>
                         {!isVideoLoading &&
                             <Button pos='absolute' top={24} right={8} onClick={handleVideo}>
                                 {!isVideoPlaying ? 'Play' : 'Stop'}
@@ -102,10 +101,10 @@ export default function Hero({ todayImgPair, introTextAvatar }) {
     )
 }
 
+// min-height: 100vh;
 const videoCss = css`
 video {
     min-height: 100%;
-    min-height: 100vh;
     min-width: 100%;
     position: absolute;
     left: 50%;
