@@ -27,14 +27,13 @@ export default function Home(
     productTextImage: TopShopTextImage[],
     newArchives: AllArchives2Interface[]
   }) {
-  console.log('newArchives:', newArchives)
 
   const { user, error, isLoading } = useUser()
   const { locale } = useRouter()
 
   const imgCSS = css`
         img {
-        border-radius: .6rem;
+          border-radius: .6rem;
         }
     `
 
@@ -47,7 +46,7 @@ export default function Home(
           {newArchives.map(arc => (
             <Grid templateColumns='1fr 150px' w='full' gap={8}>
               <VStack spacing={3} align='flex-start'>
-                <Text fontSize='xl' fontWeight='semibold'>{`「${arc.title[locale]}」をアーカイブに追加しました。`}</Text>
+                <Text fontSize='xl' fontWeight='semibold'>{locale === 'en' ? `' ${arc.title[locale]} ' was archived.` : `「${arc.title[locale]}」をアーカイブに追加しました。`}</Text>
                 <Text fontSize='md'>{format(parseISO(arc.publishDate), 'yyyy/MM/dd')}</Text>
               </VStack>
               <Box css={imgCSS}>
@@ -69,8 +68,8 @@ export default function Home(
 export const getStaticProps: GetStaticProps = async () => {
 
   const today = new Date()
-  const timeRangeNews = formatISO(new Date(today.getFullYear(), today.getMonth() - 3, today.getDate()), { representation: 'date' })
-  const filter = `{publishDate_gte : "${timeRangeNews}"}`
+  const NewsTimeRange = formatISO(new Date(today.getFullYear(), today.getMonth() - 3, today.getDate()), { representation: 'date' })
+  const filter = `{publishDate_gte : "${NewsTimeRange}"}`
   const newArchiveSearchQuery = generateSearchQuery(true, filter, null, 3, true)
   const { archive2Collection: { items: newArchives } } = await fetchContentful(newArchiveSearchQuery)
 
