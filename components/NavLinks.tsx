@@ -9,7 +9,7 @@ export default function NavLinks() {
 
     return (
         <Stack spacing={4} isInline alignItems="center" d={{ base: "none", lg: "flex" }}>
-            {(asPath !== '/' && asPath !== '/#news') && nav_links.map(link => (
+            {nav_links.map(link => (
                 <ActiveLink href={link.href} root={link.root} key={link.key}>
                     {(!!link.root && asPath.includes(link.root)) ? <></> : <Link>{link.text[locale]}</Link>}
                 </ActiveLink>
