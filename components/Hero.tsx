@@ -42,7 +42,7 @@ export default function Hero({ todayImgPair, introTextAvatar, newArchives }) {
             <Box>
                 {/* {todayImgPair.map((img, i) => ( */}
                 {!isLargerThan992 &&
-                    <Box h={`${innerHeight}px`} zIndex={'-1'}>
+                    <Box h={`${innerHeight}px`} zIndex={'-1'} overflow='hidden'>
                         <SlickSlider img={todayImgPair} h={`${innerHeight}px`} />
                         {/* <Image src={todayImgPair[0].url}
                             layout="fill"
