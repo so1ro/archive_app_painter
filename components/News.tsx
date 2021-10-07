@@ -41,7 +41,7 @@ export default function News({ newArchives }: { newArchives: AllArchives2Interfa
 	const Label = ({ arg }) => <Code colorScheme='none' mb={1} mr={2} border='1px solid' borderColor={textColor} borderRadius={20} px={3} fontSize='xs' key={arg}>{arg}</Code>
 
 	return (
-		<VStack spacing={24} w='full' maxW='640px'>
+		<VStack spacing={{ base: 24, sm: 36 }} w='full' maxW='640px'>
 			<Text fontSize='2xl'>{locale === 'en' ? 'News' : '新着'}</Text>
 			{newArchives.map(arc => (
 				<Grid templateColumns={{ base: '1fr 100px', sm: '1fr 150px' }} w='full' gap={{ base: 4, sm: 8 }} key={arc.sys.id}>
