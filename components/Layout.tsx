@@ -25,7 +25,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 <meta name="viewport" content="initial-scale=1.0, width=device-width, viewport-fit=cover" />
             </Head>
             <Flex flexDirection="column" minH="100vh" bg={useColorModeValue(bg_color.l, bg_color.d)}>
-                <Nav />
+                {/* <Nav /> */}
                 <NavModalSPTB />
                 <Flex w="100%" flexGrow={1} ml="auto" mr="auto" direction="column">{children}</Flex>
                 <Footer />

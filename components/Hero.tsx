@@ -3,7 +3,7 @@ import { Box, Container, Button, useColorModeValue, Spinner, HStack, Text } from
 import Image from 'next/image'
 import HeroSnsIcons from '@/components/HeroSnsIcons'
 import HeroArchiveLink from '@/components/HeroArchiveLink'
-import { useWindowSizeOrientation } from '@/utils/useWindowSize'
+import { useWindowSizeOrientation, useWindowSizeResize } from '@/utils/useWindowSize'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { css } from "@emotion/react"
 import { bg_color_nav, highlight_color } from '@/styles/colorModeValue'
@@ -13,10 +13,14 @@ import { useRouter } from 'next/router'
 import { PlayVideoIcon } from '@/styles/icons'
 import { ArrowDownIcon } from '@chakra-ui/icons'
 
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
+import SlickSlider from '@/components/SlickSlider'
+
 export default function Hero({ todayImgPair, introTextAvatar, newArchives }) {
 
     // Hook
-    const { height: innerHeight } = useWindowSizeOrientation()
+    const { height: innerHeight } = useWindowSizeResize()
     const isLargerThan992 = useMediaQuery("(min-width: 992px)")
     const video = useRef<HTMLVideoElement>()
     const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
@@ -38,14 +42,15 @@ export default function Hero({ todayImgPair, introTextAvatar, newArchives }) {
             <Box>
                 {/* {todayImgPair.map((img, i) => ( */}
                 {!isLargerThan992 &&
-                    <Container h={`${innerHeight}px`} zIndex={'-1'}>
-                        <Image src={todayImgPair[0].url}
+                    <Box h={`${innerHeight}px`} zIndex={'-1'}>
+                        <SlickSlider img={todayImgPair} h={`${innerHeight}px`} />
+                        {/* <Image src={todayImgPair[0].url}
                             layout="fill"
                             objectFit="cover"
                             quality={100}
                             priority={true}
-                            alt='スーツ' />
-                    </Container>}
+                            alt='スーツ' /> */}
+                    </Box>}
                 {isLargerThan992 &&
                     <Box h={`${innerHeight}px`} zIndex={'-1'} css={videoCss}>
                         {/* {isVideoLoading &&

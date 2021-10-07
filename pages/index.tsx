@@ -29,9 +29,10 @@ export default function Home(
   return (
     <>
       <Hero todayImgPair={todayImgPair} introTextAvatar={introTextAvatar} newArchives={newArchives} />
-      {newArchives && <PageShell customPT={{ base: 24, lg: 32 }} customSpacing={null} id={'news'}>
-        <News newArchives={newArchives} />
-      </PageShell>}
+      {newArchives &&
+        <PageShell customPT={{ base: 24, lg: 32 }} customSpacing={null} id={'news'}>
+          <News newArchives={newArchives} />
+        </PageShell>}
     </>
   )
 }

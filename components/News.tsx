@@ -53,9 +53,9 @@ export default function News({ newArchives }: { newArchives: AllArchives2Interfa
 							<Text fontSize={{ base: 'sm', sm: 'md' }} >{format(parseISO(arc.publishDate), 'yyyy/MM/dd')}</Text>
 						</VStack>
 						<Box>
-							{pickHandler(arc, 'species')[locale].map(sp => <Label arg={sp} />)}
-							{pickHandler(arc, 'season')[locale].map(se => <Label arg={se} />)}
-							{pickHandler(arc, 'color')[locale].map(c => <Label arg={c} />)}
+							{pickHandler(arc, 'species')[locale].map((sp, i) => <Label key={i} arg={sp} />)}
+							{pickHandler(arc, 'season')[locale].map((se, i) => <Label key={i} arg={se} />)}
+							{pickHandler(arc, 'color')[locale].map((c, i) => <Label key={i} arg={c} />)}
 						</Box>
 					</VStack>
 					<Box><Box css={imgCSS} overflow="hidden" borderRadius={8} w='full' boxShadow={boxShadow}>
