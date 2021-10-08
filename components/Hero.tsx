@@ -17,7 +17,7 @@ import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import SlickSlider from '@/components/SlickSlider'
 
-export default function Hero({ todayImgPair, introTextAvatar, newArchives }) {
+export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
 
     // Hook
     const { height: innerHeight } = useWindowSizeResize()
@@ -43,7 +43,7 @@ export default function Hero({ todayImgPair, introTextAvatar, newArchives }) {
                 {/* {todayImgPair.map((img, i) => ( */}
                 {!isLargerThan992 &&
                     <Box h={`${innerHeight}px`} zIndex={'-1'} overflow='hidden'>
-                        <SlickSlider img={todayImgPair} h={`${innerHeight}px`} />
+                        <SlickSlider imgs={heroSlideImgs} h={`${innerHeight}px`} />
                         {/* <Image src={todayImgPair[0].url}
                             layout="fill"
                             objectFit="cover"

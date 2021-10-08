@@ -12,12 +12,12 @@ import News from '@/components/News'
 
 export default function Home(
   {
-    todayImgPair,
+    heroSlideImgs,
     introTextAvatar,
     productTextImage,
     newArchives,
   }: {
-    todayImgPair: AllHeroImgInterface[],
+    heroSlideImgs: AllHeroImgInterface[],
     introTextAvatar: TopIntroTextAvatar
     productTextImage: TopShopTextImage[],
     newArchives: AllArchives2Interface[]
@@ -25,10 +25,9 @@ export default function Home(
 
   const { user, error, isLoading } = useUser()
 
-
   return (
     <>
-      <Hero todayImgPair={todayImgPair} introTextAvatar={introTextAvatar} newArchives={newArchives} />
+      <Hero heroSlideImgs={heroSlideImgs[0].imageCollection.items} introTextAvatar={introTextAvatar} newArchives={newArchives} />
       {newArchives &&
         <PageShell customPT={{ base: 24, lg: 32 }} customSpacing={null} id={'news'}>
           <News newArchives={newArchives} />
@@ -46,17 +45,17 @@ export const getStaticProps: GetStaticProps = async () => {
   const { archive2Collection: { items: newArchives } } = await fetchContentful(newArchiveSearchQuery)
 
   // get Archivce data from Contentful
-  const { topHeroImgsCollection: { items: allHeroImg } } = await fetchContentful(query_allHeroImg)
+  const { topHeroImgsCollection: { items: heroSlideImgs } } = await fetchContentful(query_allHeroImg)
   const { topIntroCollection: { items: introTextAvatar } } = await fetchContentful(query_topIntro)
   const { topShopCollection: { items: productTextImage } } = await fetchContentful(query_topShop)
 
   // Arrange Portrait First & Destructuring 
-  const portraitFirstAllImg = allHeroImg.map(pair => pair.imageCollection.items.sort((a, b) => a.width - b.width))
-  const todayImgPair = portraitFirstAllImg[dailyNum(portraitFirstAllImg)]
+  // const portraitFirstAllImg = allHeroImg.map(pair => pair.imageCollection.items.sort((a, b) => a.width - b.width))
+  // const todayImgPair = portraitFirstAllImg[dailyNum(portraitFirstAllImg)]
 
   return {
     props: {
-      todayImgPair,
+      heroSlideImgs,
       introTextAvatar: introTextAvatar[0],
       productTextImage,
       newArchives,
