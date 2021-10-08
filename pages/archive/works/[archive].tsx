@@ -96,6 +96,16 @@ export default function Archive1({ archive, path }:
 		</Center>
 	)
 
+	const FavoriteButton = () => (
+		<FavoriteHeartIcon
+			width={iconSize} height={iconSize} cursor='pointer'
+			color={favoriteWork.includes(archive.archiveNumber) && highLightColor}
+			onClick={() => {
+				toast({ duration: 3000, render: () => (<Toast text={favoriteButtonText} />) })
+				favoriteHandler(archive.archiveNumber)
+			}} />
+	)
+
 	if (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail)) {
 		return (
 			<>
@@ -144,40 +154,16 @@ export default function Archive1({ archive, path }:
 														</AccordionPanel>
 													</AccordionItem>
 												</Accordion>
-												<FavoriteHeartIcon
-													width={iconSize} height={iconSize} cursor='pointer'
-													color={favoriteWork.includes(archive.archiveNumber) && highLightColor}
-													onClick={() => {
-														toast({ duration: 3000, render: () => (<Toast text={favoriteButtonText} />) })
-														// スーツさんのアーカイブなので、vimeoIdではなく、youtubeIdを指定
-														favoriteHandler(archive.archiveNumber)
-													}} />
-
+												<FavoriteButton />
 											</HStack>}
 										{archive?.youtubeId && !archive?.timestamp &&
-											<Box w='full' textAlign='right'>
-												<FavoriteHeartIcon
-													width={iconSize} height={iconSize} cursor='pointer'
-													color={favoriteWork.includes(archive.archiveNumber) && highLightColor}
-													onClick={() => {
-														toast({ duration: 3000, render: () => (<Toast text={favoriteButtonText} />) })
-														// スーツさんのアーカイブなので、vimeoIdではなく、youtubeIdを指定
-														favoriteHandler(archive.archiveNumber)
-													}} />
-											</Box>}
+											<Box w='full' textAlign='right'><FavoriteButton /></Box>}
 
 									</VStack>
 									<ZoomImgModal archive={archive} path={path} />
 									{!archive?.youtubeId &&
 										<Box w='full' textAlign='left'>
-											<FavoriteHeartIcon
-												width={iconSize} height={iconSize} cursor='pointer'
-												color={favoriteWork.includes(archive.archiveNumber) && highLightColor}
-												onClick={() => {
-													toast({ duration: 3000, render: () => (<Toast text={favoriteButtonText} />) })
-													// スーツさんのアーカイブなので、vimeoIdではなく、youtubeIdを指定
-													favoriteHandler(archive.archiveNumber)
-												}} />
+											<FavoriteButton />
 										</Box>}
 								</VStack>
 							</TabPanel>
