@@ -34,7 +34,7 @@ export const query_allHeroImg =
               }
                 title
                 fileName
-                url(transform: { quality: 30 })
+                url(transform: { quality: 50 })
                 width
               }
             }
