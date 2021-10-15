@@ -188,3 +188,15 @@ export const query_storageUrl =
       path
     }
   }`
+
+export const query_tier =
+  `{
+    archivePricingTierCollection(order : tierTitle_ASC){
+      items{
+        tierTitle
+        price
+        viewPeriod
+        tierDescription
+      }
+    }
+  }`

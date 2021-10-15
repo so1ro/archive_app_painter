@@ -6,7 +6,7 @@ import { useMediaQuery } from '@/utils/useMediaQuery'
 import NextLink from 'next/link'
 
 import { fetchContentful } from "@/hook/contentful"
-import { query_archivePricing } from "@/hook/contentful-queries"
+import { query_archivePricing, query_tier } from "@/hook/contentful-queries"
 
 import { Heading, Box, Text, Button } from "@chakra-ui/react"
 import { fetchAllPrices } from '@/hook/getStaticProps'
@@ -20,11 +20,13 @@ export default function Archive(
   {
     // allArchives,
     allPrices,
-    landingPageText, }:
+    landingPageText,
+    tier, }:
     {
       // allArchives: AllArchivesInterface[],
       allPrices: AllPrices[],
       landingPageText: LandingPageText[],
+      tier: TierInterface[],
     }) {
 
   const { sys: { id }, message, content, functions, merit, vimeoId, explain, annotation } = landingPageText[0]
@@ -87,13 +89,16 @@ export const getStaticProps: GetStaticProps = async () => {
   // get Archivce data from Contentful
   // const archiveData = await fetchContentful(query_allArchives)
   const allPrices = await fetchAllPrices()
+  // console.log('allPrices:', allPrices)
   const landingPageText = await fetchContentful(query_archivePricing)
+  const tier = await fetchContentful(query_tier)
 
   return {
     props: {
       // allArchives: archiveData.kasumibroVideoCollection.items,
       allPrices: [...allPrices],
-      landingPageText: landingPageText.archivePricingCollection.items
+      landingPageText: landingPageText.archivePricingCollection.items,
+      tier: tier.archivePricingTierCollection.items,
     },
     revalidate: 30
   }

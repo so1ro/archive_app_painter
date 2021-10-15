@@ -9,7 +9,7 @@ export async function fetchAllPrices() {
             .filter(price => price.type === 'recurring' || 'one_time')
             .filter(price => (price.nickname && price.active))
             .sort((a, b) => a.unit_amount - b.unit_amount)
-            .map(prod => _.pick(prod, ['id', 'nickname', 'unit_amount', 'type', 'recurring', 'active', 'livemode']))
+            .map(prod => _.pick(prod, ['id', 'nickname', 'unit_amount', 'type', 'recurring', 'active', 'livemode', 'currency']))
 
     } catch (e) {
         // add a descriptive error message first,

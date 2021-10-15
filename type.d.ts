@@ -17,6 +17,12 @@ interface AllArchives2Interface {
   learningVideoId?: string
   learningVideoTimestamp?: { time?: string, indexText?: string, detail?: string }[]
 }
+interface TierInterface {
+  tierTitle?: string,
+  price?: { en?: string, ja?: string },
+  viewPeriod?: string,
+  tierDescription?: { en?: string, ja?: string }
+}
 
 // ---------------------- befor painer -------------------------- //
 interface UserMetadataContextInterface {

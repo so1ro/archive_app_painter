@@ -39,6 +39,32 @@ const createCheckoutSession = async (req, res) => {
         cancel_url: `${domain}/account/`
       })
 
+
+      // const session = await stripe.checkout.sessions.create({
+      //   mode,
+      //   payment_method_types: ['card'],
+      //   customer: customer.id,
+      //   line_items: [
+      //     {
+      //       price_data: _{
+      //         // price,
+      //         currency: 'usd',
+      //         product_data: {
+      //           name: 'T-shirt',
+      //         },
+      //         unit_amount: 64,
+      //       },
+      //       quantity: 1,
+      //     }
+      //   ],
+      //   allow_promotion_codes: true,
+      //   // billing_address_collection: 'required',
+      //   // subscription_data: {},
+      //   success_url: `${domain}/account/?session_id={CHECKOUT_SESSION_ID}`,
+      //   cancel_url: `${domain}/account/`
+      // })
+      // console.log('session:', session)
+
       return res.status(200).json({ sessionId: session.id });
     } catch (e) {
       //// Logging ////
