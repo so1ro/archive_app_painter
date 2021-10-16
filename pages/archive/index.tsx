@@ -6,7 +6,7 @@ import { useMediaQuery } from '@/utils/useMediaQuery'
 import NextLink from 'next/link'
 
 import { fetchContentful } from "@/hook/contentful"
-import { query_archivePricing, query_tier } from "@/hook/contentful-queries"
+import { query_archivePricing, query_archiveTier } from "@/hook/contentful-queries"
 
 import { Heading, Box, Text, Button } from "@chakra-ui/react"
 import { fetchAllPrices } from '@/hook/getStaticProps'
@@ -36,6 +36,8 @@ export default function Archive(
   const isLargerThan768 = useMediaQuery("(min-width: 768px)")
   const messageWithoutNewline = message.replace('\n', '')
   const router = useRouter()
+  const { locale } = router
+  const localeAllPrices = allPrices.filter(price => locale === 'en' ? price.currency === 'usd' : price.currency === 'jpy')
 
   if (error) return <div>{error.message}</div>
   if (error_metadata) return <div>{error_metadata}</div>
@@ -65,7 +67,7 @@ export default function Archive(
         </Box>
         {/* サブスクリプションもワンペイ永久ご視聴もご購入前 */}
         {subscription_state === 'unsubscribe' &&
-          <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={false} />}
+          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} isOnePayPermanent={false} />}
         {/* サブスクリプションが一時停止の場合 */}
         {subscription_state === 'paused' &&
           <NextLink href={'/account'}>
@@ -89,9 +91,8 @@ export const getStaticProps: GetStaticProps = async () => {
   // get Archivce data from Contentful
   // const archiveData = await fetchContentful(query_allArchives)
   const allPrices = await fetchAllPrices()
-  // console.log('allPrices:', allPrices)
   const landingPageText = await fetchContentful(query_archivePricing)
-  const tier = await fetchContentful(query_tier)
+  const tier = await fetchContentful(query_archiveTier)
 
   return {
     props: {

@@ -189,7 +189,7 @@ export const query_storageUrl =
     }
   }`
 
-export const query_tier =
+export const query_archiveTier =
   `{
     archivePricingTierCollection(order : tierTitle_ASC){
       items{

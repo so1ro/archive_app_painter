@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { GetStaticProps } from "next"
 
@@ -30,6 +31,9 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
     setTemporaryPaidCheck,
   } = useUserMetadata()
 
+  const router = useRouter()
+  const { locale } = router
+  const localeAllPrices = allPrices.filter(price => locale === 'en' ? price.currency === 'usd' : price.currency === 'jpy')
   const toast = useToast()
   const { annotation } = landingPageText[0]
   const tableSize = useBreakpointValue({ base: 'sm', md: 'md' })
@@ -77,7 +81,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
         handleCustomerPortal(Subscription_Detail.customer_Id)
         toast({ duration: 3000, render: () => (<Toast text={"カスタマーポータルに移動中..."} />) })
       }}>
-        {(Subscription_Detail.cancel_at_period_end || subscription_state === 'paused') ?
+        {(Subscription_Detail?.cancel_at_period_end || subscription_state === 'paused') ?
           `サブスクリプションの再開 ／ お支払い履歴` : `プランの変更・キャンセル・一時停止 ／ 履歴`}
       </Button>
     </Center>
@@ -173,7 +177,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
           </Box>
           {subscription_state === 'unsubscribe' && <>
             <Text mb={4}>サブスクリプションを開始することもできます。</Text>
-            <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={!!One_Pay_Detail} /></>}
+            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} isOnePayPermanent={!!One_Pay_Detail} /></>}
           {subscription_state !== 'unsubscribe' && <>
             <Center mb={4}>サブスクリプションの詳細は、次のボタンからご確認いただけます。</Center>
             <CustomerPortalButton />
@@ -196,7 +200,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
             <Box>○</Box>
           </Grid>}
           <Text mb={4}>新たにサブスクリプションやワンペイ永久ご視聴プランを開始することもできます。</Text>
-          <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={false} />
+          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} isOnePayPermanent={false} />
         </Box>
       </PageShell>
     )
@@ -240,7 +244,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
       <PageShell customPT={null} customSpacing={null}>
         <Box>
           <Text mb={10}>ご購入ボタンからサブスクリプションやワンペイ永久ご視聴プランを開始することができます。</Text>
-          <PriceList user={user} allPrices={allPrices} annotation={annotation} isOnePayPermanent={false} />
+          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} isOnePayPermanent={false} />
         </Box>
       </PageShell>)
   }

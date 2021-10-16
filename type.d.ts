@@ -41,13 +41,14 @@ interface UserMetadataContextInterface {
   setTemporaryPaidCheck: ({ setTemporaryPaidCheck: boolean }) => void
 }
 interface AllPrices {
-  id: string | null
-  nickname: string | null
-  unit_amount: number | null
-  type: string | null
-  recurring: object | null
-  active: boolean | null
-  livemode: boolean | null
+  id?: string
+  nickname?: string
+  unit_amount?: number
+  type?: string
+  recurring?: object
+  active?: boolean
+  livemode?: boolean
+  currency?: string
 }
 
 interface ArchivePath {
