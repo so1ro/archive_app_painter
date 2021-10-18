@@ -110,6 +110,8 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
 // min-height: 100vh;
 const videoCss = css`
 video {
+    width: 100vw;
+    height: 100vh;
     min-height: 100%;
     min-width: 100%;
     position: absolute;
