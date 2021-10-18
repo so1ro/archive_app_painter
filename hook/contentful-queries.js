@@ -194,9 +194,10 @@ export const query_archiveTier =
     archivePricingTierCollection(order : tierTitle_ASC){
       items{
         tierTitle
-        price
         viewPeriod
-        tierDescription
+        nickname
+        unitAmount
+        currency
       }
     }
   }`

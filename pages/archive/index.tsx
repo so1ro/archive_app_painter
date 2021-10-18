@@ -21,12 +21,12 @@ export default function Archive(
     // allArchives,
     allPrices,
     landingPageText,
-    tier, }:
+    tiers, }:
     {
       // allArchives: AllArchivesInterface[],
       allPrices: AllPrices[],
       landingPageText: LandingPageText[],
-      tier: TierInterface[],
+      tiers: TierInterface[],
     }) {
 
   const { sys: { id }, message, content, functions, merit, vimeoId, explain, annotation } = landingPageText[0]
@@ -38,6 +38,7 @@ export default function Archive(
   const router = useRouter()
   const { locale } = router
   const localeAllPrices = allPrices.filter(price => locale === 'en' ? price.currency === 'usd' : price.currency === 'jpy')
+  const localeAllTiers = tiers.filter(tier => locale === 'en' ? tier.currency === 'usd' : tier.currency === 'jpy')
 
   if (error) return <div>{error.message}</div>
   if (error_metadata) return <div>{error_metadata}</div>
@@ -67,7 +68,8 @@ export default function Archive(
         </Box>
         {/* サブスクリプションもワンペイ永久ご視聴もご購入前 */}
         {subscription_state === 'unsubscribe' &&
-          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} isOnePayPermanent={false} />}
+          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} />}
+        <PriceList user={user} allPrices={localeAllTiers} annotation={null} />
         {/* サブスクリプションが一時停止の場合 */}
         {subscription_state === 'paused' &&
           <NextLink href={'/account'}>
@@ -92,14 +94,15 @@ export const getStaticProps: GetStaticProps = async () => {
   // const archiveData = await fetchContentful(query_allArchives)
   const allPrices = await fetchAllPrices()
   const landingPageText = await fetchContentful(query_archivePricing)
-  const tier = await fetchContentful(query_archiveTier)
+  const tiersCollection = await fetchContentful(query_archiveTier)
+  const tiers = tiersCollection.archivePricingTierCollection.items.map(t => ({ ...t, unit_amount: t.unitAmount, type: 'one_time' }))
 
   return {
     props: {
       // allArchives: archiveData.kasumibroVideoCollection.items,
       allPrices: [...allPrices],
       landingPageText: landingPageText.archivePricingCollection.items,
-      tier: tier.archivePricingTierCollection.items,
+      tiers
     },
     revalidate: 30
   }

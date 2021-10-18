@@ -8,7 +8,7 @@ import { MotionButton, MotionLink } from '@/components/Chakra_Framer/element'
 import { price_card_color, highlight_color } from '@/styles/colorModeValue'
 import { Toast } from '@/components/Toast'
 
-export default function PriceList({ user, allPrices, annotation, isOnePayPermanent }) {
+export default function PriceList({ user, allPrices, annotation }) {
 
     const toast = useToast()
     const { colorMode } = useColorMode()
@@ -93,7 +93,6 @@ export default function PriceList({ user, allPrices, annotation, isOnePayPermane
                         borderColor={price.type === "recurring" ? priceCardColor : oneTimeCardColor}
                         borderRadius={14}
                         align='center'
-                        d={price.type !== "recurring" && isOnePayPermanent ? 'none' : 'flex'}
                     >
                         <HStack spacing={1} align='baseline' py={{ base: 2, md: 4 }}>
                             <Text letterSpacing='-1px' fontSize={{ base: '3xl', lg: '4xl' }}>{price.unit_amount}</Text>
@@ -107,7 +106,7 @@ export default function PriceList({ user, allPrices, annotation, isOnePayPermane
                     </Flex>
                 ))}
             </Grid>
-            {!isOnePayPermanent && <Text fontSize={{ base: 'xs', md: 'sm' }} color={useColorModeValue(highlight_color.l, highlight_color.d)}>{annotation}</Text>}
+            <Text fontSize={{ base: 'xs', md: 'sm' }} color={useColorModeValue(highlight_color.l, highlight_color.d)}>{annotation}</Text>
         </div>
     )
 }

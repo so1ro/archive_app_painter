@@ -17,11 +17,15 @@ interface AllArchives2Interface {
   learningVideoId?: string
   learningVideoTimestamp?: { time?: string, indexText?: string, detail?: string }[]
 }
+
 interface TierInterface {
   tierTitle?: string,
-  price?: { en?: string, ja?: string },
   viewPeriod?: string,
-  tierDescription?: { en?: string, ja?: string }
+  nickname?: string
+  unitAmount?: number,
+  currency?: string
+  unit_amount?: number,
+  type?: string
 }
 
 // ---------------------- befor painer -------------------------- //
