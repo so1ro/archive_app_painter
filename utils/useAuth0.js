@@ -1,6 +1,7 @@
 import { stripe } from '@/utils/stripe'
 import axios from 'axios'
 import _ from 'lodash'
+import { format, fromUnixTime } from "date-fns"
 
 const getAuth0URL = (id) => {
     return `https://${process.env.AUTH0_DOMAIN}/api/v2/users/${id}`
@@ -74,10 +75,10 @@ const upsertSubscriptionRecord = async (event) => {
     const { id: subscription_Id, customer: customer_Id } = event
 
     try {
-        const { metadata: { auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id)
+        const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id)
         const auth0Token = await auth0AccessToken()
         const metadata = {
-            Subscription_Detail: { subscription_Id, criteria_OnePay_price, }
+            Subscription_Detail: { subscription_Id }
         }
         // canceled_at : If the subscription has been canceled, the date of that cancellation. If the subscription was canceled with cancel_at_period_end, canceled_at will reflect the time of the most recent update request, not the end of the subscription period when the subscription is automatically moved to a canceled state.
         await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
@@ -128,25 +129,25 @@ const upsertChargeRecord = async (event) => {
 //// Send One-pay record to Auth0
 const upsertOnePayRecord = async (event) => {
 
-    const { amount, customer: customer_Id, created, } = event
+    const { amount, customer: customer_Id, created, invoice } = event
 
     try {
-
-        const { metadata: { auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id)
+        const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id)
         const auth0Token = await auth0AccessToken()
 
         // if it's subscription charge.succeeded, it returns here
-        if (amount !== parseFloat(criteria_OnePay_price)) return
+        if (invoice) return // Subscription charge always has invoice
 
-        const { user_metadata: { User_Detail: { past_charged_fee } } } = await getUserMetadata(auth0_UUID, auth0Token)
+        const { user_metadata:
+            { User_Detail: { past_charged_fee },
+                One_Pay_Detail: currentOnePayRecord } } = await getUserMetadata(auth0_UUID, auth0Token)
         const currentChargedFee = (past_charged_fee + amount) || 0
+        const newRecord = { amount, Date: format(fromUnixTime(created), 'yyyy/MM/dd') }
+        let One_Pay_Detail = currentOnePayRecord ? [newRecord, ...currentOnePayRecord] : [newRecord]
+
         const metadata = {
-            One_Pay_Detail: {
-                title: 'ワンペイ永久ご視聴',
-                created,
-                criteria_OnePay_price,
-            },
-            User_Detail: { past_charged_fee: currentChargedFee }
+            User_Detail: { past_charged_fee: currentChargedFee },
+            One_Pay_Detail
         }
         await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
 

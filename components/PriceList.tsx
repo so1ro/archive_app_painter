@@ -18,17 +18,24 @@ export default function PriceList({ user, allPrices, annotation }) {
     const highlighColor = useColorModeValue(highlight_color.l, highlight_color.d)
     // const criteriaOnePayPrice = allPrices.find(price => price.type === 'one_time').unit_amount
 
-    const handleCheckout = async (price, type) => {
-        // setPriceIdLoading(price.id)
+    const handleCheckout = async (
+        price?: string,
+        type?: string,
+        tier_title?: string,
+        unit_amount?: number,
+        currency?: string,) => {
+
         try {
             const { sessionId } = await postData({
                 url: '/api/stripe/create-checkout-session',
                 data: {
                     price,
                     type,
+                    tier_title,
+                    unit_amount,
+                    currency,
                     user_uuid: user.sub,
                     user_email: user.email,
-                    // criteriaOnePayPrice
                 }
                 // token: session.access_token
             })
@@ -37,8 +44,6 @@ export default function PriceList({ user, allPrices, annotation }) {
             stripe.redirectToCheckout({ sessionId })
         } catch (e) {
             return console.error(e.message)
-        } finally {
-            // setPriceIdLoading(false)
         }
     }
 
@@ -61,7 +66,7 @@ export default function PriceList({ user, allPrices, annotation }) {
                     whileHover={{ scale: 1.1 }}
                     onClick={() => {
                         toast({ duration: 3000, render: () => (<Toast text={user ? "チェックアウトセッションに移動中..." : "サインアップに移動中..."} />) })
-                        if (user) handleCheckout(price.id, price.type)
+                        if (user) handleCheckout(price.id, price.type, price.tierTitle, price.unit_amount, price.currency)
                     }}>
                     {user ? '購入' : 'サインアップ・購入'}
                 </MotionButton>
@@ -85,7 +90,7 @@ export default function PriceList({ user, allPrices, annotation }) {
                 {allPrices.map(price => (
                     <Flex
                         direction='column'
-                        key={price.id}
+                        key={price.id ?? price.sys.id}
                         color="gray.600" // pending
                         bg='#fff'
                         border={cardBorder}

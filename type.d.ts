@@ -19,12 +19,13 @@ interface AllArchives2Interface {
 }
 
 interface TierInterface {
-  tierTitle?: string,
-  viewPeriod?: string,
+  sys?: { id: string }
+  tierTitle?: string
+  viewPeriod?: string
   nickname?: string
-  unitAmount?: number,
+  unitAmount?: number
   currency?: string
-  unit_amount?: number,
+  unit_amount?: number
   type?: string
 }
 

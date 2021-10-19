@@ -193,6 +193,9 @@ export const query_archiveTier =
   `{
     archivePricingTierCollection(order : tierTitle_ASC){
       items{
+        sys {
+          id
+        }
         tierTitle
         viewPeriod
         nickname
