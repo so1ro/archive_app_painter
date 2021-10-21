@@ -158,7 +158,7 @@ const upsertOnePayRecord = async (event) => {
                 One_Pay_Detail: currentOnePayHistory } } = await getUserMetadata(auth0_UUID, auth0Token)
 
         const newChargedFeeRecord = (past_charged_fee + practicalAmount) || 0
-        const newOnePayHistory = { id, amount: practicalAmount, Date: format(fromUnixTime(created), 'yyyy/MM/dd') }
+        const newOnePayHistory = { id, amount: practicalAmount, Date: format(fromUnixTime(created), 'yyyy/MM/dd HH:mm:ss') }
 
         let One_Pay_Detail = currentOnePayHistory ? [newOnePayHistory, ...currentOnePayHistory] : [newOnePayHistory]
         let userCurrency = currentUserCurrency ? currentUserCurrency : currency
