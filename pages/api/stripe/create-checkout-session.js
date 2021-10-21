@@ -3,7 +3,7 @@ import { stripe } from '@/utils/stripe'
 const domain = process.env.NEXT_PUBLIC_DOMAIN
 
 const createCheckoutSession = async (req, res) => {
-  const { price, type, tier_title, unit_amount, currency, user_uuid, user_email } = JSON.parse(req.body)
+  const { price, type, tier_title, unit_amount, currency, user_uuid, user_email, return_page } = JSON.parse(req.body)
 
   if (req.method === 'POST') {
     // See https://stripe.com/docs/api/checkout/sessions/create
@@ -34,7 +34,7 @@ const createCheckoutSession = async (req, res) => {
           allow_promotion_codes: true,
           // subscription_data: {},
           success_url: `${domain}/account/?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${domain}/account/`
+          cancel_url: `${domain}/${return_page}`
         })
       }
 
@@ -59,7 +59,7 @@ const createCheckoutSession = async (req, res) => {
           allow_promotion_codes: true,
           // billing_address_collection: 'required',
           success_url: `${domain}/account/?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${domain}/account/`
+          cancel_url: `${domain}/${return_page}`
         })
       }
       //// End of Session ////

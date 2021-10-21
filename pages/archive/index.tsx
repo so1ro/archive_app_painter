@@ -68,8 +68,8 @@ export default function Archive(
         </Box>
         {/* サブスクリプションもワンペイ永久ご視聴もご購入前 */}
         {subscription_state === 'unsubscribe' &&
-          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} />}
-        <PriceList user={user} allPrices={localeAllTiers} annotation={null} />
+          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'archive'} />}
+        <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'archive'} />
         {/* サブスクリプションが一時停止の場合 */}
         {subscription_state === 'paused' &&
           <NextLink href={'/account'}>

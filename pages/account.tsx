@@ -40,8 +40,12 @@ export default function Account({
 
   const router = useRouter()
   const { locale } = router
-  const localeAllPrices = allPrices.filter(price => locale === 'en' ? price.currency === 'usd' : price.currency === 'jpy')
-  const localeAllTiers = tiers.filter(tier => locale === 'en' ? tier.currency === 'usd' : tier.currency === 'jpy')
+  const localeAllPrices = allPrices.filter(price => User_Detail?.userCurrency ?
+    User_Detail?.userCurrency === 'usd' ? price.currency === 'usd' : price.currency === 'jpy' :
+    locale === 'en' ? price.currency === 'usd' : price.currency === 'jpy')
+  const localeAllTiers = tiers.filter(tier => User_Detail?.userCurrency ?
+    User_Detail?.userCurrency === 'usd' ? tier.currency === 'usd' : tier.currency === 'jpy' :
+    locale === 'en' ? tier.currency === 'usd' : tier.currency === 'jpy')
   const toast = useToast()
   const { annotation } = landingPageText[0]
   const tableSize = useBreakpointValue({ base: 'sm', md: 'md' })
@@ -185,13 +189,13 @@ export default function Account({
           </Box>
           {subscription_state === 'unsubscribe' && <>
             <Text mb={4}>サブスクリプションを開始することもできます。</Text>
-            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} />
+            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
           </>}
           {subscription_state !== 'unsubscribe' && <>
             <Center mb={4}>サブスクリプションの詳細は、次のボタンからご確認いただけます。</Center>
             <CustomerPortalButton />
           </>}
-          <PriceList user={user} allPrices={localeAllTiers} annotation={null} />
+          <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
         </Box>
       </PageShell>)
   }
@@ -210,8 +214,8 @@ export default function Account({
             <Box>○</Box>
           </Grid>}
           <Text mb={4}>新たにサブスクリプションやワンペイ永久ご視聴プランを開始することもできます。</Text>
-          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} />
-          <PriceList user={user} allPrices={localeAllTiers} annotation={null} />
+          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
+          <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
         </Box>
       </PageShell>
     )
@@ -255,8 +259,8 @@ export default function Account({
       <PageShell customPT={null} customSpacing={null}>
         <Box>
           <Text mb={10}>ご購入ボタンからサブスクリプションやワンペイ永久ご視聴プランを開始することができます。</Text>
-          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} />
-          <PriceList user={user} allPrices={localeAllTiers} annotation={null} />
+          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
+          <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
         </Box>
       </PageShell>)
   }

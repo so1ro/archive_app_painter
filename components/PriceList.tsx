@@ -9,7 +9,7 @@ import { MotionButton, MotionLink } from '@/components/Chakra_Framer/element'
 import { price_card_color, highlight_color } from '@/styles/colorModeValue'
 import { Toast } from '@/components/Toast'
 
-export default function PriceList({ user, allPrices, annotation }) {
+export default function PriceList({ user, allPrices, annotation, returnPage }) {
 
     let pastChargedFee = 0
     if (user) {
@@ -44,6 +44,7 @@ export default function PriceList({ user, allPrices, annotation }) {
                     currency,
                     user_uuid: user.sub,
                     user_email: user.email,
+                    return_page: returnPage,
                 }
                 // token: session.access_token
             })

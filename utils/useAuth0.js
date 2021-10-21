@@ -97,23 +97,33 @@ const upsertChargeRecord = async (event) => {
 
     const status = event.object // 'invoice' or 'refund'
     const customer_Id = event.customer
+    const { currency } = event
 
     let amount
-    if (status === 'invoice') amount = event.amount_paid
-    if (status === 'charge') amount = event.amount_refunded * -1
+    if (status === 'invoice') currency === 'usd' ? amount = (event.amount_paid / 100) : amount = event.amount_paid
+    if (status === 'charge') currency === 'usd' ? amount = ((event.amount_refunded * -1) / 100) : amount = event.amount_refunded * -1
+    console.log('amount:', amount)
 
     try {
         const { metadata: { auth0_UUID, criteria_OnePay_price } } = await stripe.customers.retrieve(customer_Id)
         const auth0Token = await auth0AccessToken()
-        const { user_metadata: { User_Detail: { past_charged_fee } } } = await getUserMetadata(auth0_UUID, auth0Token)
+        const {
+            user_metadata: {
+                User_Detail: { past_charged_fee, userCurrency: currentUserCurrency } }
+        } = await getUserMetadata(auth0_UUID, auth0Token)
 
-        const currentChargedFee = (past_charged_fee + amount) || 0
+
+        const newChargedFeeRecord = (past_charged_fee + amount) || 0
+        let User_Detail = {
+            past_charged_fee: newChargedFeeRecord,
+            userCurrency: currentUserCurrency ? currentUserCurrency : currency
+        }
 
         // if Refund for One Pay, remove One Pay record from Auth0
         let metadata = {}
         amount + parseFloat(criteria_OnePay_price) === 0 ?
-            metadata = { User_Detail: { past_charged_fee: currentChargedFee }, One_Pay_Detail: null } :
-            metadata = { User_Detail: { past_charged_fee: currentChargedFee } }
+            metadata = { User_Detail, One_Pay_Detail: null } :
+            metadata = { User_Detail }
 
         await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
 
@@ -129,7 +139,9 @@ const upsertChargeRecord = async (event) => {
 //// Send One-pay record to Auth0
 const upsertOnePayRecord = async (event) => {
 
-    const { amount, customer: customer_Id, created, invoice } = event
+    const { amount, customer: customer_Id, created, invoice, currency } = event
+    const practicalAmount = currency === 'usd' ? amount / 100 : amount
+    console.log('practicalAmount:', practicalAmount)
 
     try {
         const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id)
@@ -139,14 +151,17 @@ const upsertOnePayRecord = async (event) => {
         if (invoice) return // Subscription charge always has invoice
 
         const { user_metadata:
-            { User_Detail: { past_charged_fee },
-                One_Pay_Detail: currentOnePayRecord } } = await getUserMetadata(auth0_UUID, auth0Token)
-        const currentChargedFee = (past_charged_fee + amount) || 0
-        const newRecord = { amount, Date: format(fromUnixTime(created), 'yyyy/MM/dd') }
-        let One_Pay_Detail = currentOnePayRecord ? [newRecord, ...currentOnePayRecord] : [newRecord]
+            { User_Detail: { past_charged_fee, userCurrency: currentUserCurrency },
+                One_Pay_Detail: currentOnePayHistory } } = await getUserMetadata(auth0_UUID, auth0Token)
+
+        const newChargedFeeRecord = (past_charged_fee + practicalAmount) || 0
+        const newOnePayHistory = { amount: practicalAmount, Date: format(fromUnixTime(created), 'yyyy/MM/dd') }
+
+        let One_Pay_Detail = currentOnePayHistory ? [newOnePayHistory, ...currentOnePayHistory] : [newOnePayHistory]
+        let userCurrency = currentUserCurrency ? currentUserCurrency : currency
 
         const metadata = {
-            User_Detail: { past_charged_fee: currentChargedFee },
+            User_Detail: { past_charged_fee: newChargedFeeRecord, userCurrency },
             One_Pay_Detail
         }
         await patchUserMetadataToAuth0(auth0_UUID, auth0Token, metadata)
