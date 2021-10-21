@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 
 import { postData } from '@/utils/helpers'
 import { getStripe } from '@/utils/stripe-client'
+import { useUserMetadata } from '@/context/useUserMetadata'
 
 import { Grid, Box, VStack, Text, HStack, useToast, Center, useColorMode, useColorModeValue, Flex, Link } from '@chakra-ui/react'
 import { MotionButton, MotionLink } from '@/components/Chakra_Framer/element'
@@ -10,12 +11,19 @@ import { Toast } from '@/components/Toast'
 
 export default function PriceList({ user, allPrices, annotation }) {
 
+    let pastChargedFee = 0
+    if (user) {
+        const { User_Detail: { past_charged_fee } } = useUserMetadata()
+        pastChargedFee = past_charged_fee
+    }
+
     const toast = useToast()
     const { colorMode } = useColorMode()
     const priceCardColor = useColorModeValue(price_card_color.l, price_card_color.d)
     const oneTimeCardColor = '#e63946'
     const cardBorder = colorMode === 'light' ? '1px' : '0px'
     const highlighColor = useColorModeValue(highlight_color.l, highlight_color.d)
+    const selectedPrices = allPrices.filter(price => price.type === 'one_time' ? price.unit_amount - pastChargedFee > 0 : price)
     // const criteriaOnePayPrice = allPrices.find(price => price.type === 'one_time').unit_amount
 
     const handleCheckout = async (
@@ -66,7 +74,13 @@ export default function PriceList({ user, allPrices, annotation }) {
                     whileHover={{ scale: 1.1 }}
                     onClick={() => {
                         toast({ duration: 3000, render: () => (<Toast text={user ? "チェックアウトセッションに移動中..." : "サインアップに移動中..."} />) })
-                        if (user) handleCheckout(price.id, price.type, price.tierTitle, price.unit_amount, price.currency)
+                        if (user) handleCheckout(
+                            price.id,
+                            price.type,
+                            price.tierTitle,
+                            price.type === 'one_time' ? price.unit_amount - pastChargedFee : price.unit_amount,
+                            price.currency
+                        )
                     }}>
                     {user ? '購入' : 'サインアップ・購入'}
                 </MotionButton>
@@ -87,7 +101,7 @@ export default function PriceList({ user, allPrices, annotation }) {
     return (
         <div>
             <Grid gap={3} gridTemplateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} mb={3}>
-                {allPrices.map(price => (
+                {selectedPrices.map(price => (
                     <Flex
                         direction='column'
                         key={price.id ?? price.sys.id}
@@ -100,7 +114,9 @@ export default function PriceList({ user, allPrices, annotation }) {
                         align='center'
                     >
                         <HStack spacing={1} align='baseline' py={{ base: 2, md: 4 }}>
-                            <Text letterSpacing='-1px' fontSize={{ base: '3xl', lg: '4xl' }}>{price.unit_amount}</Text>
+                            <Text letterSpacing='-1px' fontSize={{ base: '3xl', lg: '4xl' }}>
+                                {price.type === 'one_time' ? price.unit_amount - pastChargedFee : price.unit_amount}
+                            </Text>
                             <Text>{price.type === "recurring" ? '円／月' : '円'}</Text>
                         </HStack>
                         <Center fontSize='xs' py={0} color='#fff' w='full' bg={price.type === "recurring" ? priceCardColor : oneTimeCardColor}>

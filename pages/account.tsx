@@ -9,14 +9,21 @@ import { postData } from '@/utils/helpers'
 import PriceList from '@/components/PriceList'
 import { Toast } from '@/components/Toast'
 import { fetchContentful } from '@/hook/contentful'
-import { query_archivePricing } from '@/hook/contentful-queries'
+import { query_archivePricing, query_archiveTier } from '@/hook/contentful-queries'
 
 import { Button, Code, Box, Grid, Center, Text, useToast, HStack, useColorModeValue, Table, Tbody, Tr, Td, TableCaption, useBreakpointValue, } from '@chakra-ui/react'
 import PageShell from '@/components/PageShell'
 import LoadingSpinner from '@/components/Spinner'
 import { bg_color, border_color } from '@/styles/colorModeValue'
 
-export default function Account({ allPrices, landingPageText }: { allPrices: AllPrices[], landingPageText: LandingPageText[], }) {
+export default function Account({
+  allPrices,
+  landingPageText,
+  tiers, }: {
+    allPrices: AllPrices[],
+    landingPageText: LandingPageText[],
+    tiers: TierInterface[],
+  }) {
 
   const { user, error, isLoading } = useUser()
   const {
@@ -34,6 +41,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
   const router = useRouter()
   const { locale } = router
   const localeAllPrices = allPrices.filter(price => locale === 'en' ? price.currency === 'usd' : price.currency === 'jpy')
+  const localeAllTiers = tiers.filter(tier => locale === 'en' ? tier.currency === 'usd' : tier.currency === 'jpy')
   const toast = useToast()
   const { annotation } = landingPageText[0]
   const tableSize = useBreakpointValue({ base: 'sm', md: 'md' })
@@ -177,11 +185,13 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
           </Box>
           {subscription_state === 'unsubscribe' && <>
             <Text mb={4}>サブスクリプションを開始することもできます。</Text>
-            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} /></>}
+            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} />
+          </>}
           {subscription_state !== 'unsubscribe' && <>
             <Center mb={4}>サブスクリプションの詳細は、次のボタンからご確認いただけます。</Center>
             <CustomerPortalButton />
           </>}
+          <PriceList user={user} allPrices={localeAllTiers} annotation={null} />
         </Box>
       </PageShell>)
   }
@@ -201,6 +211,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
           </Grid>}
           <Text mb={4}>新たにサブスクリプションやワンペイ永久ご視聴プランを開始することもできます。</Text>
           <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} />
+          <PriceList user={user} allPrices={localeAllTiers} annotation={null} />
         </Box>
       </PageShell>
     )
@@ -245,6 +256,7 @@ export default function Account({ allPrices, landingPageText }: { allPrices: All
         <Box>
           <Text mb={10}>ご購入ボタンからサブスクリプションやワンペイ永久ご視聴プランを開始することができます。</Text>
           <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} />
+          <PriceList user={user} allPrices={localeAllTiers} annotation={null} />
         </Box>
       </PageShell>)
   }
@@ -273,14 +285,15 @@ export const getStaticProps: GetStaticProps = async () => {
   // get Subscription Plans from Stripe
   const landingPageText = await fetchContentful(query_archivePricing) // This is for fetching Annotation under the price list
   const allPrices = await fetchAllPrices()
+  const tiersCollection = await fetchContentful(query_archiveTier)
+  const tiers = tiersCollection.archivePricingTierCollection.items.map(t => ({ ...t, unit_amount: t.unitAmount, type: 'one_time' }))
 
   return {
     props: {
       allPrices: [...allPrices],
-      landingPageText: landingPageText.archivePricingCollection.items
+      landingPageText: landingPageText.archivePricingCollection.items,
+      tiers,
     },
     revalidate: 30
   }
 }
-
-
