@@ -52,3 +52,5 @@ export const arrayProceedHandler = (arr: AllArchivesInterface[], currentData: Al
   if (index >= 0 && index < arr.length - 1) return nextData = arr[index + 1]
   else return nextData = arr[0]
 }
+
+export const currencyUSDChecker = (userCurrency, locale) => userCurrency ? userCurrency === 'usd' : locale === 'en'

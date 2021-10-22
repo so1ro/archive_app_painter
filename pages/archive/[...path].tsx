@@ -8,7 +8,7 @@ import { useArchiveState } from "@/context/useArchiveState"
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 
-import { query_archiveRoute, limitSkipNum } from "@/hook/contentful-queries"
+import { query_archiveRoute, limitSkipNum, query_archiveTier } from "@/hook/contentful-queries"
 import { fetchContentful, generateSearchQuery } from '@/hook/contentful'
 import { format, parseISO, compareDesc } from "date-fns"
 
@@ -25,7 +25,7 @@ import LoadingSpinner from '@/components/Spinner'
 import { bg_color_content, highlight_color } from '@/styles/colorModeValue'
 import ArchiveSearch from '@/components/ArchiveSearch'
 import Alert from '@/components/AlertDialog'
-import { postData } from '@/utils/helpers'
+import { currencyUSDChecker, postData } from '@/utils/helpers'
 import { ToastError } from '@/components/Toast'
 
 export default function ArchiveRoute({
@@ -35,7 +35,8 @@ export default function ArchiveRoute({
     breadCrumbPaths,
     pathObj,
     filter,
-    totalNumOfArchives }: {
+    totalNumOfArchives,
+    tiers }: {
         filteredDescArchive: AllArchives2Interface[],
         filteredAscArchive: AllArchives2Interface[],
         currentPaths: string[],
@@ -43,12 +44,15 @@ export default function ArchiveRoute({
         pathObj: ArchivePath[],
         filter: string | null,
         totalNumOfArchives: number | null,
+        tiers: TierInterface[],
     }) {
 
     // Hook
     const { user, error, isLoading } = useUser()
     const router = useRouter()
+    const { locale } = useRouter()
     const {
+        User_Detail,
         isMetadataLoading,
         subscription_state,
         One_Pay_Detail,
@@ -87,11 +91,19 @@ export default function ArchiveRoute({
     const [{ skipNum }, setSkipNum] = useState<{ skipNum: number }>({ skipNum: limitSkipNum })
     const [{ isFavoriteArchiveLoading }, setIsFavoriteArchiveLoading] = useState<{ isFavoriteArchiveLoading: boolean }>({ isFavoriteArchiveLoading: false })
 
+    // Archive select
     const filteredArchive = isArchiveDesc ? descArchive : ascArchive
     const checkFavoriteRoute = () => router.asPath.includes('favorite')
 
     let selectedArchive = isSeaching ? searchedArchiveResult :
         (checkFavoriteRoute() ? favoriteArchive : filteredArchive)
+
+    // Current Tier View Period
+    const periodCurrentUserTier = tiers
+        .filter(t => t.currency === User_Detail?.userCurrency)
+        .map(t => ({ ...t, unit_amount: currencyUSDChecker(User_Detail?.userCurrency, locale) ? t.unit_amount / 100 : t.unit_amount }))
+        .sort((a, b) => a.unit_amount - b.unit_amount)
+        .filter(t => t.unit_amount <= User_Detail?.past_charged_fee).slice(-1)[0]?.viewPeriod
 
     // Effect
     useEffect(() => {
@@ -283,7 +295,14 @@ export default function ArchiveRoute({
                                     !!selectedArchive?.length ?
                                         <>
                                             <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', xl: 'repeat(4, 1fr)', '4xl': 'repeat(5, 1fr)' }} gap={{ base: 6, md: 8 }} cursor='pointer' w='full'>
-                                                {selectedArchive.map((archive) => <ArchiveThumbnail archive={archive} inVideoCompo={false} currentRoot={currentRoot} key={archive.sys.id} setSkipTime={null} playing={false} />)}
+                                                {selectedArchive.map((archive) =>
+                                                    <ArchiveThumbnail
+                                                        key={archive.sys.id}
+                                                        archive={archive}
+                                                        inVideoCompo={false}
+                                                        currentRoot={currentRoot}
+                                                        setSkipTime={null} playing={false}
+                                                        period={periodCurrentUserTier} />)}
                                             </Grid>
                                             {isSeaching && isShowingSearchResult && (searchedArchiveResult.length === limitSkipNum) &&
                                                 <Box>{`上位${limitSkipNum}件の結果を表示しています。`}</Box>}
@@ -384,6 +403,10 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
             total
         }}`)
 
+    const tiersCollection = await fetchContentful(query_archiveTier)
+    const tiers = tiersCollection.archivePricingTierCollection.items.map(t => ({ ...t, unit_amount: t.unitAmount, type: 'one_time' }))
+
+
     return {
         props: {
             filteredDescArchive,
@@ -392,7 +415,8 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
             breadCrumbPaths,
             pathObj: items[0].archiveRouteArray,
             filter,
-            totalNumOfArchives
+            totalNumOfArchives,
+            tiers
         },
         revalidate: 1,
     }

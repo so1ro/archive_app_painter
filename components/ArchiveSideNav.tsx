@@ -11,7 +11,9 @@ import {
     AccordionPanel,
     AccordionIcon,
     Link,
-    useColorModeValue
+    Switch,
+    HStack,
+    useColorModeValue,
 } from "@chakra-ui/react"
 import { css } from "@emotion/react"
 import { highlight_color, text_color } from '@/styles/colorModeValue';
@@ -21,7 +23,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
     const router = useRouter()
     const { locale } = useRouter()
     const route = router.pathname.split('/')[1]
-    const { setSearchKeyword } = useArchiveState()
+    const { setSearchKeyword, isShowingTierArchiveOnly, setIsShowingTierArchiveOnly, } = useArchiveState()
 
     // For routes which need Accordion to be opened.
     let defaultIndex: number | null = null
@@ -65,7 +67,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                 else return (
                     <AccordionItem borderTopWidth={0} borderBottomWidth={0} key={i}>
                         {({ isExpanded }) => (
-                            <Box borderLeft={isExpanded ? `4px solid ${highLightColor}` : ''} px={8}>
+                            <Box borderLeft={isExpanded ? `4px solid ${highLightColor} ` : ''} px={8}>
                                 <h2>
                                     <AccordionButton px={0} pt={0} pb={5} _expanded={{ color: highLightColor }} fontSize={{ base: 'sm', xl: 'md' }}>
                                         <Box
@@ -78,20 +80,30 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                                     </AccordionButton>
                                 </h2>
                                 {obj.paths.map(p => (
-                                    <ArchiveActiveLink href={`/${route}/${obj.id}/${p.link}`} key={`${obj.id}/${p.link}`}>
-                                        <Link onClick={() => {
+                                    <ArchiveActiveLink href={`/ ${route} /${obj.id}/${p.link} `} key={`${obj.id} /${p.link}`}>
+                                        <Link Link onClick={() => {
                                             setIsExpanding({ isExpanding: true })
                                             if (onCloseDrawer !== null) onCloseDrawer()
                                             setSearchKeyword({ searchKeyword: '' })
                                         }}>
                                             <AccordionPanel pt={0} pb={5} isTruncated>{p.name[locale]}</AccordionPanel>
                                         </Link>
-                                    </ArchiveActiveLink>))}
-                            </Box>
+                                    </ArchiveActiveLink >))
+                                }
+                            </Box >
                         )}
 
-                    </AccordionItem>)
+                    </AccordionItem >)
             })}
-        </Accordion>
+            <HStack spacing={4} px={8} mt={10}>
+                <Box>{locale === 'en' ? 'Show all Tier' : 'すべての Tier'}</Box>
+                <Switch
+                    colorScheme="red"
+                    size='sm'
+                    isChecked={!isShowingTierArchiveOnly}
+                    onChange={() => setIsShowingTierArchiveOnly({ isShowingTierArchiveOnly: !isShowingTierArchiveOnly })}
+                />
+            </HStack>
+        </Accordion >
     );
 }

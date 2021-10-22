@@ -1,16 +1,16 @@
 import Image from "next/image"
 import { Box, Grid, List, ListItem, useColorModeValue, Flex } from '@chakra-ui/react'
-import { format, parseISO } from "date-fns"
+import { compareAsc } from "date-fns"
 import { useRouter } from 'next/router'
 import { useArchiveState } from '@/context/useArchiveState'
 import { css } from "@emotion/react"
 import { highlight_color, text_humble_color } from '@/styles/colorModeValue';
 
-export default function ArchiveThumbnail({ archive, inVideoCompo, currentRoot, setSkipTime, playing }) {
+export default function ArchiveThumbnail({ archive, inVideoCompo, currentRoot, setSkipTime, playing, period }) {
 
     const router = useRouter()
     const { locale } = useRouter()
-    const { setCurrentDisplayArchive, setScrollY, } = useArchiveState()
+    const { setCurrentDisplayArchive, setScrollY, isShowingTierArchiveOnly, } = useArchiveState()
 
     const textHumbleColor = useColorModeValue(text_humble_color.l, text_humble_color.d)
     const imgPlayingCss = css`
@@ -28,16 +28,18 @@ export default function ArchiveThumbnail({ archive, inVideoCompo, currentRoot, s
           ${playing && `border-bottom: 4px ${useColorModeValue(highlight_color.l, highlight_color.d)} solid!important;`}
         }
     `
-
     const bgGradient = `linear-gradient(180deg, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.5) 100%);`
     const txShadow = `0px 1px 4px rgba(0, 0, 0, 0.90);`
     const boxShadow = `0px 16px 31px 7px rgba(0, 0, 0, 0.2);`
+
+    // Function
+    const showTierArchiveOnlyChecker = () => isShowingTierArchiveOnly && compareAsc(new Date(archive.publishDate), new Date(period)) >= 0
 
     return (
         <Grid
             templateColumns={!inVideoCompo ? { base: "1fr" } : { base: "1fr" }}
             gap={{ base: 4, md: 1 }}
-            d={{ base: 'grid', md: 'block' }}
+            d={showTierArchiveOnlyChecker() ? 'none' : { base: 'grid', md: 'block' }}
             onClick={() => {
                 setSkipTime !== null && setSkipTime({ skipTime: 0 })
                 setCurrentDisplayArchive({ currentDisplayArchive: archive })

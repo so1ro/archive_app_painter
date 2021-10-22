@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 
-import { postData } from '@/utils/helpers'
+import { currencyUSDChecker, postData } from '@/utils/helpers'
 import { getStripe } from '@/utils/stripe-client'
 import { useUserMetadata } from '@/context/useUserMetadata'
 
@@ -63,8 +63,6 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
         }
     }
 
-    const currencyChecker = () => userFavoriteCurrency ? userFavoriteCurrency === 'usd' : locale === 'en'
-
     // Compo in Compo
     const SignupPurchaseButton = ({ price }) => {
 
@@ -124,13 +122,13 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
                         align='center'
                     >
                         <HStack spacing={1} align='baseline' py={{ base: 2, md: 4 }}>
-                            {currencyChecker() && <Text fontSize={{ base: '2xl' }}>$</Text>}
+                            {currencyUSDChecker(userFavoriteCurrency, locale) && <Text fontSize={{ base: '2xl' }}>$</Text>}
                             <Text letterSpacing='-1px' fontSize={{ base: '3xl', lg: '4xl' }}>
                                 {price.type === 'one_time' ?
                                     price.currency === 'usd' ? (price.unit_amount / 100) - pastChargedFee : price.unit_amount - pastChargedFee :
                                     price.currency === 'usd' ? (price.unit_amount / 100) : price.unit_amount}
                             </Text>
-                            <Text>{price.type === "recurring" ? currencyChecker() ? '/ month' : '円／月' : currencyChecker() ? '' : '円'}</Text>
+                            <Text>{price.type === "recurring" ? currencyUSDChecker(userFavoriteCurrency, locale) ? '/ month' : '円／月' : currencyUSDChecker(userFavoriteCurrency, locale) ? '' : '円'}</Text>
                         </HStack>
                         <Center fontSize='xs' py={0} color='#fff' w='full' bg={price.type === "recurring" ? priceCardColor : oneTimeCardColor}>
                             {price.type === "recurring" ? 'サブスクリプション' : 'ワンペイ永久ご視聴'}

@@ -17,6 +17,7 @@ export const ArchiveStateProvider = (props) => {
   const [{ currentDisplayArchive }, setCurrentDisplayArchive] = useState<{ currentDisplayArchive: AllArchivesInterface | null }>({ currentDisplayArchive: null })
   const [{ isFetchingMoreContent }, setIsFetchingMoreContent] = useState<{ isFetchingMoreContent: boolean }>({ isFetchingMoreContent: false })
   const [{ scrollY }, setScrollY] = useState<{ scrollY: number }>({ scrollY: 0 })
+  const [{ isShowingTierArchiveOnly }, setIsShowingTierArchiveOnly] = useState<{ isShowingTierArchiveOnly: boolean }>({ isShowingTierArchiveOnly: true })
 
   // Effect
   // useEffect(() => { }, []);
@@ -44,6 +45,8 @@ export const ArchiveStateProvider = (props) => {
     setIsFetchingMoreContent,
     scrollY,
     setScrollY,
+    isShowingTierArchiveOnly,
+    setIsShowingTierArchiveOnly,
   }
   return <ArchiveStateContext.Provider value={value} {...props} />;
 };
