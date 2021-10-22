@@ -11,7 +11,7 @@ export default function NavLinks() {
         <Stack spacing={4} isInline alignItems="center" d={{ base: "none", lg: "flex" }}>
             {nav_links.map(link => (
                 <ActiveLink href={link.href} root={link.root} key={link.key}>
-                    {(!!link.root && asPath.includes(link.root)) ? <></> : <Link>{link.text[locale]}</Link>}
+                    <Link>{link.text[locale]}</Link>
                 </ActiveLink>
             ))}
         </Stack>
