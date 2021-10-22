@@ -12,20 +12,27 @@ import { Toast } from '@/components/Toast'
 export default function PriceList({ user, allPrices, annotation, returnPage }) {
 
     let pastChargedFee = 0
+    let userFavoriteCurrency = ''
     if (user) {
-        const { User_Detail: { past_charged_fee } } = useUserMetadata()
+        const { User_Detail: { past_charged_fee, userCurrency } } = useUserMetadata()
         pastChargedFee = past_charged_fee
+        userFavoriteCurrency = userCurrency
     }
 
+    const selectedPrices = allPrices.filter(
+        price => price.type === 'one_time' ?
+            price.currency === 'usd' ? (price.unit_amount / 100) - pastChargedFee > 0 : price.unit_amount - pastChargedFee > 0 :
+            price)
+
+    const { locale } = useRouter()
     const toast = useToast()
     const { colorMode } = useColorMode()
     const priceCardColor = useColorModeValue(price_card_color.l, price_card_color.d)
     const oneTimeCardColor = '#e63946'
     const cardBorder = colorMode === 'light' ? '1px' : '0px'
     const highlighColor = useColorModeValue(highlight_color.l, highlight_color.d)
-    const selectedPrices = allPrices.filter(price => price.type === 'one_time' ? price.unit_amount - pastChargedFee > 0 : price)
-    // const criteriaOnePayPrice = allPrices.find(price => price.type === 'one_time').unit_amount
 
+    // Function
     const handleCheckout = async (
         price?: string,
         type?: string,
@@ -55,6 +62,8 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
             return console.error(e.message)
         }
     }
+
+    const currencyChecker = () => userFavoriteCurrency ? userFavoriteCurrency === 'usd' : locale === 'en'
 
     // Compo in Compo
     const SignupPurchaseButton = ({ price }) => {
@@ -115,10 +124,13 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
                         align='center'
                     >
                         <HStack spacing={1} align='baseline' py={{ base: 2, md: 4 }}>
+                            {currencyChecker() && <Text fontSize={{ base: '2xl' }}>$</Text>}
                             <Text letterSpacing='-1px' fontSize={{ base: '3xl', lg: '4xl' }}>
-                                {price.type === 'one_time' ? price.unit_amount - pastChargedFee : price.unit_amount}
+                                {price.type === 'one_time' ?
+                                    price.currency === 'usd' ? (price.unit_amount / 100) - pastChargedFee : price.unit_amount - pastChargedFee :
+                                    price.currency === 'usd' ? (price.unit_amount / 100) : price.unit_amount}
                             </Text>
-                            <Text>{price.type === "recurring" ? '円／月' : '円'}</Text>
+                            <Text>{price.type === "recurring" ? currencyChecker() ? '/ month' : '円／月' : currencyChecker() ? '' : '円'}</Text>
                         </HStack>
                         <Center fontSize='xs' py={0} color='#fff' w='full' bg={price.type === "recurring" ? priceCardColor : oneTimeCardColor}>
                             {price.type === "recurring" ? 'サブスクリプション' : 'ワンペイ永久ご視聴'}
