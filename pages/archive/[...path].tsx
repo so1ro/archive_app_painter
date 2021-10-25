@@ -25,7 +25,7 @@ import LoadingSpinner from '@/components/Spinner'
 import { bg_color_content, highlight_color } from '@/styles/colorModeValue'
 import ArchiveSearch from '@/components/ArchiveSearch'
 import Alert from '@/components/AlertDialog'
-import { currencyUSDChecker, postData } from '@/utils/helpers'
+import { periodCurrentUserTierFinder, postData } from '@/utils/helpers'
 import { ToastError } from '@/components/Toast'
 
 export default function ArchiveRoute({
@@ -99,11 +99,11 @@ export default function ArchiveRoute({
         (checkFavoriteRoute() ? favoriteArchive : filteredArchive)
 
     // Current Tier View Period
-    const periodCurrentUserTier = tiers
+    const periodCurrentUserTier = periodCurrentUserTierFinder(tiers, User_Detail, locale)
+
+    const tierLableInfo = tiers
         .filter(t => t.currency === User_Detail?.userCurrency)
-        .map(t => ({ ...t, unit_amount: currencyUSDChecker(User_Detail?.userCurrency, locale) ? t.unit_amount / 100 : t.unit_amount }))
-        .sort((a, b) => a.unit_amount - b.unit_amount)
-        .filter(t => t.unit_amount <= User_Detail?.past_charged_fee).slice(-1)[0]?.viewPeriod
+        .map(t => ({ tierTitle: t.tierTitle, viewPeriod: t.viewPeriod }))
 
     // Effect
     useEffect(() => {
@@ -302,7 +302,8 @@ export default function ArchiveRoute({
                                                         inVideoCompo={false}
                                                         currentRoot={currentRoot}
                                                         setSkipTime={null} playing={false}
-                                                        period={periodCurrentUserTier} />)}
+                                                        userTierPeriod={periodCurrentUserTier}
+                                                        tierLableInfo={tierLableInfo} />)}
                                             </Grid>
                                             {isSeaching && isShowingSearchResult && (searchedArchiveResult.length === limitSkipNum) &&
                                                 <Box>{`上位${limitSkipNum}件の結果を表示しています。`}</Box>}
@@ -403,9 +404,9 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
             total
         }}`)
 
+    // Tier
     const tiersCollection = await fetchContentful(query_archiveTier)
     const tiers = tiersCollection.archivePricingTierCollection.items.map(t => ({ ...t, unit_amount: t.unitAmount, type: 'one_time' }))
-
 
     return {
         props: {

@@ -1,3 +1,5 @@
+import { compareAsc } from "date-fns";
+
 export const getURL = () => {
   const url =
     process?.env?.URL && process.env.URL !== ''
@@ -54,3 +56,15 @@ export const arrayProceedHandler = (arr: AllArchivesInterface[], currentData: Al
 }
 
 export const currencyUSDChecker = (userCurrency, locale) => userCurrency ? userCurrency === 'usd' : locale === 'en'
+
+export const periodCurrentUserTierFinder = (tiers, User_Detail, locale) => (
+  tiers
+    .filter(t => t.currency === User_Detail?.userCurrency)
+    .map(t => ({ ...t, unit_amount: currencyUSDChecker(User_Detail?.userCurrency, locale) ? t.unit_amount / 100 : t.unit_amount }))
+    .sort((a, b) => a.unit_amount - b.unit_amount)
+    .filter(t => t.unit_amount <= User_Detail?.past_charged_fee).slice(-1)[0]?.viewPeriod
+)
+
+export const isArchiveNotInTierPeriod_userIsNotSubscriber_checker = (subscription_state, archive, userTierPeriod) => (
+  subscription_state !== 'subscribe' && compareAsc(new Date(archive.publishDate), new Date(userTierPeriod)) >= 0
+)

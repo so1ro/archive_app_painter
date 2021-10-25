@@ -3,9 +3,9 @@ import { useLayoutEffect, useState } from 'react'
 import { useUserMetadata } from '@/context/useUserMetadata'
 import { fetchContentful } from '@/hook/contentful'
 import NextLink from 'next/link'
-import { query_allArchives2, query_storageUrl } from '@/hook/contentful-queries'
+import { query_allArchives2, query_archiveTier, query_storageUrl } from '@/hook/contentful-queries'
 import _ from 'lodash'
-import { postData } from '@/utils/helpers'
+import { isArchiveNotInTierPeriod_userIsNotSubscriber_checker, periodCurrentUserTierFinder, postData } from '@/utils/helpers'
 
 import ZoomImgModal from '@/components/ZoomImgModal'
 import VideoYouTube from '@/components/VideoYouTube'
@@ -20,18 +20,23 @@ import { BrushIcon, FavoriteHeartIcon } from '@/styles/icons'
 import { Toast, ToastError } from '@/components/Toast'
 import LoadingSpinner from '@/components/Spinner'
 
-export default function Archive1({ archive, path }:
-	{ archive: AllArchives2Interface, path: string }) {
+export default function Archive1({ archive, path, tiers }:
+	{ archive: AllArchives2Interface, path: string, tiers: TierInterface[], }) {
 
 	// Hook
 	const { user, error, isLoading } = useUser()
 	const { locale } = useRouter()
-	const { isMetadataLoading,
+	const {
+		User_Detail,
+		isMetadataLoading,
 		subscription_state,
 		One_Pay_Detail,
 		favoriteWork,
 		setFavoriteWork } = useUserMetadata()
 	const toast = useToast()
+	const userTierPeriod = periodCurrentUserTierFinder(tiers, User_Detail, locale)
+	const isArchiveNotInTierPeriod_userIsNotSubscriber =
+		isArchiveNotInTierPeriod_userIsNotSubscriber_checker(subscription_state, archive, userTierPeriod)
 
 	// State
 	const [{ isAccordionOpen }, setIsAccordionOpen] = useState<{ isAccordionOpen: boolean }>({ isAccordionOpen: false })
@@ -92,7 +97,17 @@ export default function Archive1({ archive, path }:
 	// Component
 	const ErrowMessage = () => (
 		<Center w='full' px={6}>
-			<Box>アーカイブのご購入を確認できませんでした。ご購入は<NextLink href='/archive' passHref><Link className='active'>こちら</Link></NextLink>から。</Box>
+			{locale === 'en' ?
+				<Box textAlign='center'>You haven't purchased Archive or your tier doesn't include this archive.<br />
+					Please purchase from {user ?
+						<NextLink href='/account' passHref><Link className='active'>here</Link></NextLink> :
+						<NextLink href='/archive' passHref><Link className='active'>here</Link></NextLink>}
+				</Box> :
+				<Box textAlign='center'>アーカイブをご購入されていないか、ご購入いただいたTierに含まれないアーカイブです。<br />
+					ご購入は{user ?
+						<NextLink href='/account' passHref><Link className='active'>こちら</Link></NextLink> :
+						<NextLink href='/archive' passHref><Link className='active'>こちら</Link></NextLink>}から。
+				</Box>}
 		</Center>
 	)
 
@@ -106,7 +121,7 @@ export default function Archive1({ archive, path }:
 			}} />
 	)
 
-	if (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail)) {
+	if (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail) && !isArchiveNotInTierPeriod_userIsNotSubscriber) {
 		return (
 			<>
 				<VStack w='full' maxW={{ base: '1000px' }} py={{ base: 12, lg: 24 }} spacing={24} margin='0 auto'>
@@ -250,11 +265,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 	const archive = items.filter(item => item.archiveNumber === params.archive)
 	const { storageUrl: { path } } = await fetchContentful(query_storageUrl)
 
+	// Tier
+	const tiersCollection = await fetchContentful(query_archiveTier)
+	const tiers = tiersCollection.archivePricingTierCollection.items.map(t => ({ ...t, unit_amount: t.unitAmount, type: 'one_time' }))
+
+
 	return {
 		props: {
 			archive: archive[0],
 			archiveNumber: params.archive,
-			path
+			path,
+			tiers
 		},
 		revalidate: 1,
 	}

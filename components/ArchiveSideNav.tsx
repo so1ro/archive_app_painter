@@ -17,12 +17,14 @@ import {
 } from "@chakra-ui/react"
 import { css } from "@emotion/react"
 import { highlight_color, text_color } from '@/styles/colorModeValue';
+import { useUserMetadata } from '@/context/useUserMetadata';
 
 export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: ArchivePath[], onCloseDrawer: () => void | null }) {
 
     const router = useRouter()
     const { locale } = useRouter()
     const route = router.pathname.split('/')[1]
+    const { subscription_state } = useUserMetadata()
     const { setSearchKeyword, isShowingTierArchiveOnly, setIsShowingTierArchiveOnly, } = useArchiveState()
 
     // For routes which need Accordion to be opened.
@@ -95,7 +97,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
 
                     </AccordionItem >)
             })}
-            <HStack spacing={4} px={8} mt={10}>
+            {subscription_state !== 'subscribe' && <HStack spacing={4} px={8} mt={10}>
                 <Box>{locale === 'en' ? 'Show all Tier' : 'すべての Tier'}</Box>
                 <Switch
                     colorScheme="red"
@@ -103,7 +105,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                     isChecked={!isShowingTierArchiveOnly}
                     onChange={() => setIsShowingTierArchiveOnly({ isShowingTierArchiveOnly: !isShowingTierArchiveOnly })}
                 />
-            </HStack>
+            </HStack>}
         </Accordion >
     );
 }
