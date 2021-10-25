@@ -116,7 +116,7 @@ export default function ArchiveThumbnail({ archive, inVideoCompo, setSkipTime, p
                 <ModalContent css={modalCss}>
                     <ModalHeader>{locale === 'en' ? 'Check your Tier' : 'Tierをご確認ください'}</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>{locale === 'en' ? "Your current Tier doesn't include this work. Please upgrade your Tier or start Subscription in order to show it." : '現在の Tier は、この作品を含んでおりません。サブスクリプションを開始されるか、Tierをアップグレードしてください。'}</ModalBody>
+                    <ModalBody>{locale === 'en' ? "Your current Tier doesn't include this piece of work. Please upgrade your Tier or start Subscription in order to show it." : '現在の Tier は、このアーカイブを含んでおりません。Tier をアップグレードされるか、サブスクリプションを開始してください。'}</ModalBody>
                     <ModalFooter>
                         <Button mr={2} onClick={() => router.push(`/account`, null)} colorScheme='green'>{locale === 'en' ? 'Move to Account' : 'アカウントページへ'}</Button>
                         <Button onClick={onClose}>{locale === 'en' ? 'Close' : '閉じる'}</Button>

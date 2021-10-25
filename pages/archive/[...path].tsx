@@ -7,12 +7,13 @@ import { useUserMetadata } from "@/context/useUserMetadata"
 import { useArchiveState } from "@/context/useArchiveState"
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
+import { compareAsc } from 'date-fns'
 
 import { query_archiveRoute, limitSkipNum, query_archiveTier } from "@/hook/contentful-queries"
 import { fetchContentful, generateSearchQuery } from '@/hook/contentful'
 import { format, parseISO, compareDesc } from "date-fns"
 
-import { VStack, Box, Flex, Grid, List, ListItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, HStack, Center, Link, useToast, Button, Spinner } from '@chakra-ui/react'
+import { Code, VStack, Box, Flex, Grid, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, HStack, Center, Link, useToast, Spinner } from '@chakra-ui/react'
 import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 
@@ -74,7 +75,9 @@ export default function ArchiveRoute({
         isFetchingMoreContent,
         setIsFetchingMoreContent,
         scrollY,
-        setScrollY, } = useArchiveState()
+        setScrollY,
+        isShowingTierArchiveOnly,
+        setIsShowingTierArchiveOnly, } = useArchiveState()
     const isLargerThan992 = useMediaQuery("(min-width: 992px)")
     const toast = useToast()
     useBottomScrollListener(() => {
@@ -94,16 +97,16 @@ export default function ArchiveRoute({
     // Archive select
     const filteredArchive = isArchiveDesc ? descArchive : ascArchive
     const checkFavoriteRoute = () => router.asPath.includes('favorite')
-
     let selectedArchive = isSeaching ? searchedArchiveResult :
         (checkFavoriteRoute() ? favoriteArchive : filteredArchive)
 
-    // Current Tier View Period
+    // Related to Tier
     const periodCurrentUserTier = periodCurrentUserTierFinder(tiers, User_Detail, locale)
-
     const tierLableInfo = tiers
         .filter(t => t.currency === User_Detail?.userCurrency)
         .map(t => ({ tierTitle: t.tierTitle, viewPeriod: t.viewPeriod }))
+    const isSelectedArchiveInTierPeriod = subscription_state === 'subscribe' ? true :
+        selectedArchive?.filter(arc => compareAsc(new Date(periodCurrentUserTier), new Date(arc.publishDate)) > 0).length > 0
 
     // Effect
     useEffect(() => {
@@ -232,7 +235,6 @@ export default function ArchiveRoute({
         </Breadcrumb>
     )
 
-
     const SortArrow = () => (
         !isSeaching && !checkFavoriteRoute() && <HStack>
             <ChevronDownIcon
@@ -259,7 +261,28 @@ export default function ArchiveRoute({
 
     const ErrowMessage = () => (
         <Center w='full' px={6}>
-            <Box>アーカイブのご購入を確認できませんでした。ご購入は<NextLink href='/archive' passHref><Link className='active'>こちら</Link></NextLink>から。</Box>
+            {locale === 'en' ?
+                <Box>We could not find your purchase record of our archive.<br />Please purchase from <NextLink href='/archive' passHref><Link className='active'>here</Link></NextLink></Box> :
+                <Box>アーカイブのご購入を確認できませんでした。ご購入は<NextLink href='/archive' passHref><Link className='active'>こちら</Link></NextLink>から。</Box>}
+        </Center>
+    )
+
+    const ErrowMessageNotUserTierIncludingArchives = () => (
+        <Center w='full' px={6}>
+            {locale === 'en' ?
+                <Box>Your tier doesn't include this category's archives.<br /><br />
+                    Check all archives?<br />
+                    <Link onClick={() => setIsShowingTierArchiveOnly({ isShowingTierArchiveOnly: !isShowingTierArchiveOnly })} color={highLightColor}>
+                        Show all Tier</Link><br /><br />
+                    Do you want to change your Tier?<br />
+                    Please upgrade your Tier or start Subscription from <NextLink href='/account' passHref><Link className='active'>here</Link></NextLink>.
+                </Box> :
+                <Box>このカテゴリーのアーカイブは、ご購入いただいた Tier に含まれておりません。<br /><br />
+                    すべての Tier をご覧になりますか？<br />
+                    <Link onClick={() => setIsShowingTierArchiveOnly({ isShowingTierArchiveOnly: !isShowingTierArchiveOnly })} color={highLightColor}>
+                        すべての Tier を表示</Link><br /><br />
+                    Tier のアップグレードまたは、サブスクリプションの開始は<NextLink href='/account' passHref><Link className='active'>こちら</Link></NextLink>から。
+                </Box>}
         </Center>
     )
 
@@ -318,16 +341,11 @@ export default function ArchiveRoute({
                                             {isSeaching && isShowingSearchResult && !isWaitingSearchResult &&
                                                 <Center>検索の結果、該当する動画は見つかりませんでした。</Center>}
                                         </Flex>}
+                                {isShowingTierArchiveOnly && !isSelectedArchiveInTierPeriod && !checkFavoriteRoute() &&
+                                    <ErrowMessageNotUserTierIncludingArchives />}
                             </VStack>
                         </Grid>
                     </Flex>}
-                {/* {isVideoMode &&
-                    <Video
-                        selectedArchive={isSeaching ? searchedArchiveResult : filteredArchive}
-                        currentRoot={currentRoot}
-                        fetchContentHandler={fetchContentHandler}
-                        skipNum={skipNum}
-                        totalNumOfArchives={totalNumOfArchives} />} */}
             </>
         )
     }

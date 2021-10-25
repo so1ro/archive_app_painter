@@ -152,6 +152,8 @@ export default function Account({
             </Table>
           </Box>
           <CustomerPortalButton />
+          <Text mb={4}>Tier を追加購入することも可能です。これによりサブスクリプション終了後も、アーカイブを視聴することができます。</Text>
+          <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
         </Box>
       </PageShell>)
   }
