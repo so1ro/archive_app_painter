@@ -11,7 +11,7 @@ import { ChakraProvider } from "@chakra-ui/react"
 import { UserMetadataProvider } from '@/context/useUserMetadata'
 import { ArchiveStateProvider } from '@/context/useArchiveState'
 import Layout from '@/components/Layout'
-// import SimpleReactLightbox from 'simple-react-lightbox-pro'
+import SimpleReactLightbox from 'simple-react-lightbox-pro'
 import "focus-visible/dist/focus-visible"
 
 // import '@/styles/globals.css'
@@ -45,11 +45,11 @@ function App({ Component, pageProps }: AppProps) {
         <ChakraProvider theme={theme}>
           <ArchiveStateProvider>
             <React.StrictMode>
-              {/* <SimpleReactLightbox> */}
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-              {/* </SimpleReactLightbox> */}
+              <SimpleReactLightbox>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </SimpleReactLightbox>
             </React.StrictMode>
           </ArchiveStateProvider>
         </ChakraProvider>
