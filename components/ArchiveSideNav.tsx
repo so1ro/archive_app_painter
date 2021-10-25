@@ -82,7 +82,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                                     </AccordionButton>
                                 </h2>
                                 {obj.paths.map(p => (
-                                    <ArchiveActiveLink href={`/ ${route} /${obj.id}/${p.link} `} key={`${obj.id} /${p.link}`}>
+                                    <ArchiveActiveLink href={`/${route}/${obj.id}/${p.link} `} key={`${obj.id} /${p.link}`}>
                                         <Link Link onClick={() => {
                                             setIsExpanding({ isExpanding: true })
                                             if (onCloseDrawer !== null) onCloseDrawer()

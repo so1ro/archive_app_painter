@@ -300,7 +300,6 @@ export default function ArchiveRoute({
                                                         key={archive.sys.id}
                                                         archive={archive}
                                                         inVideoCompo={false}
-                                                        currentRoot={currentRoot}
                                                         setSkipTime={null} playing={false}
                                                         userTierPeriod={periodCurrentUserTier}
                                                         tierLableInfo={tierLableInfo} />)}
