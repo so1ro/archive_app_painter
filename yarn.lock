@@ -7639,10 +7639,8 @@ simple-get@^4.0.0:
     once "^1.3.1"
     simple-concat "^1.0.0"
 
-simple-react-lightbox-pro@^1.3.9:
+"simple-react-lightbox-pro@file:lib/simple-react-lightbox-pro":
   version "1.3.9"
-  resolved "https://npm.cloudsmith.io/srl/simple-react-lightbox-pro/simple-react-lightbox-pro/-/1.3.9/simple-react-lightbox-pro-1.3.9.tgz#3f8a5c85407d53c9fc0ee68b28092c429db028fd"
-  integrity sha512-NVpiy83JjWD4f0pdgy3c6zcam3mc+tlbM9wT4lGI7DBhh+bATBQi7aE61rtlTBgEuH5sXSKnAiRb8OJ4g0BsOQ==
   dependencies:
     body-scroll-lock "^3.1.5"
     fast-deep-equal "^3.1.3"
