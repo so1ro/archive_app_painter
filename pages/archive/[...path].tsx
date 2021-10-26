@@ -275,13 +275,13 @@ export default function ArchiveRoute({
                     <Link onClick={() => setIsShowingTierArchiveOnly({ isShowingTierArchiveOnly: !isShowingTierArchiveOnly })} color={highLightColor}>
                         Show all Tier</Link><br /><br />
                     Do you want to change your Tier?<br />
-                    Please upgrade your Tier or start Subscription from <NextLink href='/account' passHref><Link className='active'>here</Link></NextLink>.
+                    Please upgrade your Tier or start Subscription from <NextLink href='/account' passHref><Link className='active'>Account page</Link></NextLink>.
                 </Box> :
                 <Box>このカテゴリーのアーカイブは、ご購入いただいた Tier に含まれておりません。<br /><br />
                     すべての Tier をご覧になりますか？<br />
                     <Link onClick={() => setIsShowingTierArchiveOnly({ isShowingTierArchiveOnly: !isShowingTierArchiveOnly })} color={highLightColor}>
                         すべての Tier を表示</Link><br /><br />
-                    Tier のアップグレードまたは、サブスクリプションの開始は<NextLink href='/account' passHref><Link className='active'>こちら</Link></NextLink>から。
+                    Tier のアップグレードまたは、サブスクリプションの開始は<NextLink href='/account' passHref><Link className='active'>アカウントページ</Link></NextLink>から。
                 </Box>}
         </Center>
     )
