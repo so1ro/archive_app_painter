@@ -29,6 +29,18 @@ interface TierInterface {
   type?: string
 }
 
+interface AllOverviewArchives {
+  id?: string
+  categoryName: { en?: string, ja?: string }
+  paths?: {
+    link?: string
+    name: { en?: string, ja?: string }
+    filter?: string
+    archives?: AllArchives2Interface[]
+  }[]
+}
+
+
 // ---------------------- befor painer -------------------------- //
 interface UserMetadataContextInterface {
   User_Detail: object | null
