@@ -3,6 +3,7 @@ import {
     Box, Grid, List, ListItem, useColorModeValue, Button,
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure,
 } from '@chakra-ui/react'
+import { LockIcon } from '@chakra-ui/icons'
 import { compareAsc } from "date-fns"
 import { useRouter } from 'next/router'
 import { useArchiveState } from '@/context/useArchiveState'
@@ -28,6 +29,7 @@ export default function ArchiveThumbnail({ archive, inVideoCompo, setSkipTime, p
     const isArchiveNotInTierPeriod_userIsNotSubscriber =
         isArchiveNotInTierPeriod_userIsNotSubscriber_checker(subscription_state, archive, userTierPeriod)
 
+    // Miscellaneous
     const textHumbleColor = useColorModeValue(text_humble_color.l, text_humble_color.d)
     const imgPlayingCss = css`
         width: 100%;
@@ -42,7 +44,6 @@ export default function ArchiveThumbnail({ archive, inVideoCompo, setSkipTime, p
           position: relative !important;
           height: unset !important;
           ${playing && `border-bottom: 4px ${useColorModeValue(highlight_color.l, highlight_color.d)} solid!important;`}
-          opacity : ${isArchiveNotInTierPeriod_userIsNotSubscriber ? '0.6' : '1'};
         }
     `
     const modalCss = css`
@@ -52,14 +53,15 @@ export default function ArchiveThumbnail({ archive, inVideoCompo, setSkipTime, p
 
     const bgGradient = `linear-gradient(180deg, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.5) 100%);`
     const txShadow = `0px 1px 4px rgba(0, 0, 0, 0.90);`
-    const boxShadow = () => isArchiveNotInTierPeriod_userIsNotSubscriber ? '' : `0px 16px 31px 7px rgba(0, 0, 0, 0.2);`
+    const boxShadow = () => { return '' }
 
     return (
         <>
             <Grid
                 templateColumns={!inVideoCompo ? { base: "1fr" } : { base: "1fr" }}
                 gap={{ base: 4, md: 1 }}
-                d={isShowingTierArchiveOnly && isArchiveNotInTierPeriod_userIsNotSubscriber ? 'none' : { base: 'grid', md: 'block' }}
+                d={isShowingTierArchiveOnly && isArchiveNotInTierPeriod_userIsNotSubscriber &&
+                    !router.pathname.includes('pickup') ? 'none' : { base: 'grid', md: 'block' }}
                 // cursor={isArchiveNotInTierPeriod_userIsNotSubscriber ? 'default' : 'pointer'}
                 onClick={() => {
                     if (!isArchiveNotInTierPeriod_userIsNotSubscriber) {
@@ -82,7 +84,7 @@ export default function ArchiveThumbnail({ archive, inVideoCompo, setSkipTime, p
                         className={'image'}
                     />
                     <List m={0} fontSize={['xs', 'sm', 'md']}
-                        opacity={isArchiveNotInTierPeriod_userIsNotSubscriber ? '0.6' : '1'}
+                        opacity='1'
                         w='full'
                         pos='absolute' bottom='0' zIndex='1' pt='100%' background={bgGradient}
                         pb={1.5} px={3}
@@ -98,6 +100,26 @@ export default function ArchiveThumbnail({ archive, inVideoCompo, setSkipTime, p
                         <List
                             pos='absolute'
                             zIndex='2'
+                            w='20px'
+                            h='20px'
+                            borderRadius={20}
+                            fontSize='sm'
+                            top='5px'
+                            left='5px'
+                            textAlign='center'
+                            color='white'
+                            bg='rgba(0,0,0, .4)'
+                            d='flex'
+                            alignItems='center'
+                            justifyContent='center'
+                        >
+                            <LockIcon w={2.5} h={2.5} />
+                        </List>
+                    }
+                    {/* {isArchiveNotInTierPeriod_userIsNotSubscriber &&
+                        <List
+                            pos='absolute'
+                            zIndex='2'
                             w='full'
                             py={.5}
                             fontSize='sm'
@@ -108,7 +130,7 @@ export default function ArchiveThumbnail({ archive, inVideoCompo, setSkipTime, p
                             bg='#fff'
                         >
                             <ListItem>{archiveTier.tierTitle}</ListItem>
-                        </List>}
+                        </List>} */}
                 </Box>
             </Grid>
             <Modal onClose={onClose} isOpen={isOpen} isCentered>

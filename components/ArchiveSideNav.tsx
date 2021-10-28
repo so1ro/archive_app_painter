@@ -23,8 +23,8 @@ export default function ArchiveSideNav(
     { pathObj, onCloseDrawer }:
         { pathObj: ArchivePath[], onCloseDrawer: () => void | null }) {
 
-    const overviewPath = { id: 'overview', categoryName: { en: 'Pick up', ja: 'Pick up' }, link: 'overview', paths: null, filter: null }
-    const allPaths = [overviewPath, ...pathObj]
+    const pickupPath = { id: 'pickup', categoryName: { en: 'Pick up', ja: 'Pick up' }, link: 'pickup', paths: null, filter: null }
+    const allPaths = [pickupPath, ...pathObj]
 
     const router = useRouter()
     const { locale } = useRouter()
@@ -102,7 +102,7 @@ export default function ArchiveSideNav(
 
                     </AccordionItem >)
             })}
-            {subscription_state !== 'subscribe' && <HStack spacing={4} px={8} mt={10}>
+            {!router.pathname.includes('pickup') && subscription_state !== 'subscribe' && <HStack spacing={4} px={8} mt={10}>
                 <Box>{locale === 'en' ? 'Show all Tier' : 'すべての Tier'}</Box>
                 <Switch
                     colorScheme="red"

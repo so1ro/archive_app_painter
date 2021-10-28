@@ -29,7 +29,7 @@ interface TierInterface {
   type?: string
 }
 
-interface AllOverviewArchives {
+interface AllPickupArchives {
   id?: string
   categoryName: { en?: string, ja?: string }
   paths?: {
