@@ -19,7 +19,12 @@ import { css } from "@emotion/react"
 import { highlight_color, text_color } from '@/styles/colorModeValue';
 import { useUserMetadata } from '@/context/useUserMetadata';
 
-export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: ArchivePath[], onCloseDrawer: () => void | null }) {
+export default function ArchiveSideNav(
+    { pathObj, onCloseDrawer }:
+        { pathObj: ArchivePath[], onCloseDrawer: () => void | null }) {
+
+    const overviewPath = { id: 'overview', categoryName: { en: 'Pick up', ja: 'Pick up' }, link: 'overview', paths: null, filter: null }
+    const allPaths = [overviewPath, ...pathObj]
 
     const router = useRouter()
     const { locale } = useRouter()
@@ -29,9 +34,9 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
 
     // For routes which need Accordion to be opened.
     let defaultIndex: number | null = null
-    if (router.query.path.length === 2) {
-        const indexOfRouteMatchPath = _.findIndex(pathObj, (o) => router.query.path[0] === o.id)
-        const indexOfFisrtAccordion = _.findIndex(pathObj, (o) => !!o.paths)
+    if (router.query.path?.length === 2) {
+        const indexOfRouteMatchPath = _.findIndex(allPaths, (o) => router.query.path[0] === o.id)
+        const indexOfFisrtAccordion = _.findIndex(allPaths, (o) => !!o.paths)
         defaultIndex = indexOfRouteMatchPath - indexOfFisrtAccordion
     }
 
@@ -50,7 +55,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
 
     return (
         <Accordion allowToggle css={accordionCss} defaultIndex={defaultIndex} top={8} fontSize={{ base: 'sm', xl: 'md' }} py={10}>
-            {pathObj.map((obj, i) => {
+            {allPaths.map((obj, i) => {
                 // ex: archive/名人
                 if (!obj.paths) return (
                     <Box px={8} key={i} d={(obj.id === 'favorite' && route === 'youtube') ? 'none' : 'block'}>
@@ -82,7 +87,7 @@ export default function ArchiveSideNav({ pathObj, onCloseDrawer }: { pathObj: Ar
                                     </AccordionButton>
                                 </h2>
                                 {obj.paths.map(p => (
-                                    <ArchiveActiveLink href={`/${route}/${obj.id}/${p.link} `} key={`${obj.id} /${p.link}`}>
+                                    <ArchiveActiveLink href={`/${route}/${obj.id}/${p.link}`} key={`${obj.id} /${p.link}`}>
                                         <Link Link onClick={() => {
                                             setIsExpanding({ isExpanding: true })
                                             if (onCloseDrawer !== null) onCloseDrawer()
