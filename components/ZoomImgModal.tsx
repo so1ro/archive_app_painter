@@ -78,12 +78,18 @@ export default function ZoomImgModal({ archive, path }: { archive: AllArchives2I
                             onLoad={() => setIsIframeLoading({ isIframeLoading: false })}
                             allowFullScreen />
                     </Flex>
-                    <Button onClick={() => {
+                    <Flex onClick={() => {
                         setIsIframeLoading({ isIframeLoading: true })
                         onClose()
                     }}
-                        leftIcon={<ArrowBackIcon />}
-                        pos='absolute' top={10} left={10}>戻る</Button>
+                        borderRadius={40}
+                        w={12} h={12}
+                        bgColor='rgba(0,0,0, 0.6)'
+                        align='center'
+                        justify='center'
+                        pos='absolute' top={10} left={10} colorScheme='blackAlpha' color='#fff'>
+                        <ArrowBackIcon w={6} h={6} />
+                    </Flex>
                 </ModalContent>
             </Modal>
         </Box>
