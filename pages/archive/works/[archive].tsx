@@ -15,7 +15,7 @@ import { GetStaticProps, GetStaticPaths } from "next"
 import { highlight_color } from '@/styles/colorModeValue'
 import TimeFormat from 'hh-mm-ss'
 import { useRouter } from 'next/router'
-import { ViewIcon } from '@chakra-ui/icons'
+import { ArrowBackIcon, ViewIcon } from '@chakra-ui/icons'
 import { BrushIcon, FavoriteHeartIcon } from '@/styles/icons'
 import { Toast, ToastError } from '@/components/Toast'
 import LoadingSpinner from '@/components/Spinner'
@@ -25,6 +25,7 @@ export default function Archive1({ archive, path, tiers }:
 
 	// Hook
 	const { user, error, isLoading } = useUser()
+	const router = useRouter()
 	const { locale } = useRouter()
 	const {
 		User_Detail,
@@ -124,106 +125,117 @@ export default function Archive1({ archive, path, tiers }:
 	if (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail) && !isArchiveNotInTierPeriod_userIsNotSubscriber) {
 		return (
 			<>
-				<VStack w='full' maxW={{ base: '1000px' }} py={{ base: 12, lg: 24 }} spacing={24} margin='0 auto'>
-					<Tabs w='full' id={`archive-tab-id`} isFitted>
-						<TabList d={archive?.learningVideoId ? 'flex' : 'none'}>
-							<Tab _selected={selectedColorScheme} onClick={() => stopSkipPlayLearningVideoHandler(0, false)}><ViewIcon mr={2} />{locale === 'en' ? 'View' : '観る'}</Tab>
-							<Tab _selected={selectedColorScheme} onClick={() => stopSkipPlayVideoHandler(0, false)}>
-								<BrushIcon mr={2} w={4} h={4} />{locale === 'en' ? 'Learn' : '学ぶ'}
-							</Tab>
-						</TabList>
-						<TabPanels>
-							<TabPanel p={0}>
-								<VStack w='full' spacing={archive?.youtubeId ? { base: 0, lg: 12 } : 6} pt={archive?.learningVideoId ? { base: 10, md: 20 } : 0}>
-									<VStack w='full' spacing={archive?.timestamp ? 6 : 4}>
-										{archive?.youtubeId && <VideoYouTube
-											youtubeId={archive?.youtubeId}
-											aspect={null}
-											autoplay={isAutoPlay}
-											borderRadius={0}
-											skipTime={skipTime}
-											isQuitVideo={isQuitVideo}
-											onRouterPush={null} />}
-										{archive?.timestamp &&
-											<HStack w='full' align='flex-start' justify='space-between' >
-												<Accordion w='full' css={accordionCss}
-													onChange={() => setIsAccordionOpen({ isAccordionOpen: !isAccordionOpen })} allowToggle>
-													<AccordionItem mb={8} borderTopWidth={0} borderBottomWidth={0} id="calculator-accordion-1">
-														<AccordionButton p={0} justifyContent='flex-start'>
-															<AccordionIcon w={8} h={8} mr={2} />{locale === 'en' ? 'Timestamps' : 'もくじ'}
-														</AccordionButton>
-														<AccordionPanel pb={4} px={0} fontSize={{ base: 'sm', lg: 'md' }}>
-															<Box w='full' px={2} pb={4}>
-																{archive.timestamp.map((stamp, i) => (
-																	<List fontSize={['md']} key={i} >
-																		<ListItem fontSize={{ base: 'sm', lg: 'md' }} mb={1}>
-																			<Link
-																				mr={2} color={highLightColor}
-																				onClick={() => stopSkipPlayVideoHandler(TimeFormat.toS(stamp.time), true)}
-																			>{stamp.time}</Link>
-																			{stamp.indexText}
-																		</ListItem>
-																	</List>
-																))}
-															</Box>
-														</AccordionPanel>
-													</AccordionItem>
-												</Accordion>
+				<VStack w='full' maxW={{ base: '1000px' }} py={{ base: 12, lg: 12 }} margin='0 auto'>
+					<Box w='full'>
+						<Flex onClick={() => router.back()}
+							borderRadius={40}
+							align='center'
+							justify='flex-start'
+							colorScheme='blackAlpha' color='#fff'>
+							<ArrowBackIcon w={6} h={6} />
+						</Flex>
+					</Box>
+					<VStack w='full' spacing={24}>
+						<Tabs w='full' id={`archive-tab-id`} isFitted>
+							<TabList d={archive?.learningVideoId ? 'flex' : 'none'}>
+								<Tab _selected={selectedColorScheme} onClick={() => stopSkipPlayLearningVideoHandler(0, false)}><ViewIcon mr={2} />{locale === 'en' ? 'View' : '観る'}</Tab>
+								<Tab _selected={selectedColorScheme} onClick={() => stopSkipPlayVideoHandler(0, false)}>
+									<BrushIcon mr={2} w={4} h={4} />{locale === 'en' ? 'Learn' : '学ぶ'}
+								</Tab>
+							</TabList>
+							<TabPanels>
+								<TabPanel p={0}>
+									<VStack w='full' spacing={archive?.youtubeId ? { base: 0, lg: 12 } : 6} pt={archive?.learningVideoId ? { base: 10, md: 20 } : 0}>
+										<VStack w='full' spacing={archive?.timestamp ? 6 : 4}>
+											{archive?.youtubeId && <VideoYouTube
+												youtubeId={archive?.youtubeId}
+												aspect={null}
+												autoplay={isAutoPlay}
+												borderRadius={0}
+												skipTime={skipTime}
+												isQuitVideo={isQuitVideo}
+												onRouterPush={null} />}
+											{archive?.timestamp &&
+												<HStack w='full' align='flex-start' justify='space-between' >
+													<Accordion w='full' css={accordionCss}
+														onChange={() => setIsAccordionOpen({ isAccordionOpen: !isAccordionOpen })} allowToggle>
+														<AccordionItem mb={8} borderTopWidth={0} borderBottomWidth={0} id="calculator-accordion-1">
+															<AccordionButton p={0} justifyContent='flex-start'>
+																<AccordionIcon w={6} h={6} mr={2} />{locale === 'en' ? 'Timestamps' : 'もくじ'}
+															</AccordionButton>
+															<AccordionPanel pb={4} px={0} fontSize={{ base: 'sm', lg: 'md' }}>
+																<Box w='full' px={2} pb={4}>
+																	{archive.timestamp.map((stamp, i) => (
+																		<List fontSize={['md']} key={i} >
+																			<ListItem fontSize={{ base: 'sm', lg: 'md' }} mb={1}>
+																				<Link
+																					mr={2} color={highLightColor}
+																					onClick={() => stopSkipPlayVideoHandler(TimeFormat.toS(stamp.time), true)}
+																				>{stamp.time}</Link>
+																				{stamp.indexText}
+																			</ListItem>
+																		</List>
+																	))}
+																</Box>
+															</AccordionPanel>
+														</AccordionItem>
+													</Accordion>
+													<FavoriteButton />
+												</HStack>}
+											{archive?.youtubeId && !archive?.timestamp &&
+												<Box w='full' textAlign='right'><FavoriteButton /></Box>}
+
+										</VStack>
+										<ZoomImgModal archive={archive} path={path} />
+										{!archive?.youtubeId &&
+											<Box w='full' textAlign='left'>
 												<FavoriteButton />
-											</HStack>}
-										{archive?.youtubeId && !archive?.timestamp &&
-											<Box w='full' textAlign='right'><FavoriteButton /></Box>}
-
+											</Box>}
 									</VStack>
-									<ZoomImgModal archive={archive} path={path} />
-									{!archive?.youtubeId &&
-										<Box w='full' textAlign='left'>
-											<FavoriteButton />
-										</Box>}
-								</VStack>
-							</TabPanel>
+								</TabPanel>
 
-							<TabPanel p={0}>
-								<VStack w='full' spacing={archive?.learningVideoId ? 24 : 0} pt={20}>
-									<VStack w='full' spacing={archive?.learningVideoTimestamp ? 6 : 0}>
-										{archive?.learningVideoId && <VideoYouTube
-											youtubeId={archive?.learningVideoId}
-											aspect={null}
-											autoplay={isAutoPlayLearnVideo}
-											borderRadius={0}
-											skipTime={skipTimeLearnVideo}
-											isQuitVideo={isQuitLearnVideo}
-											onRouterPush={null} />}
-										{archive?.learningVideoTimestamp && <Box w='full' pb={4}>
-											{archive.learningVideoTimestamp.map((stamp, i) => (
-												<List fontSize={['md']} key={i} >
-													<ListItem fontSize={{ base: 'sm', lg: 'md' }} mb={1}>
-														<Link
-															mr={2} color={highLightColor}
-															onClick={() => stopSkipPlayLearningVideoHandler(TimeFormat.toS(stamp.time), true)}
-														>{stamp.time}</Link>
-														{stamp.indexText}
-													</ListItem>
-												</List>
-											))}
-										</Box>}
+								<TabPanel p={0}>
+									<VStack w='full' spacing={archive?.learningVideoId ? 24 : 0} pt={20}>
+										<VStack w='full' spacing={archive?.learningVideoTimestamp ? 6 : 0}>
+											{archive?.learningVideoId && <VideoYouTube
+												youtubeId={archive?.learningVideoId}
+												aspect={null}
+												autoplay={isAutoPlayLearnVideo}
+												borderRadius={0}
+												skipTime={skipTimeLearnVideo}
+												isQuitVideo={isQuitLearnVideo}
+												onRouterPush={null} />}
+											{archive?.learningVideoTimestamp && <Box w='full' pb={4}>
+												{archive.learningVideoTimestamp.map((stamp, i) => (
+													<List fontSize={['md']} key={i} >
+														<ListItem fontSize={{ base: 'sm', lg: 'md' }} mb={1}>
+															<Link
+																mr={2} color={highLightColor}
+																onClick={() => stopSkipPlayLearningVideoHandler(TimeFormat.toS(stamp.time), true)}
+															>{stamp.time}</Link>
+															{stamp.indexText}
+														</ListItem>
+													</List>
+												))}
+											</Box>}
+										</VStack>
 									</VStack>
-								</VStack>
-							</TabPanel>
+								</TabPanel>
 
-						</TabPanels>
-					</Tabs>
+							</TabPanels>
+						</Tabs>
 
-					{(archive?.title || archive?.createdYear || archive?.size) && <Box w='full' pb={4}>
-						<List fontSize={['md']} mt={12}>
-							{archive.title &&
-								<ListItem mb={1}> タイトル : {archive.title[locale]} </ListItem>}
-							{archive.createdYear &&
-								<ListItem mb={1}> 作成年 : {archive.createdYear} </ListItem>}
-							{archive.size &&
-								<ListItem mb={1}> 実際のサイズ : W {archive.size.width} x H {archive.size.height} {archive.size.unit}  </ListItem>}
-						</List>
-					</Box>}
+						{(archive?.title || archive?.createdYear || archive?.size) && <Box w='full' pb={4}>
+							<List fontSize={['md']} mt={12}>
+								{archive.title &&
+									<ListItem mb={1}> タイトル : {archive.title[locale]} </ListItem>}
+								{archive.createdYear &&
+									<ListItem mb={1}> 作成年 : {archive.createdYear} </ListItem>}
+								{archive.size &&
+									<ListItem mb={1}> 実際のサイズ : W {archive.size.width} x H {archive.size.height} {archive.size.unit}  </ListItem>}
+							</List>
+						</Box>}
+					</VStack>
 				</VStack>
 			</>
 		)
