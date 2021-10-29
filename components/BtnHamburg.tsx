@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 export default function Btn_hamburg({ onHandler, isOpen }: { onHandler: () => void | null, isOpen: boolean }) {
 
   const router = useRouter()
-  const isArvhiveContent = router.pathname === '/archive/[...path]' || router.pathname === '/youtube/[...path]'
+  const isArvhiveContent = router.pathname.includes('/archive') || router.pathname.includes('/youtube')
 
   // Position
   const btnPosition = [4, 6]

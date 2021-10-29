@@ -1,6 +1,7 @@
 import { useUser } from '@auth0/nextjs-auth0'
 import Nav from '@/components/Nav'
 import ActiveLink from '@/components/ActiveLink'
+import { useRouter } from 'next/router'
 
 import {
     Modal,
@@ -36,6 +37,7 @@ export default function NavModalSPTB() {
     const toast = useToast()
     const borderColor = useColorModeValue(text_color.l, text_color.d)
     const highlighColor = useColorModeValue(highlight_color.l, highlight_color.d)
+    const { locale } = useRouter()
 
     return (
         <Box d={{ base: "block", lg: "none" }}>
@@ -66,7 +68,7 @@ export default function NavModalSPTB() {
                                         animate="visible"
                                         variants={nav_link_variants}
                                         fontSize={{ base: "md", md: 'lg' }}
-                                    >{link.text}</MotionLink>
+                                    >{link.text[locale]}</MotionLink>
                                 </ActiveLink>
                             ))}
                             {isLoading ? '' :
