@@ -41,8 +41,8 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
         <Box pos='relative'>
             <Box>
                 {/* {todayImgPair.map((img, i) => ( */}
-                <Box d={{ base: 'block', lg: 'none' }} h={`${innerHeight}px`} zIndex={'-1'} overflow='hidden'>
-                    <SlickSlider imgs={heroSlideImgs} h={`${innerHeight}px`} />
+                <Box d={{ base: 'block', lg: 'none' }} h={innerHeight ? `${innerHeight}px` : '100vh'} zIndex={'-1'} overflow='hidden'>
+                    <SlickSlider imgs={heroSlideImgs} h={innerHeight ? `${innerHeight}px` : '100vh'} />
                     {/* <Image src={todayImgPair[0].url}
                             layout="fill"
                             objectFit="cover"
@@ -50,7 +50,7 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
                             priority={true}
                             alt='スーツ' /> */}
                 </Box>
-                <Box d={{ base: 'none', lg: 'block' }} h={`${innerHeight}px`} zIndex={'-1'} css={videoCss}>
+                <Box d={{ base: 'none', lg: 'block' }} h={innerHeight ? `${innerHeight}px` : '100vh'} zIndex={'-1'} css={videoCss}>
                     {/* {isVideoLoading &&
                             <Spinner thickness="3px" speed="0.65s" emptyColor="gray.200"
                                 color={highLightColor} size="md"
