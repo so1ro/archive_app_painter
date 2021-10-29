@@ -49,7 +49,6 @@ export default function Pickup({
 		totalNumOfArchives: number | null,
 		tiers: TierInterface[],
 	}) {
-	console.log('allDescLatestArchives:', allDescLatestArchives)
 
 	const pickupArchives = allPickupArchives.map(arc => {
 		const randomNum = getRandomInt(arc.paths.length)
@@ -61,9 +60,6 @@ export default function Pickup({
 	}
 
 	// Hook
-	const { user, error, isLoading } = useUser()
-	const router = useRouter()
-	const { locale } = useRouter()
 	const {
 		User_Detail,
 		isMetadataLoading,
@@ -90,8 +86,11 @@ export default function Pickup({
 		setScrollY,
 		isShowingTierArchiveOnly,
 		setIsShowingTierArchiveOnly, } = useArchiveState()
-	const isLargerThan992 = useMediaQuery("(min-width: 992px)")
+	const { user, error, isLoading } = useUser()
+	const router = useRouter()
+	const { locale } = useRouter()
 	const toast = useToast()
+	const isLargerThan992 = useMediaQuery("(min-width: 992px)")
 
 	// State
 	const [{ descArchive }, setDescArchive] = useState<{ descArchive: AllArchives2Interface[] | null }>({ descArchive: null })
@@ -239,7 +238,7 @@ export default function Pickup({
         
         /* Handle */
         ::-webkit-scrollbar-thumb {
-            background: #ddd;
+            background: ${useColorModeValue('#ddd', '#555')};
             border-radius : 8px
         }
 
@@ -249,21 +248,7 @@ export default function Pickup({
         }
     `
 
-	// // Components
-	const BreadcrumbNav = ({ paths }) => (
-		<Breadcrumb
-			spacing="8px"
-			separator={<ChevronRightIcon color="gray.500" />}
-			fontSize='md' >
-			{paths.map((path, i) => (
-				<BreadcrumbItem key={i}>
-					<BreadcrumbLink textDecoration='none' cursor='default'>{path}</BreadcrumbLink>
-				</BreadcrumbItem>
-			))}
-		</Breadcrumb>
-	)
-
-
+	// Components
 	const ErrowMessage = () => (
 		<Center w='full' px={6}>
 			{locale === 'en' ?
@@ -291,34 +276,18 @@ export default function Pickup({
 		</Center>
 	)
 
-	const SmallLoadingSpinner = () => (
-		<Center>
-			<Spinner thickness="3px" speed="0.65s" emptyColor="gray.200"
-				color={useColorModeValue(highlight_color.l, highlight_color.d)} size="md" />
-		</Center>
-	)
-
-
 	// Main Component
 	if (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail)) {
 		return (
 			<>
-				{/* {!isVideoMode && !isLargerThan992 && <ArchiveDrawer pathObj={pathObj} />} */}
+				{!isVideoMode && !isLargerThan992 && <ArchiveDrawer pathObj={pathObj} />}
 				{!isVideoMode &&
 					<Flex flexGrow={1} direction='row' bg={bgColor}>
 						<Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }} >
-							{isLargerThan992 && <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />}
-							<VStack spacing={20} px={{ base: 4, md: 8 }} py={{ base: 8, md: 8 }} overflow='hidden'>
-								{/* <Flex justify={{ base: 'none', md: 'space-between' }} flexDirection={{ base: 'column', md: 'row' }} w='full' align='center'>
-									<HStack spacing={4} mb={{ base: 2, md: 0 }}>
-										<BreadcrumbNav paths={breadCrumbPaths} />
-									</HStack>
-									<HStack spacing={{ base: 3, sm: 6, md: 8 }}>
-										{totalNumOfArchives <= 1000 && <ArchiveSearch filter={"{color_contains_some : 'purple_紫'}"} />}
-									</HStack>
-								</Flex> */}
+							<Box d={{ base: 'none', lg: 'block' }}><ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} /></Box>
+							<VStack spacing={20} px={{ base: 4, md: 8 }} pt={8} pb={24} overflow='hidden'>
 								<VStack w='full' spacing={6} align='flex-start'>
-									<Box>{locale === 'en' ? 'Latest' : '最新'}</Box>
+									<Flex align='center' h='40px'>{locale === 'en' ? 'Latest' : '最新'}</Flex>
 									<List w='full' overflowX='auto' whiteSpace='nowrap' mt={12} pb={4} borderTopWidth='0' css={thumbnailAreaScrollCss}>
 										{allDescLatestArchives.map((i, j) => (
 											<ListItem

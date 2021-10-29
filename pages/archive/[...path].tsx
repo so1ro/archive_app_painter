@@ -302,8 +302,8 @@ export default function ArchiveRoute({
                 {!isVideoMode &&
                     <Flex flexGrow={1} direction='row' bg={bgColor}>
                         <Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }} w='full'>
-                            {isLargerThan992 && <ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} />}
-                            <VStack spacing={8} px={{ base: 4, md: 8 }} py={{ base: 8, md: 8 }} w='full'>
+                            <Box d={{ base: 'none', lg: 'block' }}><ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} /></Box>
+                            <VStack spacing={8} px={{ base: 4, md: 8 }} pt={8} pb={24} w='full'>
                                 <Flex justify={{ base: 'none', md: 'space-between' }} flexDirection={{ base: 'column', md: 'row' }} w='full' align='center'>
                                     <HStack spacing={4} mb={{ base: 2, md: 0 }}>
                                         <BreadcrumbNav paths={breadCrumbPaths} />
