@@ -3,7 +3,7 @@ import { Box, Container, Button, useColorModeValue, Spinner, HStack, Text } from
 import Image from 'next/image'
 import HeroSnsIcons from '@/components/HeroSnsIcons'
 import HeroArchiveLink from '@/components/HeroArchiveLink'
-import { useWindowSizeOrientation, useWindowSizeResize } from '@/utils/useWindowSize'
+import { useWindowSizeResize } from '@/utils/useWindowSize'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 import { css } from "@emotion/react"
 import { bg_color_nav, highlight_color } from '@/styles/colorModeValue'
@@ -21,7 +21,7 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
 
     // Hook
     const { height: innerHeight } = useWindowSizeResize()
-    const isLargerThan992 = useMediaQuery("(min-width: 992px)")
+    const isLargerThan600 = useMediaQuery("(min-width: 600px)")
     const video = useRef<HTMLVideoElement>()
     const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
     const bgColorNav = useColorModeValue(bg_color_nav.l, bg_color_nav.d)
@@ -38,24 +38,25 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
     const avatarSize = { base: 12, lg: 14 }
 
     return (
-        <Box pos='relative'>
-            <Box>
-                {/* {todayImgPair.map((img, i) => ( */}
-                <Box d={{ base: 'block', lg: 'none' }} h={innerHeight ? `${innerHeight}px` : '100vh'} zIndex={'-1'} overflow='hidden'>
-                    <SlickSlider imgs={heroSlideImgs} h={innerHeight ? `${innerHeight}px` : '100vh'} />
-                    {/* <Image src={todayImgPair[0].url}
+        <>
+            <Box pos='relative'>
+                <Box>
+                    {/* {todayImgPair.map((img, i) => ( */}
+                    <Box d={{ base: 'block', lg: 'none' }} h={innerHeight ? `${innerHeight}px` : '100vh'} zIndex={'-1'} overflow='hidden'>
+                        <SlickSlider imgs={heroSlideImgs} h={innerHeight ? `${innerHeight}px` : '100vh'} />
+                        {/* <Image src={todayImgPair[0].url}
                             layout="fill"
                             objectFit="cover"
                             quality={100}
                             priority={true}
                             alt='スーツ' /> */}
-                </Box>
-                <Box d={{ base: 'none', lg: 'block' }} h={innerHeight ? `${innerHeight}px` : '100vh'} zIndex={'-1'} css={videoCss}>
-                    {/* {isVideoLoading &&
+                    </Box>
+                    <Box d={{ base: 'none', lg: 'block' }} h={innerHeight ? `${innerHeight}px` : '100vh'} zIndex={'-1'} css={videoCss}>
+                        {/* {isVideoLoading &&
                             <Spinner thickness="3px" speed="0.65s" emptyColor="gray.200"
                                 color={highLightColor} size="md"
                                 pos='absolute' top='50%' left='50%' transform='traslateX(-50%) traslateY(-50%)' />} */}
-                    {/* <motion.video
+                        {/* <motion.video
                             src="/video/mov.mp4" ref={video}
                             muted autoPlay playsInline loop
                             onPlay={() => setIsVideoPlaying({ isVideoPlaying: true })}
@@ -65,25 +66,44 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
                             initial={"hidden"}
                             animate={"visible"}
                             variants={hero_video_variants} /> */}
-                    <motion.video
-                        ref={video}
-                        muted autoPlay playsInline loop
-                        initial={"hidden"}
-                        animate={"visible"}
-                        variants={hero_video_variants}
-                    >
-                        <source src="/video/mov.mp4" type="video/mp4" />
-                        <source src="/video/mov.webm" type="video/webm" />
-                    </motion.video>
-                    {/* <Button pos='absolute' top={24} right={8} onClick={handleVideo}>
+                        <motion.video
+                            ref={video}
+                            muted autoPlay playsInline loop
+                            initial={"hidden"}
+                            animate={"visible"}
+                            variants={hero_video_variants}
+                        >
+                            <source src="/video/mov.mp4" type="video/mp4" />
+                            <source src="/video/mov.webm" type="video/webm" />
+                        </motion.video>
+                        {/* <Button pos='absolute' top={24} right={8} onClick={handleVideo}>
                             {!isVideoPlaying ? 'Play' : 'Stop'}
                         </Button> */}
+                    </Box>
+                    {/* ))} */}
                 </Box>
-                {/* ))} */}
+                <HeroArchiveLink />
+                {/* <HeroSnsIcons /> */}
+                <HStack d={{ base: 'none', lg: 'flex' }} spacing={2} pos='absolute' px={8} py={3} bottom={0} left={0} bgColor='rgb(36, 39, 41)' cursor='pointer'>
+                    <PlayVideoIcon size={20} />
+                    <Text color='white' pr={2}>{locale === 'en' ? 'About Archive' : 'アーカイブについて'}</Text>
+                    <Box w={avatarSize} h={avatarSize} borderRadius='full' overflow='hidden' mx="auto">
+                        <Image
+                            src={introTextAvatar.avatar.url}
+                            width='192px'
+                            height='192px'
+                            alt='Author' />
+                    </Box>
+                </HStack>
+                {newArchives && isLargerThan600 &&
+                    <a href="#news">
+                        <HStack spacing={2} pos='absolute' px={6} py={3} bottom={4} right={6} bgColor={bgColorNav} borderRadius={48} cursor='pointer'>
+                            <Text>{locale === 'en' ? 'News' : '新着'}</Text>
+                            <ArrowDownIcon />
+                        </HStack>
+                    </a>}
             </Box>
-            <HeroArchiveLink />
-            {/* <HeroSnsIcons /> */}
-            <HStack spacing={2} pos='absolute' px={8} py={3} bottom={0} left={0} bgColor='rgb(36, 39, 41)' cursor='pointer'>
+            <HStack d={{ base: 'flex', lg: 'none' }} justify='center' w='full' spacing={2} px={8} py={3} bgColor='rgb(36, 39, 41)' cursor='pointer'>
                 <PlayVideoIcon size={20} />
                 <Text color='white' pr={2}>{locale === 'en' ? 'About Archive' : 'アーカイブについて'}</Text>
                 <Box w={avatarSize} h={avatarSize} borderRadius='full' overflow='hidden' mx="auto">
@@ -94,14 +114,7 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
                         alt='Author' />
                 </Box>
             </HStack>
-            {newArchives &&
-                <a href="#news">
-                    <HStack spacing={2} pos='absolute' px={6} py={3} bottom={4} right={6} bgColor={bgColorNav} borderRadius={48} cursor='pointer'>
-                        <Text>{locale === 'en' ? 'News' : '新着'}</Text>
-                        <ArrowDownIcon />
-                    </HStack>
-                </a>}
-        </Box>
+        </>
     )
 }
 

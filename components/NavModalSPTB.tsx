@@ -74,7 +74,7 @@ export default function NavModalSPTB() {
                             {isLoading ? '' :
                                 (user ?
                                     <>
-                                        <Divider borderColor={borderColor} variant='dashed' />
+                                        {/* <Divider borderColor={borderColor} variant='dashed' /> */}
                                         <MotionBox
                                             w='full'
                                             textAlign='center'
@@ -96,7 +96,7 @@ export default function NavModalSPTB() {
                                         </ActiveLink>
                                     </> :
                                     <>
-                                        <Divider borderColor={borderColor} variant='dashed' />
+                                        {/* <Divider borderColor={borderColor} variant='dashed' /> */}
                                         <MotionLink
                                             initial="hidden"
                                             animate="visible"
@@ -117,7 +117,7 @@ export default function NavModalSPTB() {
                                         </MotionLink>
                                     </>)
                             }
-                            {/* <SnsIcons animation={true} type={'NavModal'} onHandler={onClose} /> */}
+                            <SnsIcons animation={true} type={'NavModal'} onHandler={onClose} />
                         </VStack>
                     </Flex>
                     <Btn_hamburg onHandler={onClose} isOpen={isOpen} />

@@ -16,7 +16,7 @@ export default function SnsIcons({ animation, type, onHandler }:
     return (
         <MotionIconStack
             direction={["row"]}
-            spacing={type === 'nav' ? 7 : 8}
+            spacing={type === 'nav' ? 6 : 8}
             pt={type === 'nav' ? 0 : (type === 'NavModal' ? 8 : 2)}
             initial={animation ? "hidden" : ''}
             animate={animation ? "visible" : ''}

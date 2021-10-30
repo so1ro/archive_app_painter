@@ -12,7 +12,7 @@ export default function UserLoginSignup() {
 
     return (
         <>
-            <HStack align="center" spacing={[2, 2, 3]}>
+            <HStack align="center" spacing={[2, 2, 3]} px={{ base: 1, lg: 2 }}>
                 <Link fontSize={["10px", "11px"]}
                     href="/api/auth/login?param=signup"
                     lineHeight='14px'

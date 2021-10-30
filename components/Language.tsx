@@ -2,7 +2,7 @@ import { Select } from "@chakra-ui/react"
 import { upperCase } from "lodash"
 import { useRouter } from 'next/router'
 
-export default function Language({ }: {}) {
+export default function Language() {
 	const router = useRouter()
 	const { locale, asPath } = router
 	const handleLanguage = (e) => {
