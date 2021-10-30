@@ -130,8 +130,8 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
                             </Text>
                             <Text>{price.type === "recurring" ? currencyUSDChecker(userFavoriteCurrency, locale) ? '/ month' : '円／月' : currencyUSDChecker(userFavoriteCurrency, locale) ? '' : '円'}</Text>
                         </HStack>
-                        <Center fontSize='xs' py={0} color='#fff' w='full' bg={price.type === "recurring" ? priceCardColor : oneTimeCardColor}>
-                            {price.type === "recurring" ? 'サブスクリプション' : 'ワンペイ永久ご視聴'}
+                        <Center fontSize='md' py={0} color='#fff' w='full' bg={price.type === "recurring" ? priceCardColor : oneTimeCardColor}>
+                            {price.type === "recurring" ? 'サブスクリプション' : price.tierTitle}
                         </Center>
                         <Box px={6} py={6} flexGrow={1}>{price.nickname}</Box>
                         <Box pb={6}><SignupPurchaseButton price={price} /></Box>

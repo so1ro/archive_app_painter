@@ -11,7 +11,7 @@ import { Toast } from '@/components/Toast'
 import { fetchContentful } from '@/hook/contentful'
 import { query_archivePricing, query_archiveTier } from '@/hook/contentful-queries'
 
-import { Button, Code, Box, Grid, Center, Text, useToast, HStack, useColorModeValue, Table, Tbody, Tr, Td, TableCaption, useBreakpointValue, } from '@chakra-ui/react'
+import { VStack, Button, Code, Box, Grid, Center, Text, useToast, HStack, useColorModeValue, Table, Tbody, Tr, Td, TableCaption, useBreakpointValue, } from '@chakra-ui/react'
 import PageShell from '@/components/PageShell'
 import LoadingSpinner from '@/components/Spinner'
 import { bg_color, border_color } from '@/styles/colorModeValue'
@@ -181,7 +181,7 @@ export default function Account({
       <PageShell customPT={null} customSpacing={null}>
         <Box w='full' maxW='640px'>
           <Box mb={4}>{user.email} 様</Box>
-          <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={16} pt={2} pb={4} bg={bgColor}>
+          <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={{ base: 16, lg: 24 }} pt={2} pb={4} bg={bgColor}>
             <Table variant="striped" colorScheme="gray" size={tableSize}>
               <TableCaption placement='top' mt={0} mb={2}>プラン詳細</TableCaption>
               <Tbody>
@@ -197,7 +197,10 @@ export default function Account({
             <Center mb={4}>サブスクリプションの詳細は、次のボタンからご確認いただけます。</Center>
             <CustomerPortalButton />
           </>}
-          <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+          <Box mt={{ base: 16, lg: 24 }}>
+            <Text mb={4}>Tier をアップグレードすることもできます。</Text>
+            <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+          </Box>
         </Box>
       </PageShell>)
   }
@@ -216,8 +219,10 @@ export default function Account({
             <Box>○</Box>
           </Grid>}
           <Text mb={4}>新たにサブスクリプションやワンペイ永久ご視聴プランを開始することもできます。</Text>
-          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
-          <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+          <VStack spacing={{ base: 16, lg: 24 }}>
+            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
+            <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+          </VStack>
         </Box>
       </PageShell>
     )
