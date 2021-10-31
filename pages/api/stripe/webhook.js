@@ -52,6 +52,7 @@ const webhookHandler = async (req, res) => {
             try {
                 // Handle the event
                 switch (event.type) {
+                    case 'customer.subscription.created':
                     case 'customer.subscription.updated':
                     case 'customer.subscription.deleted':
                         const subscriptionSession = event.data.object

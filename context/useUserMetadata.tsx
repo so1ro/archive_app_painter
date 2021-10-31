@@ -13,7 +13,7 @@ export const UserMetadataProvider = (props) => {
   const [{ isMetadataLoading }, setIsMetadataLoading] = useState<{ isMetadataLoading: boolean }>({ isMetadataLoading: false })
   const [{ User_Detail }, setUserDetail] = useState<{ User_Detail: object }>({ User_Detail: null })
   const [{ Subscription_Detail }, setSubscriptionDetail] = useState<{ Subscription_Detail: object }>({ Subscription_Detail: null })
-  const [{ One_Pay_Detail }, setOnePayPermanentDetail] = useState<{ One_Pay_Detail: object }>({ One_Pay_Detail: null })
+  const [{ One_Pay_Detail }, setOnePayDetail] = useState<{ One_Pay_Detail: object }>({ One_Pay_Detail: null })
   const [{ error_metadata }, setErrorMetadata] = useState<{ error_metadata: string }>({ error_metadata: '' })
   const [{ isBeforeCancelDate }, setIsBeforeCancelDate] = useState<{ isBeforeCancelDate: boolean }>({ isBeforeCancelDate: false })
   // Subscription State "subscribe" || "unsubscribe" || "paused"
@@ -40,10 +40,10 @@ export const UserMetadataProvider = (props) => {
             setUserDetail({ User_Detail })
           }
 
-          // ワンペイ永久購入済み One_Pay_Detailを取得
+          // Tier購入済み One_Pay_Detailを取得
           if (user_metadata.One_Pay_Detail) {
             const { One_Pay_Detail } = user_metadata
-            setOnePayPermanentDetail({ One_Pay_Detail })
+            setOnePayDetail({ One_Pay_Detail })
           }
 
           // if favorite_archive is saved on Auth0
