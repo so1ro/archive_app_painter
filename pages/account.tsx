@@ -80,10 +80,6 @@ export default function Account({
     window.location.assign(url)
   }
 
-  const isPermanentSubscription = (Subscription_Detail) => {
-    return (parseFloat(Subscription_Detail.criteria_OnePay_price) - User_Detail.past_charged_fee) <= 0
-  }
-
   const indexBgColor = useColorModeValue(border_color.l, border_color.d)
 
   // Component
@@ -121,16 +117,6 @@ export default function Account({
         name: '現在のステータス',
         value: Subscription_Detail.subscription_Status,
         display: true
-      },
-      {
-        name: '永久ご視聴まで残り',
-        value: `${parseFloat(Subscription_Detail.criteria_OnePay_price) - User_Detail.past_charged_fee}円`,
-        display: !isPermanentSubscription(Subscription_Detail)
-      },
-      {
-        name: '永久ご視聴',
-        value: '○',
-        display: isPermanentSubscription(Subscription_Detail)
       },
       {
         name: 'キャンセル',
@@ -218,10 +204,6 @@ export default function Account({
         <Box w='full' maxW='640px'>
           <Box mb={4}>{user.email} 様</Box>
           <Box>{Subscription_Detail.cancel_at ?? Subscription_Detail.canceled_at}にキャンセルされました。</Box>
-          {isPermanentSubscription(Subscription_Detail) && <Grid templateColumns={{ base: '1fr', md: '160px auto' }} gap={2} mb={8}>
-            <Box>永久ご視聴</Box>
-            <Box>○</Box>
-          </Grid>}
           <Text mb={4}>新たにサブスクリプションやワンペイ永久ご視聴プランを開始することもできます。</Text>
           <VStack spacing={{ base: 16, lg: 24 }}>
             <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
@@ -242,10 +224,6 @@ export default function Account({
           {Subscription_Detail.pause_collection.resumes_at ?
             <Box mb={6}>サブスクリプションは、{Subscription_Detail.pause_collection.resumes_at}に再開されます。</Box> :
             <Box mb={6}>サブスクリプションは、現在停止中です。次のボタンから再開することができます。</Box>}
-          {isPermanentSubscription(Subscription_Detail) && <Grid templateColumns={{ base: '1fr', md: '160px auto' }} gap={2} mb={8}>
-            <Box>永久ご視聴</Box>
-            <Box>○</Box>
-          </Grid>}
           <CustomerPortalButton />
 
           {/* Tierプロモーション */}
