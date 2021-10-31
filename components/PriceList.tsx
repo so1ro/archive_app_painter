@@ -87,7 +87,9 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
                             price.id,
                             price.type,
                             price.tierTitle,
-                            price.type === 'one_time' ? price.unit_amount - pastChargedFee : price.unit_amount,
+                            price.type === 'one_time' ?
+                                price.currency === 'usd' ? price.unit_amount - pastChargedFee * 100 : price.unit_amount - pastChargedFee :
+                                price.unit_amount,
                             price.currency
                         )
                     }}>
