@@ -5,7 +5,7 @@ import { GetStaticProps } from "next"
 import { useUser } from '@auth0/nextjs-auth0'
 import { useUserMetadata } from '@/context/useUserMetadata'
 import { fetchAllPrices } from '@/hook/getStaticProps'
-import { postData } from '@/utils/helpers'
+import { currencyUSDChecker, postData } from '@/utils/helpers'
 import PriceList from '@/components/PriceList'
 import { Toast } from '@/components/Toast'
 import { fetchContentful } from '@/hook/contentful'
@@ -38,6 +38,7 @@ export default function Account({
     setTemporaryPaidCheck,
   } = useUserMetadata()
 
+  // Hook
   const router = useRouter()
   const { locale } = router
   const localeAllPrices = allPrices.filter(price => User_Detail?.userCurrency ?
@@ -47,6 +48,16 @@ export default function Account({
     User_Detail?.userCurrency === 'usd' ? tier.currency === 'usd' : tier.currency === 'jpy' :
     locale === 'en' ? tier.currency === 'usd' : tier.currency === 'jpy')
   const toast = useToast()
+
+  // let pastChargedFee = 0
+  // let userFavoriteCurrency = ''
+  // if (user) {
+  //   const { past_charged_fee, userCurrency } = User_Detail
+  //   pastChargedFee = past_charged_fee
+  //   userFavoriteCurrency = userCurrency
+  // }
+
+  // Miscellaneous
   const { annotation } = landingPageText[0]
   const tableSize = useBreakpointValue({ base: 'sm', md: 'md' })
   const bgColor = useColorModeValue(bg_color.l, bg_color.d)
@@ -99,27 +110,33 @@ export default function Account({
   if (error) return <div>{error.message}</div>
 
   // サブスクリプション購入後
-  if ((!isLoading && !isMetadataLoading) && (subscription_state === 'subscribe' && !One_Pay_Detail)) {
+  if ((!isLoading && !isMetadataLoading) && (subscription_state === 'subscribe')) {
 
     // Status Table contents
     const status = [
       {
-        name: 'プラン',
-        value: `${Subscription_Detail.subscription_Price}円／月`,
+        name: locale === 'en' ? 'Plan' : 'プラン',
+        value: currencyUSDChecker(User_Detail?.userCurrency, locale) ?
+          `$${Subscription_Detail.subscription_Price / 100} / month` : `${Subscription_Detail.subscription_Price}円／月`,
         display: true
       },
       {
-        name: '特典',
+        name: locale === 'en' ? 'Feature' : '特典',
         value: Subscription_Detail.subscription_Description,
         display: true
       },
       {
-        name: '現在のステータス',
+        name: locale === 'en' ? 'Status' : 'ステータス',
         value: Subscription_Detail.subscription_Status,
         display: true
       },
       {
-        name: 'キャンセル',
+        name: locale === 'en' ? 'Past total pay' : 'お支払い（累積）',
+        value: currencyUSDChecker(User_Detail?.userCurrency, locale) ? `$${User_Detail?.past_charged_fee}` : `${User_Detail?.past_charged_fee}円`,
+        display: true
+      },
+      {
+        name: locale === 'en' ? 'Cancellation' : 'キャンセル',
         value: `このサブスクリプションは、\n${Subscription_Detail.cancel_at + (isBeforeCancelDate ? 'までご利用いただけます。' : 'にキャンセルされました。')}`,
         display: Subscription_Detail.cancel_at_period_end
       },
@@ -131,9 +148,9 @@ export default function Account({
           <Box mb={8}>{user.email} 様</Box>
           <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={16} pt={2} pb={4} bg={bgColor}>
             <Table variant="striped" colorScheme="gray" size={tableSize} whiteSpace='pre-wrap'>
-              <TableCaption placement='top' mt={0} mb={2}>プラン詳細</TableCaption>
+              <TableCaption placement='top' mt={0} mb={2}>{locale === 'en' ? 'Subscription detail' : 'サブスクリプション詳細'}</TableCaption>
               <Tbody>
-                {status.map((s, i) => (s.display && (<Tr key={i}><Td>{s.name}</Td><Td>{s.value}</Td></Tr>)))}
+                {status.map((s, i) => (s.display && (<Tr key={i}><Td minW={{ base: '100px', sm: '200px' }}>{s.name}</Td><Td>{s.value}</Td></Tr>)))}
               </Tbody>
             </Table>
           </Box>
@@ -147,7 +164,7 @@ export default function Account({
   }
 
   // サブスクリプション未購入、ワンペイ永久ご視聴購入済み
-  if (!isLoading && !isMetadataLoading && One_Pay_Detail) {
+  if (!isLoading && !isMetadataLoading && (!Subscription_Detail && One_Pay_Detail)) {
 
     // Status Table contents
     const status = [
