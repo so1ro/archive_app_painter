@@ -9,9 +9,7 @@ const createCheckoutSession = async (req, res) => {
     // See https://stripe.com/docs/api/checkout/sessions/create
     // for additional parameters to pass.
     try {
-      const customerData = {
-        metadata: { auth0_UUID: user_uuid }
-      }
+      const customerData = price ? { metadata: { auth0_UUID: user_uuid } } : { metadata: { auth0_UUID: user_uuid, tier: tier_title } }
       if (user_email) customerData.email = user_email
       const customer = await stripe.customers.create(customerData)
 

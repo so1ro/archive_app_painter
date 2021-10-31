@@ -147,7 +147,7 @@ const upsertOnePayRecord = async (event) => {
     const practicalAmount = currency === 'usd' ? amount / 100 : amount
 
     try {
-        const { metadata: { auth0_UUID } } = await stripe.customers.retrieve(customer_Id)
+        const { metadata: { auth0_UUID, tier } } = await stripe.customers.retrieve(customer_Id)
         const auth0Token = await auth0AccessToken()
 
         // if it's subscription charge.succeeded, it returns here
@@ -158,7 +158,12 @@ const upsertOnePayRecord = async (event) => {
                 One_Pay_Detail: currentOnePayHistory } } = await getUserMetadata(auth0_UUID, auth0Token)
 
         const newChargedFeeRecord = (past_charged_fee + practicalAmount) || 0
-        const newOnePayHistory = { id, amount: practicalAmount, Date: format(fromUnixTime(created), 'yyyy/MM/dd HH:mm:ss') }
+        const newOnePayHistory = {
+            tier,
+            id,
+            amount: practicalAmount,
+            Date: format(fromUnixTime(created), 'yyyy/MM/dd HH:mm:ss')
+        }
 
         let One_Pay_Detail = currentOnePayHistory ? [newOnePayHistory, ...currentOnePayHistory] : [newOnePayHistory]
         let userCurrency = currentUserCurrency ? currentUserCurrency : currency
