@@ -22,7 +22,8 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
     const selectedPrices = allPrices.filter(
         price => price.type === 'one_time' ?
             price.currency === 'usd' ? (price.unit_amount / 100) - pastChargedFee > 0 : price.unit_amount - pastChargedFee > 0 :
-            price)
+            price
+    )
 
     const { locale } = useRouter()
     const toast = useToast()

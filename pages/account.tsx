@@ -152,8 +152,10 @@ export default function Account({
             </Table>
           </Box>
           <CustomerPortalButton />
-          <Text mb={4}>Tier を追加購入することも可能です。これによりサブスクリプション終了後も、アーカイブを視聴することができます。</Text>
-          <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+          <Box mt={{ base: 24, lg: 32 }}>
+            <Text mb={4}>Tier を追加購入することも可能です。これによりサブスクリプション終了後も、アーカイブを視聴することができます。</Text>
+            <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+          </Box>
         </Box>
       </PageShell>)
   }
@@ -197,6 +199,8 @@ export default function Account({
             <Center mb={4}>サブスクリプションの詳細は、次のボタンからご確認いただけます。</Center>
             <CustomerPortalButton />
           </>}
+
+          {/* Tierプロモーション */}
           <Box mt={{ base: 16, lg: 24 }}>
             <Text mb={4}>Tier をアップグレードすることもできます。</Text>
             <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
@@ -243,6 +247,12 @@ export default function Account({
             <Box>○</Box>
           </Grid>}
           <CustomerPortalButton />
+
+          {/* Tierプロモーション */}
+          <Box mt={{ base: 24, lg: 32 }}>
+            <Text mb={4}>Tier を追加購入することも可能です。これによりサブスクリプション終了後も、アーカイブを視聴することができます。</Text>
+            <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+          </Box>
         </Box>
       </PageShell>
     )
