@@ -44,18 +44,14 @@ export default function Account({
   const localeAllPrices = allPrices.filter(price => User_Detail?.userCurrency ?
     User_Detail?.userCurrency === 'usd' ? price.currency === 'usd' : price.currency === 'jpy' :
     locale === 'en' ? price.currency === 'usd' : price.currency === 'jpy')
-  const localeAllTiers = tiers.filter(tier => User_Detail?.userCurrency ?
-    User_Detail?.userCurrency === 'usd' ? tier.currency === 'usd' : tier.currency === 'jpy' :
-    locale === 'en' ? tier.currency === 'usd' : tier.currency === 'jpy')
+  const localeAllTiers = tiers
+    .filter(tier => User_Detail?.userCurrency ?
+      User_Detail?.userCurrency === 'usd' ? tier.currency === 'usd' : tier.currency === 'jpy' :
+      locale === 'en' ? tier.currency === 'usd' : tier.currency === 'jpy')
+    .filter(tier => tier.currency === 'usd' ?
+      (tier.unit_amount / 100) - User_Detail?.past_charged_fee > 0 : tier.unit_amount - User_Detail?.past_charged_fee > 0)
   const toast = useToast()
-
-  // let pastChargedFee = 0
-  // let userFavoriteCurrency = ''
-  // if (user) {
-  //   const { past_charged_fee, userCurrency } = User_Detail
-  //   pastChargedFee = past_charged_fee
-  //   userFavoriteCurrency = userCurrency
-  // }
+  console.log('localeAllTiers:', localeAllTiers)
 
   // Miscellaneous
   const { annotation } = landingPageText[0]
@@ -142,6 +138,7 @@ export default function Account({
       },
     ]
 
+
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Box w='full' maxW='640px'>
@@ -155,10 +152,10 @@ export default function Account({
             </Table>
           </Box>
           <CustomerPortalButton />
-          <Box mt={{ base: 24, lg: 32 }}>
+          {localeAllTiers && <Box mt={{ base: 24, lg: 32 }}>
             <Text mb={4}>Tier を追加購入することも可能です。これによりサブスクリプション終了後も、アーカイブを視聴することができます。</Text>
             <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
-          </Box>
+          </Box>}
         </Box>
       </PageShell>)
   }
@@ -204,10 +201,10 @@ export default function Account({
           </>}
 
           {/* Tierプロモーション */}
-          <Box mt={{ base: 16, lg: 24 }}>
+          {localeAllTiers.length > 0 && <Box mt={{ base: 16, lg: 24 }}>
             <Text mb={4}>Tier をアップグレードすることもできます。</Text>
             <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
-          </Box>
+          </Box>}
         </Box>
       </PageShell>)
   }

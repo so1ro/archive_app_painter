@@ -19,12 +19,6 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
         userFavoriteCurrency = userCurrency
     }
 
-    const selectedPrices = allPrices.filter(
-        price => price.type === 'one_time' ?
-            price.currency === 'usd' ? (price.unit_amount / 100) - pastChargedFee > 0 : price.unit_amount - pastChargedFee > 0 :
-            price
-    )
-
     const { locale } = useRouter()
     const toast = useToast()
     const { colorMode } = useColorMode()
@@ -112,7 +106,7 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
     return (
         <div>
             <Grid gap={3} gridTemplateColumns={{ base: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} mb={3}>
-                {selectedPrices.map(price => (
+                {allPrices.map(price => (
                     <Flex
                         direction='column'
                         key={price.id ?? price.sys.id}
