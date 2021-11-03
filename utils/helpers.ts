@@ -57,6 +57,14 @@ export const arrayProceedHandler = (arr: AllArchivesInterface[], currentData: Al
 
 export const currencyUSDChecker = (userCurrency, locale) => userCurrency ? userCurrency === 'usd' : locale === 'en'
 
+export const currentUserTierFinder = (tiers, User_Detail, locale) => (
+  tiers
+    .filter(t => t.currency === User_Detail?.userCurrency)
+    .map(t => ({ ...t, unit_amount: currencyUSDChecker(User_Detail?.userCurrency, locale) ? t.unit_amount / 100 : t.unit_amount }))
+    .sort((a, b) => a.unit_amount - b.unit_amount)
+    .filter(t => t.unit_amount <= User_Detail?.past_charged_fee).slice(-1)[0]
+)
+
 export const periodCurrentUserTierFinder = (tiers, User_Detail, locale) => (
   tiers
     .filter(t => t.currency === User_Detail?.userCurrency)

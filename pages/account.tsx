@@ -1,17 +1,18 @@
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { GetStaticProps } from "next"
+import { format, parseISO } from "date-fns"
 
 import { useUser } from '@auth0/nextjs-auth0'
 import { useUserMetadata } from '@/context/useUserMetadata'
 import { fetchAllPrices } from '@/hook/getStaticProps'
-import { currencyUSDChecker, postData } from '@/utils/helpers'
+import { currencyUSDChecker, currentUserTierFinder, postData } from '@/utils/helpers'
 import PriceList from '@/components/PriceList'
 import { Toast } from '@/components/Toast'
 import { fetchContentful } from '@/hook/contentful'
 import { query_archivePricing, query_archiveTier } from '@/hook/contentful-queries'
 
-import { VStack, Button, Code, Box, Grid, Center, Text, useToast, HStack, useColorModeValue, Table, Tbody, Tr, Td, TableCaption, useBreakpointValue, } from '@chakra-ui/react'
+import { VStack, Button, Box, Center, Text, useToast, HStack, useColorModeValue, Table, Thead, Th, Tbody, Tr, Td, TableCaption, useBreakpointValue, } from '@chakra-ui/react'
 import PageShell from '@/components/PageShell'
 import LoadingSpinner from '@/components/Spinner'
 import { bg_color, border_color } from '@/styles/colorModeValue'
@@ -51,7 +52,10 @@ export default function Account({
     .filter(tier => tier.currency === 'usd' ?
       (tier.unit_amount / 100) - User_Detail?.past_charged_fee > 0 : tier.unit_amount - User_Detail?.past_charged_fee > 0)
   const toast = useToast()
-  console.log('localeAllTiers:', localeAllTiers)
+  const tierList = tiers
+    .filter(tier => User_Detail?.userCurrency ?
+      User_Detail?.userCurrency === 'usd' ? tier.currency === 'usd' : tier.currency === 'jpy' :
+      locale === 'en' ? tier.currency === 'usd' : tier.currency === 'jpy')
 
   // Miscellaneous
   const { annotation } = landingPageText[0]
@@ -91,7 +95,7 @@ export default function Account({
 
   // Component
   const CustomerPortalButton = () => (
-    <Center>
+    !Subscription_Detail?.canceled_at && <Center mb={24}>
       <Button color='#fff' bg='#69b578' fontSize={{ base: 'xs', sm: 'md' }} onClick={() => {
         handleCustomerPortal(Subscription_Detail.customer_Id)
         toast({ duration: 3000, render: () => (<Toast text={"カスタマーポータルに移動中..."} />) })
@@ -102,14 +106,28 @@ export default function Account({
     </Center>
   )
 
+  const UsernameTotalPayment = () => (
+    <>
+      <Box mb={2}>{user.email} 様</Box>
+      <HStack mb={24}>
+        <Box>{locale === 'en' ? 'Total payment' : 'これまでのお支払い（累積）'}</Box>
+        <Box>{currencyUSDChecker(User_Detail?.userCurrency, locale) ?
+          `$${User_Detail?.past_charged_fee} ／ ` : `${User_Detail?.past_charged_fee}円 ／ `}
+          {currentUserTierFinder(tiers, User_Detail, locale) ?
+            currentUserTierFinder(tiers, User_Detail, locale)?.tierTitle :
+            locale === 'en' ? "No Tier" : 'まだ Tier に達していません。'}</Box>
+      </HStack>
+    </>
+  )
+
   // Render
   if (error) return <div>{error.message}</div>
 
   // サブスクリプション購入後
-  if ((!isLoading && !isMetadataLoading) && (subscription_state === 'subscribe')) {
+  if ((!isLoading && !isMetadataLoading) && (subscription_state === 'subscribe' || One_Pay_Detail) && subscription_state !== 'paused') {
 
-    // Status Table contents
-    const status = [
+    // Subscription Status Table contents
+    const subscription_status = Subscription_Detail && [
       {
         name: locale === 'en' ? 'Plan' : 'プラン',
         value: currencyUSDChecker(User_Detail?.userCurrency, locale) ?
@@ -127,114 +145,149 @@ export default function Account({
         display: true
       },
       {
-        name: locale === 'en' ? 'Past total pay' : 'お支払い（累積）',
-        value: currencyUSDChecker(User_Detail?.userCurrency, locale) ? `$${User_Detail?.past_charged_fee}` : `${User_Detail?.past_charged_fee}円`,
-        display: true
-      },
-      {
         name: locale === 'en' ? 'Cancellation' : 'キャンセル',
-        value: `このサブスクリプションは、\n${Subscription_Detail.cancel_at + (isBeforeCancelDate ? 'までご利用いただけます。' : 'にキャンセルされました。')}`,
-        display: Subscription_Detail.cancel_at_period_end
+        value: `このサブスクリプションは、\n${(Subscription_Detail.cancel_at ?? Subscription_Detail.canceled_at) + (isBeforeCancelDate ? 'までご利用いただけます。' : 'にキャンセルされました。')}`,
+        display: Subscription_Detail.cancel_at_period_end || Subscription_Detail.canceled_at
       },
     ]
-
 
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Box w='full' maxW='640px'>
-          <Box mb={8}>{user.email} 様</Box>
-          <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={16} pt={2} pb={4} bg={bgColor}>
+          <UsernameTotalPayment />
+
+          {/* Subscription status table */}
+          {subscription_status && <Box mb={24}>
+            <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={8} pt={2} pb={4} bg={bgColor}>
+              <Table variant="striped" colorScheme="gray" size={tableSize} whiteSpace='pre-wrap'>
+                <TableCaption placement='top' mt={0} mb={2}>{locale === 'en' ? 'Subscription detail' : 'サブスクリプション詳細'}</TableCaption>
+                <Tbody>
+                  {subscription_status.map((s, i) => (s.display && (<Tr key={i}><Td w={{ base: '100px', sm: '200px' }}>{s.name}</Td><Td>{s.value}</Td></Tr>)))}
+                </Tbody>
+              </Table>
+            </Box>
+            {/* <Center mb={4}>サブスクリプションの詳細は、次のボタンからご確認いただけます。</Center> */}
+            <CustomerPortalButton />
+          </Box>}
+          {/* {subscription_state !== 'unsubscribe' && <> </>} */}
+
+          {/* Tier status table */}
+          {/* {tier_status && <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={24} pt={2} pb={4} bg={bgColor}>
             <Table variant="striped" colorScheme="gray" size={tableSize} whiteSpace='pre-wrap'>
-              <TableCaption placement='top' mt={0} mb={2}>{locale === 'en' ? 'Subscription detail' : 'サブスクリプション詳細'}</TableCaption>
+              <TableCaption placement='top' mt={0} mb={2}>{locale === 'en' ? 'Tier detail' : 'Tier 詳細'}</TableCaption>
               <Tbody>
-                {status.map((s, i) => (s.display && (<Tr key={i}><Td minW={{ base: '100px', sm: '200px' }}>{s.name}</Td><Td>{s.value}</Td></Tr>)))}
+                {tier_status.map((s, i) => (s.display && (<Tr key={i}><Td w={{ base: '100px', sm: '200px' }}>{s.name}</Td><Td>{s.value}</Td></Tr>)))}
+              </Tbody>
+            </Table>
+          </Box>} */}
+
+          {subscription_state === 'unsubscribe' && <Box mb={24}>
+            <Text mb={4}>サブスクリプションを開始することができます。</Text>
+            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
+          </Box>}
+
+          {subscription_state === 'unsubscribe' && localeAllTiers.length > 0 && <Box mb={24}>
+            <Text mb={4}>Tier を追加購入することも可能です。</Text>
+            <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+          </Box>}
+          <Box mb={6}>{locale === 'en' ? 'Your subscription payment is accumulated. Even after stopping subscription, you can access the works published in a certain period according to your total payment.' : 'これまでのお支払いは累積されます。サブスクリプション終了後も、その金額に応じて下記期間の作品をご覧いただけます。'}</Box>
+
+          <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={24} pt={2} pb={4} bg={bgColor}>
+            <Table variant="striped" colorScheme="gray" size={tableSize} whiteSpace='pre-wrap'>
+              {/* <TableCaption placement='top' mt={0} mb={2}>{locale === 'en' ? 'List Tier' : 'Tier 一覧'}</TableCaption> */}
+              <Thead><Tr><Th>Tier</Th><Th>{locale === 'en' ? 'Access range' : '閲覧可能な作品'}</Th></Tr></Thead>
+              <Tbody>
+                {tierList.map((s, i) => (
+                  <Tr key={i}><Td w={{ base: '100px', sm: '200px' }}>{s.tierTitle}{`　`}{currencyUSDChecker(User_Detail?.userCurrency, locale) ?
+                    `($${s.unit_amount / 100})` : `（${s.unit_amount}円）`}</Td>
+                    <Td>{
+                      locale === 'en' ? `Works published by ${format(parseISO(s.viewPeriod), 'yyyy / MM / dd')}` :
+                        `${format(parseISO(s.viewPeriod), 'yyyy / MM / dd')} までに公開された作品`
+                    }</Td>
+                  </Tr>))}
               </Tbody>
             </Table>
           </Box>
-          <CustomerPortalButton />
-          {localeAllTiers && <Box mt={{ base: 24, lg: 32 }}>
-            <Text mb={4}>Tier を追加購入することも可能です。これによりサブスクリプション終了後も、アーカイブを視聴することができます。</Text>
-            <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
-          </Box>}
         </Box>
       </PageShell>)
   }
 
   // サブスクリプション未購入、ワンペイ永久ご視聴購入済み
-  if (!isLoading && !isMetadataLoading && (!Subscription_Detail && One_Pay_Detail)) {
+  // if (!isLoading && !isMetadataLoading && (!Subscription_Detail && One_Pay_Detail)) {
 
-    // Status Table contents
-    const status = [
-      {
-        name: 'プラン',
-        value: One_Pay_Detail.title,
-      },
-      {
-        name: '特典',
-        value: '期限なく、すべてのコンテンツをご視聴をいただけます。',
-      },
-      {
-        name: '永久ご視聴',
-        value: '○',
-      },
-    ]
+  //   // Status Table contents
+  //   const status = [
+  //     {
+  //       name: 'プラン',
+  //       value: One_Pay_Detail.title,
+  //     },
+  //     {
+  //       name: '特典',
+  //       value: '期限なく、すべてのコンテンツをご視聴をいただけます。',
+  //     },
+  //     {
+  //       name: '永久ご視聴',
+  //       value: '○',
+  //     },
+  //   ]
 
-    return (
-      <PageShell customPT={null} customSpacing={null}>
-        <Box w='full' maxW='640px'>
-          <Box mb={4}>{user.email} 様</Box>
-          <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={{ base: 16, lg: 24 }} pt={2} pb={4} bg={bgColor}>
-            <Table variant="striped" colorScheme="gray" size={tableSize}>
-              <TableCaption placement='top' mt={0} mb={2}>プラン詳細</TableCaption>
-              <Tbody>
-                {status.map((s, i) => (<Tr key={i}><Td>{s.name}</Td><Td>{s.value}</Td></Tr>))}
-              </Tbody>
-            </Table>
-          </Box>
-          {subscription_state === 'unsubscribe' && <>
-            <Text mb={4}>サブスクリプションを開始することもできます。</Text>
-            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
-          </>}
-          {subscription_state !== 'unsubscribe' && <>
-            <Center mb={4}>サブスクリプションの詳細は、次のボタンからご確認いただけます。</Center>
-            <CustomerPortalButton />
-          </>}
+  //   return (
+  //     <PageShell customPT={null} customSpacing={null}>
+  //       <Box w='full' maxW='640px'>
+  //         <Box mb={4}>{user.email} 様</Box>
+  //         <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={{ base: 16, lg: 24 }} pt={2} pb={4} bg={bgColor}>
+  //           <Table variant="striped" colorScheme="gray" size={tableSize}>
+  //             <TableCaption placement='top' mt={0} mb={2}>プラン詳細</TableCaption>
+  //             <Tbody>
+  //               {status.map((s, i) => (<Tr key={i}><Td>{s.name}</Td><Td>{s.value}</Td></Tr>))}
+  //             </Tbody>
+  //           </Table>
+  //         </Box>
+  //         {subscription_state === 'unsubscribe' && <>
+  //           <Text mb={4}>サブスクリプションを開始することもできます。</Text>
+  //           <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
+  //         </>}
+  //         {subscription_state !== 'unsubscribe' && <>
+  //           <Center mb={4}>サブスクリプションの詳細は、次のボタンからご確認いただけます。</Center>
+  //           <CustomerPortalButton />
+  //         </>}
 
-          {/* Tierプロモーション */}
-          {localeAllTiers.length > 0 && <Box mt={{ base: 16, lg: 24 }}>
-            <Text mb={4}>Tier をアップグレードすることもできます。</Text>
-            <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
-          </Box>}
-        </Box>
-      </PageShell>)
-  }
+  //         {/* Tierプロモーション */}
+  //         {localeAllTiers.length > 0 && <Box mt={{ base: 16, lg: 24 }}>
+  //           <Text mb={4}>Tier をアップグレードすることもできます。</Text>
+  //           <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+  //         </Box>}
+  //       </Box>
+  //     </PageShell>)
+  // }
+
 
   // サブスクリプションのキャンセル後
   // 注：Stripe Dashboardからのキャンセルは、即日キャンセルになる
-  if (!isLoading && !isMetadataLoading &&
-    (Subscription_Detail && Subscription_Detail.subscription_Status === 'canceled' && !One_Pay_Detail)) {
-    return (
-      <PageShell customPT={null} customSpacing={null}>
-        <Box w='full' maxW='640px'>
-          <Box mb={4}>{user.email} 様</Box>
-          <Box>{Subscription_Detail.cancel_at ?? Subscription_Detail.canceled_at}にキャンセルされました。</Box>
-          <Text mb={4}>新たにサブスクリプションやワンペイ永久ご視聴プランを開始することもできます。</Text>
-          <VStack spacing={{ base: 16, lg: 24 }}>
-            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
-            <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
-          </VStack>
-        </Box>
-      </PageShell>
-    )
-  }
+  // if (!isLoading && !isMetadataLoading &&
+  //   (Subscription_Detail?.subscription_Status === 'canceled' && !One_Pay_Detail)) {
+  //   return (
+  //     <PageShell customPT={null} customSpacing={null}>
+  //       <Box w='full' maxW='640px'>
+  //         <UsernameTotalPayment />
+  //         <Box>{Subscription_Detail.cancel_at ?? Subscription_Detail.canceled_at}にキャンセルされました。</Box>
+  //         <Text mb={4}>新たにサブスクリプションを開始することも、Tier を購入することもできます。</Text>
+  //         <VStack spacing={{ base: 16, lg: 24 }}>
+  //           <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
+  //           <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+  //         </VStack>
+  //       </Box>
+  //     </PageShell>
+  //   )
+  // }
 
   // サブスクリプションの一時停止 Paused
   if (!isLoading && !isMetadataLoading &&
-    (Subscription_Detail && subscription_state === 'paused' && Subscription_Detail.pause_collection && !One_Pay_Detail)) {
+    (Subscription_Detail && subscription_state === 'paused' && Subscription_Detail.pause_collection)) {
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Box w='full' maxW='640px'>
-          <Box mb={4}>{user.email} 様</Box>
+          <UsernameTotalPayment />
           {Subscription_Detail.pause_collection.resumes_at ?
             <Box mb={6}>サブスクリプションは、{Subscription_Detail.pause_collection.resumes_at}に再開されます。</Box> :
             <Box mb={6}>サブスクリプションは、現在停止中です。次のボタンから再開することができます。</Box>}
@@ -242,7 +295,7 @@ export default function Account({
 
           {/* Tierプロモーション */}
           <Box mt={{ base: 24, lg: 32 }}>
-            <Text mb={4}>Tier を追加購入することも可能です。これによりサブスクリプション終了後も、アーカイブを視聴することができます。</Text>
+            <Text mb={4}>Tier を追加購入することも可能です。</Text>
             <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
           </Box>
         </Box>
@@ -251,11 +304,11 @@ export default function Account({
   }
   // サブスクリプション status が incomplete / incomplete_expired / incomplete_expired / past_due の場合
   if (!isLoading && !isMetadataLoading &&
-    (Subscription_Detail && subscription_state === 'paused' && !Subscription_Detail.pause_collection && !One_Pay_Detail)) {
+    (Subscription_Detail && subscription_state === 'paused' && !Subscription_Detail.pause_collection)) {
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Box w='full' maxW='640px'>
-          <Box mb={4}>{user.email} 様</Box>
+          <UsernameTotalPayment />
           <CustomerPortalButton />
         </Box>
       </PageShell>
@@ -267,9 +320,12 @@ export default function Account({
     return (
       <PageShell customPT={null} customSpacing={null}>
         <Box>
-          <Text mb={10}>ご購入ボタンからサブスクリプションやワンペイ永久ご視聴プランを開始することができます。</Text>
-          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
-          <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+          <UsernameTotalPayment />
+          <Text mb={10}>ご購入ボタンからサブスクリプションや Tier を購入することができます。</Text>
+          <VStack spacing={{ base: 16, lg: 24 }}>
+            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
+            <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+          </VStack>
         </Box>
       </PageShell>)
   }
