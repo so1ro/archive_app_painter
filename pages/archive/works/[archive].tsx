@@ -12,7 +12,7 @@ import VideoYouTube from '@/components/VideoYouTube'
 import { Center, Flex, VStack, HStack, Box, List, ListItem, Link, useColorModeValue, Tabs, TabList, TabPanels, Tab, TabPanel, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, useToast } from '@chakra-ui/react'
 import { css } from "@emotion/react"
 import { GetStaticProps, GetStaticPaths } from "next"
-import { highlight_color } from '@/styles/colorModeValue'
+import { highlight_color, text_color } from '@/styles/colorModeValue'
 import TimeFormat from 'hh-mm-ss'
 import { useRouter } from 'next/router'
 import { ArrowBackIcon, ViewIcon } from '@chakra-ui/icons'
@@ -56,6 +56,7 @@ export default function Archive1({ archive, path, tiers }:
 
 	// Miscellaneous
 	const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
+	const textColor = useColorModeValue(text_color.l, text_color.d)
 	const selectedColorScheme = { color: highLightColor, borderColor: highLightColor }
 	const iconSize = { base: 6, md: 7 }
 	const favoriteButtonText = favoriteWork.includes(archive.archiveNumber) ? 'お気に入りから削除中...' : 'お気に入りに保存中...'
@@ -131,7 +132,7 @@ export default function Archive1({ archive, path, tiers }:
 							borderRadius={40}
 							align='center'
 							justify='flex-start'
-							colorScheme='blackAlpha' color='#fff'>
+							colorScheme='blackAlpha' color={textColor}>
 							<ArrowBackIcon w={6} h={6} />
 						</Flex>
 					</Box>
