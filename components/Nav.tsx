@@ -13,6 +13,7 @@ import ColorModeButton from '@/components/ColorModeButton'
 import NextLink from 'next/link'
 import Language from '@/components/Language'
 import SnsIcons from './SnsIcons'
+import { UserIcon } from '@/styles/icons'
 
 export default function Nav() {
     // Hooks
@@ -52,7 +53,7 @@ export default function Nav() {
                 <Stack spacing={[2, 3]} isInline align="center" ml={6}>
                     <Language />
                     {isLargerThan992 && <SnsIcons animation={false} type={'nav'} onHandler={null} />}
-                    {isLoading ? '' : (user ? <UserMenu /> : <UserLoginSignup />)}
+                    {isLoading ? <UserIcon width={7} height={7} py={2} /> : (user ? <UserMenu /> : <UserLoginSignup />)}
                     <ColorModeButton />
                 </Stack>
             </Flex>
