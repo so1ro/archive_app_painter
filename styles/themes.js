@@ -27,7 +27,7 @@ const theme = extendTheme({
                 padding: 0,
                 margin: 0,
                 overflowY: "scroll",
-                fontFamily: "'Merriweather', 'Times New Roman', 'YuMincho', 'Hiragino Mincho ProN', 'Yu Mincho', 'MS PMincho', serif",
+                fontFamily: "'Noto Serif JP','Merriweather', 'Times New Roman', 'YuMincho', 'Hiragino Mincho ProN', 'Yu Mincho', 'MS PMincho', serif",
             },
             "a": {
                 color: "inherit",

@@ -18,6 +18,7 @@
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
     "@fontsource/merriweather": "^4.5.1",
+    "@fontsource/noto-serif-jp": "^4.5.2",
     "@stripe/stripe-js": "^1.13.2",
     "@types/pino": "^6.3.11",
     "@u-wave/react-vimeo": "^0.9.4",
