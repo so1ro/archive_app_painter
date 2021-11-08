@@ -8,7 +8,7 @@ import NextLink from 'next/link'
 import { fetchContentful } from "@/hook/contentful"
 import { query_archivePricing, query_archiveTier } from "@/hook/contentful-queries"
 
-import { Heading, Box, Text, Button } from "@chakra-ui/react"
+import { VStack, Heading, Box, Text, Button } from "@chakra-ui/react"
 import { fetchAllPrices } from '@/hook/getStaticProps'
 import PriceList from '@/components/PriceList'
 import ArchiveMeritList from "@/components/ArchiveMeritList"
@@ -29,14 +29,14 @@ export default function Archive(
       tiers: TierInterface[],
     }) {
 
+  const router = useRouter()
+  const { locale } = useRouter()
   const { sys: { id }, message, content, functions, merit, vimeoId, explain, annotation } = landingPageText[0]
   const meritListItems = [content, functions, merit]
   const { user, error, isLoading } = useUser()
   const { User_Detail, isMetadataLoading, subscription_state, One_Pay_Detail, error_metadata } = useUserMetadata()
   const isLargerThan768 = useMediaQuery("(min-width: 768px)")
-  const messageWithoutNewline = message.replace('\n', '')
-  const router = useRouter()
-  const { locale } = router
+  const messageWithoutNewline = message[locale].replace('\n', '')
   const localeAllPrices = allPrices.filter(price => locale === 'en' ? price.currency === 'usd' : price.currency === 'jpy')
   const localeAllTiers = tiers.filter(tier => locale === 'en' ? tier.currency === 'usd' : tier.currency === 'jpy')
 
@@ -57,24 +57,24 @@ export default function Archive(
             textAlign={{ base: 'left', md: 'center' }}
             whiteSpace='pre-wrap'
             lineHeight={{ base: '32px', md: '42px' }}
-            mb={6}>
-            {!isLargerThan768 ? messageWithoutNewline : message}
+            mb={{ base: 12, md: 20 }}>
+            {!isLargerThan768 ? messageWithoutNewline : message[locale]}
           </Heading>
           <ArchiveMeritList meritListItems={meritListItems} />
         </Box>
-        <Box>
-          <Text mb={6}>{explain}</Text>
-          <VideoVimeoLT vimeoId={vimeoId} aspect={'52.7%'} autoplay={false} borderRadius={null} />
-        </Box>
-        {/* サブスクリプションもワンペイ永久ご視聴もご購入前 */}
-        {subscription_state === 'unsubscribe' &&
-          <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'archive'} />}
-        <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'archive'} />
-        {/* サブスクリプションが一時停止の場合 */}
-        {subscription_state === 'paused' &&
-          <NextLink href={'/account'}>
-            <Button color='#fff' bg='#69b578' fontSize={{ base: 'xs', sm: 'md' }} >アカウントページへ</Button>
-          </NextLink>}
+        <VideoVimeoLT vimeoId={vimeoId} aspect={'52.7%'} autoplay={false} borderRadius={null} />
+        <VStack spacing={10}>
+          <Text w='full' whiteSpace='pre-wrap'>{explain[locale]}</Text>
+          {subscription_state === 'unsubscribe' &&
+            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation ?? null} returnPage={'archive'} />}
+          {/* サブスクリプションもワンペイ永久ご視聴もご購入前 */}
+          <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'archive'} />
+          {/* サブスクリプションが一時停止の場合 */}
+          {subscription_state === 'paused' &&
+            <NextLink href={'/account'}>
+              <Button color='#fff' bg='#69b578' fontSize={{ base: 'xs', sm: 'md' }} >アカウントページへ</Button>
+            </NextLink>}
+        </VStack>
       </PageShell>
     )
   }

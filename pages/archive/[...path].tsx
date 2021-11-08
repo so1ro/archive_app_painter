@@ -335,11 +335,11 @@ export default function ArchiveRoute({
                                             </Center>}
                                         </>
                                         : <Flex flexGrow={1}>
-                                            {!isSeaching && <Center>該当する動画は見つかりませんでした。</Center>}
+                                            {!isSeaching && <Center>該当する作品は見つかりませんでした。</Center>}
                                             {isSeaching && !isShowingSearchResult && !isWaitingSearchResult && <Center>入力中...</Center>}
                                             {isSeaching && !isShowingSearchResult && isWaitingSearchResult && <SmallLoadingSpinner />}
                                             {isSeaching && isShowingSearchResult && !isWaitingSearchResult &&
-                                                <Center>検索の結果、該当する動画は見つかりませんでした。</Center>}
+                                                <Center>検索の結果、該当する作品は見つかりませんでした。</Center>}
                                         </Flex>}
                                 {isShowingTierArchiveOnly && !isSelectedArchiveInTierPeriod && !checkFavoriteRoute() &&
                                     <ErrowMessageNotUserTierIncludingArchives />}

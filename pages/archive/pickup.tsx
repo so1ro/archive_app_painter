@@ -289,7 +289,7 @@ export default function Pickup({
 								<VStack w='full' spacing={6} align='flex-start'>
 									<Flex align='center' h='40px'>{locale === 'en' ? 'Latest' : '最新'}</Flex>
 									<List w='full' overflowX='auto' whiteSpace='nowrap' mt={12} pb={4} borderTopWidth='0' css={thumbnailAreaScrollCss}>
-										{allDescLatestArchives.map((i, j) => (
+										{allDescLatestArchives.slice(0, 5).map((i, j) => (
 											<ListItem
 												d='inline-block'
 												verticalAlign='top'
@@ -369,11 +369,11 @@ export default function Pickup({
 										</>
 										: 
 										<Flex flexGrow={1}>
-											{!isSeaching && <Center>該当する動画は見つかりませんでした。</Center>}
+											{!isSeaching && <Center>該当する作品は見つかりませんでした。</Center>}
 											{isSeaching && !isShowingSearchResult && !isWaitingSearchResult && <Center>入力中...</Center>}
 											{isSeaching && !isShowingSearchResult && isWaitingSearchResult && <SmallLoadingSpinner />}
 											{isSeaching && isShowingSearchResult && !isWaitingSearchResult &&
-												<Center>検索の結果、該当する動画は見つかりませんでした。</Center>}
+												<Center>検索の結果、該当する作品は見つかりませんでした。</Center>}
 										</Flex>
 										}
 								{isShowingTierArchiveOnly && !isSelectedArchiveInTierPeriod && !checkFavoriteRoute() &&
