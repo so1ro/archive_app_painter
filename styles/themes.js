@@ -16,6 +16,10 @@ const theme = extendTheme({
     breakpoints,
     initialColorMode: "light",
     useSystemColorMode: false,
+    fonts: {
+        body: "'Noto Serif JP','Merriweather', 'Times New Roman', 'YuMincho', 'Hiragino Mincho ProN', 'Yu Mincho', 'MS PMincho', serif",
+        heading: "'Noto Serif JP','Merriweather', 'Times New Roman', 'YuMincho', 'Hiragino Mincho ProN', 'Yu Mincho', 'MS PMincho', serif",
+    },
     styles: {
         global: (props) => ({
             html: {
@@ -27,7 +31,7 @@ const theme = extendTheme({
                 padding: 0,
                 margin: 0,
                 overflowY: "scroll",
-                fontFamily: "'Noto Serif JP','Merriweather', 'Times New Roman', 'YuMincho', 'Hiragino Mincho ProN', 'Yu Mincho', 'MS PMincho', serif",
+                // fontFamily: "'Noto Serif JP','Merriweather', 'Times New Roman', 'YuMincho', 'Hiragino Mincho ProN', 'Yu Mincho', 'MS PMincho', serif",
             },
             "a": {
                 color: "inherit",
