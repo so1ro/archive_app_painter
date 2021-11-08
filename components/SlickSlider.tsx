@@ -21,7 +21,7 @@ export default function SlickSlider({ imgs, h }) {
 						objectFit="cover"
 						quality={100}
 						priority={true}
-						alt='スーツ' />
+						alt='芝田美智子 ボタニカルアート 教室' />
 				</Box>
 			))}
 		</Slider>
@@ -36,5 +36,5 @@ export default function SlickSlider({ imgs, h }) {
 // 					// objectFit="cover"
 // 					quality={100}
 // 					priority={true}
-// 					alt='スーツ' />
+// 					alt='芝田美智子 ボタニカルアート 教室' />
 // 			</Box>
