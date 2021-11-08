@@ -19,7 +19,7 @@ export default function ArchiveMeritList({ meritListItems }) {
     const checkIconColor = useColorModeValue(highlight_color.l, highlight_color.d)
     const iconSize = 28
 
-    const MeritGridItem = ({ title, list, icon, num }: { title: object, list: string[], icon: string, num: number }) => {
+    const MeritGridItem = ({ title, list, icon, num }: { title: object, list: object, icon: string, num: number }) => {
 
         const iconHandler = (icon) => {
             // Add Switch condition here...
