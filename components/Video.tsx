@@ -127,7 +127,7 @@ export default function Video({
     )
 
     // Miscellaneous
-    // スーツさんのアーカイブなので、vimeoIdではなく、youtubeIdを指定
+    // さんのアーカイブなので、vimeoIdではなく、youtubeIdを指定
     const favoriteButtonText = favoriteVideo.includes(displayingArchive.youtubeId) ? 'お気に入りから削除中...' : 'お気に入りに保存中...'
     const favoriteButtonErrorText = favoriteVideo.includes(displayingArchive.youtubeId) ? 'お気に入りから削除できませんでした。' : 'お気に入りは保存されませんでした。'
     const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
@@ -215,11 +215,11 @@ export default function Video({
                             <HStack overflow="hidden" textAlign='right' spacing={2} justifySelf={{ base: 'start', md: 'end' }} alignItems='flex-start' pt={1}>
                                 {route === 'archive' && <FavoriteHeartIcon
                                     width={iconSize} height={iconSize} cursor='pointer'
-                                    // スーツさんのアーカイブなので、vimeoIdではなく、youtubeIdを指定
+                                    // さんのアーカイブなので、vimeoIdではなく、youtubeIdを指定
                                     color={favoriteVideo.includes(displayingArchive.youtubeId) && highLightColor}
                                     onClick={() => {
                                         toast({ duration: 3000, render: () => (<Toast text={favoriteButtonText} />) })
-                                        // スーツさんのアーカイブなので、vimeoIdではなく、youtubeIdを指定
+                                        // さんのアーカイブなので、vimeoIdではなく、youtubeIdを指定
                                         favoriteHandler(displayingArchive.youtubeId)
                                     }} />}
                                 <RepeatIcon

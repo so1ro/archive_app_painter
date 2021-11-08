@@ -13,7 +13,7 @@ import Footer from '@/components/Footer';
 export default function Layout({ children }: { children: ReactNode }) {
 
     const router = useRouter()
-    const currentHeadData = headData.find(data => data.path === router.pathname.split('/')[1]) ?? { path: '404', title: '404 | スーツ' }
+    const currentHeadData = headData.find(data => data.path === router.pathname.split('/')[1]) ?? { path: '404', title: '404 | 芝田美智子 ボタニカルアート 教室' }
 
     return (
         <>
@@ -35,14 +35,14 @@ export default function Layout({ children }: { children: ReactNode }) {
 }
 
 const headData = [
-    { path: '', title: 'スーツ' },
-    { path: 'archive', title: 'アーカイブ | スーツ' },
-    { path: 'youtube', title: 'YouTube | スーツ' },
-    { path: 'twitter', title: 'ツイッター | スーツ' },
-    { path: 'instagram', title: 'インスタグラム | スーツ' },
-    { path: 'account', title: 'アカウント | スーツ' },
-    { path: 'facebook', title: 'Facebook | スーツ' },
-    { path: 'contact', title: 'お問い合わせ | スーツ' },
-    { path: 'contact_success', title: 'お問い合わせ | スーツ' },
-    { path: '404', title: '404 | スーツ' },
+    { path: '', title: '芝田美智子 ボタニカルアート 教室' },
+    { path: 'archive', title: 'アーカイブ | 芝田美智子 ボタニカルアート 教室' },
+    { path: 'youtube', title: 'YouTube | 芝田美智子 ボタニカルアート 教室' },
+    { path: 'twitter', title: 'ツイッター | 芝田美智子 ボタニカルアート 教室' },
+    { path: 'instagram', title: 'インスタグラム | 芝田美智子 ボタニカルアート 教室' },
+    { path: 'account', title: 'アカウント | 芝田美智子 ボタニカルアート 教室' },
+    { path: 'facebook', title: 'Facebook | 芝田美智子 ボタニカルアート 教室' },
+    { path: 'contact', title: 'お問い合わせ | 芝田美智子 ボタニカルアート 教室' },
+    { path: 'contact_success', title: 'お問い合わせ | 芝田美智子 ボタニカルアート 教室' },
+    { path: '404', title: '404 | 芝田美智子 ボタニカルアート 教室' },
 ]

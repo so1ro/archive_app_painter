@@ -46,7 +46,12 @@ export default function Nav() {
             borderBottom={(!isTop && colorMode === 'dark') ? `1px #2F4351 solid` : 0}
         >
             <Stack spacing={4} isInline alignItems="center">
-                <NextLink href={'/'} passHref><Link><Text as="h1" fontSize={["lg", "xl", "2xl"]}>スーツ</Text></Link></NextLink>
+                <NextLink href={'/'} passHref>
+                    <Link>
+                        <Text as="h1" fontSize={["lg", "xl", "2xl"]} d={{ base: 'none', lg: 'inline-block' }}>芝田美智子 ボタニカルアート 教室</Text>
+                        <Text as="h1" fontSize={["lg", "xl", "2xl"]} d={{ base: 'inline-block', lg: 'none' }}>芝田美智子</Text>
+                    </Link>
+                </NextLink>
             </Stack>
             <Flex alignItems="center">
                 <NavLinks />
