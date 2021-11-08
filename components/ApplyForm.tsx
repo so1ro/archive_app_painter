@@ -1,5 +1,5 @@
 import Router from 'next/router'
-// import { useState } from "react"
+import { useUser } from '@auth0/nextjs-auth0'
 import * as Yup from "yup"
 import { Formik, Form, } from 'formik'
 import { FormikInput, FormikSelect, FormikSubmitButton, FormikTextArea } from '@/components/Formik/Fields'
@@ -10,13 +10,12 @@ import { useToast } from "@chakra-ui/toast"
 import { Toast, ToastError } from '@/components/Toast'
 import { highlight_color, text_color } from '@/styles/colorModeValue'
 
-export default function ApplyForm(
-	{ userEmail, auth0_UUID }: { userEmail?: string, auth0_UUID?: string }
-) {
+export default function ApplyForm() {
 
+	const { user, error, isLoading } = useUser()
 	// const [response, setResponse] = useState({ type: '', message: '', })
 	const highlightColor = useColorModeValue(highlight_color.l, highlight_color.d)
-	const blurTextColor = useColorModeValue(text_color.l, text_color.d)
+	const textColor = useColorModeValue(text_color.l, text_color.d)
 	const toast = useToast()
 	const { locale, route } = useRouter()
 
@@ -82,7 +81,7 @@ export default function ApplyForm(
 			<Formik
 				initialValues={{
 					name: '',
-					email: userEmail ?? '',
+					email: user?.email ?? '',
 					// plan: '',
 					// snsIntegration: '',
 					// snsURL: '',
@@ -92,11 +91,11 @@ export default function ApplyForm(
 				}}
 				validationSchema={Yup.object({
 					name: Yup.string()
-						.max(30, 'Must be 30 characters or less')
+						.max(30, `${locale === 'en' ? '* Must be 30 characters or less' : '※ 30文字以内でご入力ください。。'}`)
 						.required(`${locale === 'en' ? '* Required' : '※ 必須項目です。'}`),
 					email: Yup.string()
-						.email('Invalid email address')
-						.required('Required'),
+						.email(`${locale === 'en' ? '* Invalid email address' : '※ メールアドレスをご入力ください。'}`)
+						.required(`${locale === 'en' ? '* Required' : '※ 必須項目です。'}`),
 					// plan: Yup.string()
 					// 	.required(`${locale === 'en' ? '* Required' : '※ 必須項目です。'}`),
 					// snsIntegration: route.includes('account') ? Yup.string()
@@ -110,8 +109,8 @@ export default function ApplyForm(
 					// type: Yup.string()
 					// 	.required(`${locale === 'en' ? '* Required' : '※ 必須項目です。'}`),
 					message: Yup.string()
-						.max(2000, 'Must be 2000 characters or less')
-					// .required(`${locale === 'en' ? '* Required' : '※ 必須項目です。'}`),
+						.max(2000, `${locale === 'en' ? '* Must be 2000 characters or less' : '※ 2000文字以内でご入力ください。'}`)
+						.required(`${locale === 'en' ? '* Required' : '※ 必須項目です。'}`),
 				})}
 				onSubmit={(values, { setSubmitting }) => {
 					setTimeout(() => {
@@ -127,10 +126,11 @@ export default function ApplyForm(
 							focusBorderColor={highlightColor} />
 						<FormikInput label={locale === 'en' ? 'Email address' : 'メールアドレス'}
 							name="email" type="text"
-							mb={3} variant="unstyled"
-							color={blurTextColor}
-							borderBottom='1px solid' borderRadius={0} pb={2} borderColor='gray.500'
-							value={userEmail} isReadOnly={userEmail ? true : false} />
+							mb={3} variant={user?.email ? 'unstyled' : 'flushed'}
+							color={textColor}
+							focusBorderColor={!user?.email && highlightColor}
+							borderBottom={!user?.email && '1px solid'} borderRadius={0} pb={user?.email && 2} borderColor='gray.500'
+							value={user?.email} isReadOnly={user?.email ? true : false} />
 						{/* <FormikSelect label={locale === 'en' ? 'Plan' : 'プラン'} name="plan">
 							{applyText.plan[locale].map(plan => <option value={plan.value} key={plan.value}>{plan.text}</option>)}
 						</FormikSelect> */}
