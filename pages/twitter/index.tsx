@@ -51,6 +51,9 @@ export default function Twitter({ twitterAST }) {
         border-radius: 0.4rem;
         overflow: hidden;
     }
+    .static-tweet-emoji {
+        display: inline-block;
+    }
 `
     return (
         <Box css={twitterBlockquoteWrap}>
