@@ -8,7 +8,7 @@ export default handleAuth({
             const returnTo = req.query.param === 'signup' ? `/account` : `/archive`
             await handleLogin(req, res, {
                 returnTo,
-                authorizationParams: { screen_hint: (req.query.param?.toString() || null) }
+                authorizationParams: { screen_hint: req.query.param?.toString() }
             });
         } catch (e) {
             //// Logging ////
