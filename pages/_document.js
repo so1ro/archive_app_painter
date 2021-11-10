@@ -54,7 +54,7 @@ class MyDocument extends Document {
                     <meta property='og:url' content='https://yourdomain.com' />
                     <meta property='og:image' content='https://yourdomain.com/public/icons/apple-touch-icon.png' /> */}
                     {/* PWA */}
-                    <meta name='application-name' content='PWA App' />
+                    <meta name='application-name' content='Archive App' />
                 </Head>
                 <body>
                     <ColorModeScript initialColorMode={theme.config.initialColorMode} />
