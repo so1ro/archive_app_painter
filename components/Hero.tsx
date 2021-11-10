@@ -49,7 +49,7 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
                             objectFit="cover"
                             quality={100}
                             priority={true}
-                            alt='芝田美智子 ボタニカルアート教室' /> */}
+                            alt='芝田美智子 ボタニカルアート' /> */}
                     </Box>
                     <Box d={{ base: 'none', lg: 'block' }} h={innerHeight ? `${innerHeight}px` : '100vh'} zIndex={'-1'} css={videoCss}>
                         {/* {isVideoLoading &&
