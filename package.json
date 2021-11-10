@@ -38,7 +38,7 @@
     "leaflet-defaulticon-compatibility": "^0.1.1",
     "lodash": "^4.17.21",
     "next": "10.0.5",
-    "next-pwa": "^5.2.21",
+    "next-pwa": "5.4.0",
     "nodemailer": "^6.6.5",
     "pino": "^6.13.0",
     "pino-logflare": "^0.3.12",
