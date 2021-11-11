@@ -19,6 +19,7 @@ import { ArrowBackIcon, ViewIcon } from '@chakra-ui/icons'
 import { BrushIcon, FavoriteHeartIcon } from '@/styles/icons'
 import { Toast, ToastError } from '@/components/Toast'
 import LoadingSpinner from '@/components/Spinner'
+import PageShell from '@/components/PageShell'
 
 export default function Archive1({ archive, path, tiers }:
 	{ archive: AllArchives2Interface, path: string, tiers: TierInterface[], }) {
@@ -58,7 +59,7 @@ export default function Archive1({ archive, path, tiers }:
 	const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
 	const textColor = useColorModeValue(text_color.l, text_color.d)
 	const selectedColorScheme = { color: highLightColor, borderColor: highLightColor }
-	const iconSize = { base: 6, md: 7 }
+	const iconSize = { base: 5, md: 7 }
 	const favoriteButtonText = favoriteWork.includes(archive.archiveNumber) ? 'お気に入りから削除中...' : 'お気に入りに保存中...'
 	const favoriteButtonErrorText = favoriteWork.includes(archive.archiveNumber) ? 'お気に入りから削除できませんでした。' : 'お気に入りは保存されませんでした。'
 	const accordionCss = css`
@@ -126,17 +127,18 @@ export default function Archive1({ archive, path, tiers }:
 	if (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail) && !isArchiveNotInTierPeriod_userIsNotSubscriber) {
 		return (
 			<>
-				<VStack w='full' maxW={{ base: '1000px' }} py={{ base: 12, lg: 12 }} margin='0 auto'>
+				{/* <VStack w='full' maxW={{ base: '1000px' }} py={{ base: 12, lg: 12 }} margin='0 auto'> */}
+				<PageShell customPT={{ base: 6, lg: 10 }} customSpacing={archive?.learningVideoId ? { base: 0, lg: 0 } : { base: 6, lg: 6 }} id={null}>
 					<Box w='full'>
 						<Flex onClick={() => router.back()}
 							borderRadius={40}
 							align='center'
 							justify='flex-start'
 							colorScheme='blackAlpha' color={textColor}>
-							<ArrowBackIcon w={6} h={6} />
+							<ArrowBackIcon w={6} h={6} cursor='pointer' />
 						</Flex>
 					</Box>
-					<VStack w='full' spacing={24}>
+					<VStack w='full' spacing={{ base: 10, lg: 16 }}>
 						<Tabs w='full' id={`archive-tab-id`} isFitted>
 							<TabList d={archive?.learningVideoId ? 'flex' : 'none'}>
 								<Tab _selected={selectedColorScheme} onClick={() => stopSkipPlayLearningVideoHandler(0, false)}><ViewIcon mr={2} />{locale === 'en' ? 'View' : '観る'}</Tab>
@@ -146,8 +148,8 @@ export default function Archive1({ archive, path, tiers }:
 							</TabList>
 							<TabPanels>
 								<TabPanel p={0}>
-									<VStack w='full' spacing={archive?.youtubeId ? { base: 0, lg: 12 } : 6} pt={archive?.learningVideoId ? { base: 10, md: 20 } : 0}>
-										<VStack w='full' spacing={archive?.timestamp ? 6 : 4}>
+									<VStack w='full' spacing={archive?.youtubeId ? { base: 10, lg: 16 } : 0} pt={archive?.learningVideoId ? { base: 10, md: 20 } : 0}>
+										<VStack w='full' spacing={archive?.timestamp ? 4 : 2}>
 											{archive?.youtubeId && <VideoYouTube
 												youtubeId={archive?.youtubeId}
 												aspect={null}
@@ -227,7 +229,7 @@ export default function Archive1({ archive, path, tiers }:
 						</Tabs>
 
 						{(archive?.title || archive?.createdYear || archive?.size) && <Box w='full' pb={4}>
-							<List fontSize={['md']} mt={12}>
+							<List fontSize={['md']}>
 								{archive.title &&
 									<ListItem mb={1}> タイトル : {archive.title[locale]} </ListItem>}
 								{archive.createdYear &&
@@ -237,7 +239,8 @@ export default function Archive1({ archive, path, tiers }:
 							</List>
 						</Box>}
 					</VStack>
-				</VStack>
+					{/* </VStack> */}
+				</PageShell>
 			</>
 		)
 	}
