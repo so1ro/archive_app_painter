@@ -119,7 +119,6 @@ export default function NavModalSPTB() {
                             }
 
                             <MotionBox
-                                w='full'
                                 textAlign='center'
                                 initial="hidden"
                                 animate="visible"

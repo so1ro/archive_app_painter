@@ -20,6 +20,7 @@ export default function Nav() {
     const router = useRouter()
     const isTop = router.pathname === '/'
     const { user, error, isLoading } = useUser()
+    const isLargerThan480 = useMediaQuery("(min-width: 480px)")
     const isLargerThan992 = useMediaQuery("(min-width: 992px)")
 
     const { colorMode } = useColorMode()
@@ -56,7 +57,7 @@ export default function Nav() {
             <Flex alignItems="center">
                 <NavLinks />
                 <Stack spacing={[2, 3]} isInline align="center" ml={6}>
-                    <Language />
+                    {isLargerThan480 && <Language />}
                     {isLargerThan992 && <SnsIcons animation={false} type={'nav'} onHandler={null} />}
                     {isLoading ? <UserIcon width={7} height={7} py={2} /> : (user ? <UserMenu /> : <UserLoginSignup />)}
                     <ColorModeButton />

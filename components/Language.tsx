@@ -13,7 +13,6 @@ export default function Language() {
 	return (
 		<Select
 			onChange={handleLanguage}
-			d={{ base: 'none', md: 'inline-block' }}
 			placeholder={upperCase(locale)} w='none' border='0'
 			style={{ paddingInlineStart: '0' }}>
 			{locale !== 'en' && <option value="en">EN</option>}
