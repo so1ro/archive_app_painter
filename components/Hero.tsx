@@ -41,17 +41,10 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
         <>
             <Box pos='relative'>
                 <Box>
-                    {/* {todayImgPair.map((img, i) => ( */}
-                    <Box d={{ base: 'block', lg: 'none' }} h={innerHeight ? `${innerHeight}px` : '100vh'} zIndex={'-1'} overflow='hidden'>
+                    <Box d={{ base: 'block', md: 'none' }} h={innerHeight ? `${innerHeight}px` : '100vh'} zIndex={'-1'} overflow='hidden'>
                         <SlickSlider imgs={heroSlideImgs} h={innerHeight ? `${innerHeight}px` : '100vh'} />
-                        {/* <Image src={todayImgPair[0].url}
-                            layout="fill"
-                            objectFit="cover"
-                            quality={100}
-                            priority={true}
-                            alt='芝田美智子 ボタニカルアート' /> */}
                     </Box>
-                    <Box d={{ base: 'none', lg: 'block' }} h={innerHeight ? `${innerHeight}px` : '100vh'} zIndex={'-1'} css={videoCss}>
+                    <Box d={{ base: 'none', md: 'block' }} h={innerHeight ? `${innerHeight}px` : '100vh'} zIndex={'-1'} css={videoCss}>
                         {/* {isVideoLoading &&
                             <Spinner thickness="3px" speed="0.65s" emptyColor="gray.200"
                                 color={highLightColor} size="md"
