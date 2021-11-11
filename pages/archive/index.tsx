@@ -83,7 +83,7 @@ export default function Archive(
   if (
     (!isLoading && !isMetadataLoading) &&
     (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail))) {
-    if (typeof window !== 'undefined') router.push('/archive/all')
+    if (typeof window !== 'undefined') router.push('/archive/pickup')
     return <LoadingSpinner />
   }
   return <LoadingSpinner />

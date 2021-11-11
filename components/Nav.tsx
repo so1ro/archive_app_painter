@@ -18,6 +18,7 @@ import { UserIcon } from '@/styles/icons'
 export default function Nav() {
     // Hooks
     const router = useRouter()
+    const { locale } = useRouter()
     const isTop = router.pathname === '/'
     const { user, error, isLoading } = useUser()
     const isLargerThan480 = useMediaQuery("(min-width: 480px)")
@@ -49,8 +50,9 @@ export default function Nav() {
             <Stack spacing={4} isInline alignItems="center">
                 <NextLink href={'/'} passHref>
                     <Link>
-                        <Text as="h1" fontSize={["lg", "xl"]} d={{ base: 'none', smd: 'inline-block' }}>芝田美智子 ボタニカルアート</Text>
-                        <Text as="h1" fontSize={["lg", "xl"]} d={{ base: 'inline-block', smd: 'none' }}>芝田美智子</Text>
+                        <Text as="h1" fontSize={["lg", "xl"]} d={{ base: 'none', smd: 'none', lg: 'inline-block' }}>{locale === 'en' ? 'Michiko Shibata Botanical Art' : '芝田美智子 ボタニカルアート'}</Text>
+                        <Text as="h1" fontSize={["lg", "xl"]} d={{ base: 'none', smd: 'inline-block', lg: 'none' }}>{locale === 'en' ? 'Michiko Shibata' : '芝田美智子 ボタニカルアート'}</Text>
+                        <Text as="h1" fontSize={["lg", "xl"]} d={{ base: 'inline-block', smd: 'none', lg: 'none' }}>{locale === 'en' ? 'Michiko' : '芝田美智子'}</Text>
                     </Link>
                 </NextLink>
             </Stack>

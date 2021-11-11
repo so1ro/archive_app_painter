@@ -1,15 +1,16 @@
-import React from 'react';
-import { Flex, VStack, Text, useColorMode } from '@chakra-ui/react';
-import { bg_color, text_BW } from '@/styles/colorModeValue';
-import SnsIcons from '@/components/SnsIcons';
-import NavLinks from '@/components/NavLinks';
+import { useRouter } from 'next/router'
+import { Flex, VStack, Text, useColorMode } from '@chakra-ui/react'
+import { bg_color, text_BW } from '@/styles/colorModeValue'
+import SnsIcons from '@/components/SnsIcons'
+import NavLinks from '@/components/NavLinks'
 
-const date = new Date();
-const year = date.getFullYear();
+const date = new Date()
+const year = date.getFullYear()
 
 export default function Footer() {
 
     const { colorMode } = useColorMode()
+    const { locale } = useRouter()
 
     return (
         <Flex
@@ -21,13 +22,13 @@ export default function Footer() {
             p={{ base: 4, lg: 9 }}
             borderTop={colorMode === 'dark' ? `1px #2F4351 solid` : 0}>
             <VStack spacing={1} align={{ base: "center", lg: "flex-start" }} order={{ base: 2, lg: 1 }}>
-                <Text fontSize={{ base: "md", sm: "xl" }} isTruncated>芝田美智子 ボタニカルアート</Text>
-                <Text fontSize="xs">&#xA9; {year} 芝田美智子 All rights reserved.</Text>
+                <Text fontSize={{ base: "md", sm: "xl" }} isTruncated>{locale === 'en' ? 'Michiko Shibata Botanical Art' : '芝田美智子 ボタニカルアート'}</Text>
+                <Text fontSize="xs">&#xA9; {year} {locale === 'en' ? 'Michiko Shibata' : '芝田美智子'} All rights reserved.</Text>
             </VStack>
             <VStack mb={{ base: 4, lg: 0 }} spacing={3} align={{ base: "center", lg: "flex-end" }} order={{ base: 1, lg: 2 }}>
                 {/* <NavLinks /> */}
                 <SnsIcons animation={false} type={'footer'} onHandler={null} />
             </VStack>
         </Flex >
-    );
+    )
 }
