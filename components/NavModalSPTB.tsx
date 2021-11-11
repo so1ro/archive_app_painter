@@ -1,6 +1,6 @@
 import { useUser } from '@auth0/nextjs-auth0'
-import Nav from '@/components/Nav'
 import ActiveLink from '@/components/ActiveLink'
+import Language from './Language'
 import { useRouter } from 'next/router'
 
 import {
@@ -104,7 +104,7 @@ export default function NavModalSPTB() {
                                             fontSize={{ base: "md", md: 'lg' }}
                                             href="/api/auth/login" onClick={() => {
                                                 toast({ duration: 3000, render: () => (<Toast text={"ログインに移動中..."} />) })
-                                            }}>ログイン</MotionLink>
+                                            }}>{locale === 'en' ? 'Login' : 'ログイン'}</MotionLink>
                                         <MotionLink
                                             initial="hidden"
                                             animate="visible"
@@ -113,10 +113,19 @@ export default function NavModalSPTB() {
                                             href="/api/auth/login?param=signup"
                                             onClick={() => {
                                                 toast({ duration: 3000, render: () => (<Toast text={"サインアップに移動中..."} />) })
-                                            }}>初めての方は<br /><Text color={highlighColor}>サインアップ</Text>
+                                            }}>{locale === 'en' ? "if you're new" : '初めての方は'}<br /><Text color={highlighColor} textAlign='center'>{locale === 'en' ? 'Sign up' : 'サインアップ'}</Text>
                                         </MotionLink>
                                     </>)
                             }
+
+                            <MotionBox
+                                w='full'
+                                textAlign='center'
+                                initial="hidden"
+                                animate="visible"
+                                variants={nav_link_variants}>
+                                <Language />
+                            </MotionBox>
                             <SnsIcons animation={true} type={'NavModal'} onHandler={onClose} />
                         </VStack>
                     </Flex>
