@@ -28,6 +28,7 @@ export default function ZoomImgModal({ archive, path }: { archive: AllArchives2I
     // State
     const [{ isIframeLoading }, setIsIframeLoading] = useState<{ isIframeLoading: boolean }>({ isIframeLoading: true })
     const zoomIconSize = { base: 6, md: 8 }
+    const ArrowIconPosition = { base: 4, md: 6 }
     const iframeCss = css`
 		iframe {
 			flex-grow: 1;
@@ -87,7 +88,7 @@ export default function ZoomImgModal({ archive, path }: { archive: AllArchives2I
                         bgColor='rgba(0,0,0, 0.6)'
                         align='center'
                         justify='center'
-                        pos='absolute' top={10} left={10} colorScheme='blackAlpha' color='#fff'>
+                        pos='absolute' top={ArrowIconPosition} left={ArrowIconPosition} colorScheme='blackAlpha' color='#fff'>
                         <ArrowBackIcon w={6} h={6} />
                     </Flex>
                 </ModalContent>

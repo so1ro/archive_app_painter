@@ -82,7 +82,7 @@ export default function NavModalSPTB() {
                                             animate="visible"
                                             variants={nav_link_variants}>
                                             <ActiveLink href='/account' root='account' key='account'>
-                                                <Link onClick={onClose} fontSize={{ base: "md", md: 'lg' }}>アカウント</Link>
+                                                <Link onClick={onClose} fontSize={{ base: "md", md: 'lg' }}>{locale === 'en' ? 'Account' : 'アカウント'}</Link>
                                             </ActiveLink>
                                         </MotionBox>
                                         <ActiveLink href='/api/auth/logout' root={null} key='logout' >
@@ -92,7 +92,7 @@ export default function NavModalSPTB() {
                                                 animate="visible"
                                                 variants={nav_link_variants}
                                                 fontSize={{ base: "md", md: 'lg' }}
-                                            >ログアウト</MotionLink>
+                                            >{locale === 'en' ? 'Logout' : 'ログアウト'}</MotionLink>
                                         </ActiveLink>
                                     </> :
                                     <>
