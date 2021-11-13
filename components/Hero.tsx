@@ -1,11 +1,12 @@
 import { useState, useRef } from 'react'
-import { Box, Container, Button, useColorModeValue, Spinner, HStack, Text } from '@chakra-ui/react'
 import Image from 'next/image'
 import HeroSnsIcons from '@/components/HeroSnsIcons'
 import HeroArchiveLink from '@/components/HeroArchiveLink'
 import { useWindowSizeResize } from '@/utils/useWindowSize'
 import { useMediaQuery } from '@/utils/useMediaQuery'
+
 import { css } from "@emotion/react"
+import { Box, Container, Button, useColorModeValue, Spinner, HStack, Text } from '@chakra-ui/react'
 import { bg_color_nav, highlight_color } from '@/styles/colorModeValue'
 import { motion } from 'framer-motion'
 import { hero_video_variants } from './Chakra_Framer/variants'
@@ -75,10 +76,10 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
                     </Box>
                     {/* ))} */}
                 </Box>
-                <HeroArchiveLink />
+                <HeroArchiveLink introTextAvatar={introTextAvatar} />
                 {/* <HeroSnsIcons /> */}
-                <HStack d={{ base: 'none', lg: 'flex' }} spacing={2} pos='absolute' px={8} py={3} bottom={0} left={0} bgColor='rgb(36, 39, 41)' cursor='pointer'>
-                    <PlayVideoIcon size={20} />
+                {/* <HStack d={{ base: 'none', lg: 'flex' }} spacing={2} pos='absolute' px={8} py={3} bottom={0} left={0} bgColor='rgb(36, 39, 41)' cursor='pointer'>
+                    <PlayVideoIcon color='#FFF' size={20} />
                     <Text color='white' pr={2}>{locale === 'en' ? 'About Archive' : 'アーカイブについて'}</Text>
                     <Box w={avatarSize} h={avatarSize} borderRadius='full' overflow='hidden' mx="auto">
                         <Image
@@ -87,7 +88,7 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
                             height='192px'
                             alt='Author' />
                     </Box>
-                </HStack>
+                </HStack> */}
                 {newArchives && isLargerThan600 &&
                     <a href="#news">
                         <HStack spacing={2} pos='absolute' px={6} py={3} bottom={{ base: 7, lg: 5 }} right={5} bgColor={bgColorNav} borderRadius={48} cursor='pointer'>
@@ -96,7 +97,7 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
                         </HStack>
                     </a>}
             </Box>
-            <HStack d={{ base: 'flex', lg: 'none' }} justify='center' w='full' spacing={2} px={8} py={3} bgColor='rgb(36, 39, 41)' cursor='pointer'>
+            {/* <HStack d={{ base: 'flex', lg: 'none' }} justify='center' w='full' spacing={2} px={8} py={3} bgColor='rgb(36, 39, 41)' cursor='pointer'>
                 <PlayVideoIcon size={20} />
                 <Text color='white' pr={2}>{locale === 'en' ? 'About Archive' : 'アーカイブについて'}</Text>
                 <Box w={avatarSize} h={avatarSize} borderRadius='full' overflow='hidden' mx="auto">
@@ -106,7 +107,7 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
                         height='192px'
                         alt='Author' />
                 </Box>
-            </HStack>
+            </HStack> */}
         </>
     )
 }

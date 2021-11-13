@@ -108,9 +108,9 @@ export const ZoomIcon = createIcon({
     ),
 })
 
-export const PlayVideoIcon = ({ size }) => (
+export const PlayVideoIcon = ({ color, size }) => (
     <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14.25 9.56699C14.5833 9.75944 14.5833 10.2406 14.25 10.433L8.25 13.8971C7.91667 14.0896 7.5 13.849 7.5 13.4641L7.5 6.5359C7.5 6.151 7.91667 5.91044 8.25 6.10289L14.25 9.56699Z" fill="white" />
-        <circle cx="10" cy="10" r="9.7" stroke="white" strokeWidth="0.6" />
+        <path d="M14.25 9.56699C14.5833 9.75944 14.5833 10.2406 14.25 10.433L8.25 13.8971C7.91667 14.0896 7.5 13.849 7.5 13.4641L7.5 6.5359C7.5 6.151 7.91667 5.91044 8.25 6.10289L14.25 9.56699Z" fill={color} />
+        <circle cx="10" cy="10" r="9.7" stroke={color} strokeWidth="0.6" />
     </svg>
 )

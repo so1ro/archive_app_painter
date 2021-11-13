@@ -50,19 +50,20 @@ export default function Archive(
 
     return (
       <PageShell customPT={null} customSpacing={null}>
-        <Box>
+        <Box w='full'>
           <Heading
             as='h2'
             size="lg"
             textAlign={{ base: 'left', md: 'center' }}
             whiteSpace='pre-wrap'
             lineHeight={{ base: '32px', md: '42px' }}
-            mb={{ base: 12, md: 20 }}>
+            mb={{ base: 8, md: 20 }}
+          >
             {!isLargerThan768 ? messageWithoutNewline : message[locale]}
           </Heading>
-          <ArchiveMeritList meritListItems={meritListItems} />
+          <VideoVimeoLT vimeoId={vimeoId} aspect={'52.7%'} autoplay={false} borderRadius={null} />
         </Box>
-        <VideoVimeoLT vimeoId={vimeoId} aspect={'52.7%'} autoplay={false} borderRadius={null} />
+        <ArchiveMeritList meritListItems={meritListItems} />
         <VStack spacing={10}>
           <Text w='full' whiteSpace='pre-wrap'>{explain[locale]}</Text>
           {subscription_state === 'unsubscribe' &&
