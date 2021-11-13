@@ -189,7 +189,7 @@ export default function Archive1({ archive, path, tiers }:
 												<Box w='full' textAlign='right'><FavoriteButton /></Box>}
 
 										</VStack>
-										<ZoomImgModal archive={archive} path={path} />
+										<ZoomImgModal archive={archive} path={path} setIsQuitVideo={setIsQuitVideo} />
 										{!archive?.youtubeId &&
 											<Box w='full' textAlign='left'>
 												<FavoriteButton />

@@ -20,7 +20,7 @@ import { bg_color, highlight_color } from '@/styles/colorModeValue'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { ZoomIcon } from '@/styles/icons'
 
-export default function ZoomImgModal({ archive, path }: { archive: AllArchives2Interface, path: string }) {
+export default function ZoomImgModal({ archive, path, setIsQuitVideo }: { archive: AllArchives2Interface, path: string, setIsQuitVideo?: ({ isQuitVideo: boolean }) => void }) {
 
     // Hook
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -42,7 +42,10 @@ export default function ZoomImgModal({ archive, path }: { archive: AllArchives2I
             h={archive?.youtubeId ? { base: '140px', md: '320px' } : { base: '320px', sm: '480px', md: '700px' }}
             overflow={archive?.youtubeId ? 'hidden' : 'visible'}
             pos='relative' borderRadius={archive?.youtubeId ? '12px' : '0px'} cursor='zoom-in'
-            onClick={onOpen}>
+            onClick={() => {
+                setIsQuitVideo({ isQuitVideo: true })
+                onOpen()
+            }}>
             <Image
                 src={archive.image.url}
                 layout='fill' objectFit={archive?.youtubeId ? 'cover' : 'contain'}
@@ -81,6 +84,7 @@ export default function ZoomImgModal({ archive, path }: { archive: AllArchives2I
                     </Flex>
                     <Flex onClick={() => {
                         setIsIframeLoading({ isIframeLoading: true })
+                        setIsQuitVideo({ isQuitVideo: false })
                         onClose()
                     }}
                         borderRadius={40}
