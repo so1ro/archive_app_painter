@@ -9,6 +9,7 @@ import Nav from '@/components/Nav';
 
 import { bg_color } from '@/styles/colorModeValue';
 import Footer from '@/components/Footer';
+import { removeBlueFlushCss } from '@/styles/common';
 
 export default function Layout({ children }: { children: ReactNode }) {
 
@@ -24,7 +25,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 {/* <meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no' /> */}
                 <meta name="viewport" content="initial-scale=1.0, width=device-width, viewport-fit=cover" />
             </Head>
-            <Flex flexDirection="column" minH="100vh" bg={useColorModeValue(bg_color.l, bg_color.d)}>
+            <Flex flexDirection="column" minH="100vh" bg={useColorModeValue(bg_color.l, bg_color.d)} css={removeBlueFlushCss}>
                 <Nav />
                 <NavModalSPTB />
                 <Flex w="100%" flexGrow={1} ml="auto" mr="auto" direction="column">{children}</Flex>

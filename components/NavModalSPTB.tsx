@@ -29,6 +29,7 @@ import SnsIcons from '@/components/SnsIcons'
 import { bg_color, highlight_color, text_color } from '@/styles/colorModeValue'
 import { nav_links } from '@/data/nav_links'
 import { Toast } from '@/components/Toast'
+import { removeBlueFlushCss } from '@/styles/common'
 
 export default function NavModalSPTB() {
 
@@ -59,7 +60,7 @@ export default function NavModalSPTB() {
                         pos='absolute'
                         w='100vw'
                         h='100vh'>
-                        <VStack spacing={5}>
+                        <VStack spacing={5} css={removeBlueFlushCss}>
                             {nav_links.map(link => (
                                 <ActiveLink href={link.href} root={link.root} key={link.key}>
                                     <MotionLink

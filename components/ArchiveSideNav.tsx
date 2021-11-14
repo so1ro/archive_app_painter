@@ -48,6 +48,8 @@ export default function ArchiveSideNav(
         .chakra-accordion__item:last-of-type {
             border-bottom-width: 0;
         }
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-tap-highlight-color: transparent;
     `
     // button[aria-expanded=true] div {
     //     color : ${highLightColor};

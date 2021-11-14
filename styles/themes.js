@@ -44,9 +44,6 @@ const theme = extendTheme({
             "a:hover": {
                 textDecoration: "none!important",
             },
-            // "*:focus": {
-            //     boxShadow: "none!important" // Delete Blue border from all clickable elements
-            // }
         }),
     },
     fontWeights: {
