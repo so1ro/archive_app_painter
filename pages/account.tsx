@@ -58,7 +58,7 @@ export default function Account({
       locale === 'en' ? tier.currency === 'usd' : tier.currency === 'jpy')
 
   // Miscellaneous
-  const { annotation } = landingPageText[0]
+  const { sys: { id }, message, content, functions, merit, vimeoId, explain, annotation } = landingPageText[0]
   const tableSize = useBreakpointValue({ base: 'sm', md: 'md' })
   const bgColor = useColorModeValue(bg_color.l, bg_color.d)
 
@@ -321,10 +321,16 @@ export default function Account({
       <PageShell customPT={null} customSpacing={null}>
         <Box>
           <UsernameTotalPayment />
-          <Text mb={10}>ご購入ボタンからサブスクリプションや Tier を購入することができます。</Text>
-          <VStack spacing={{ base: 16, lg: 24 }}>
-            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
-            <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+          <Text mb={{ base: 14, md: 16 }}>{explain[locale]}</Text>
+          <VStack spacing={{ base: 14, lg: 16 }}>
+            <Box>
+              <Text w='full' fontSize='xl' fontWeight='bold' mb={5} textAlign={{ base: 'center', sm: 'left' }}>{locale === 'en' ? 'Subscription Plan' : 'サブスクリプションプラン'}</Text>
+              <PriceList user={user} allPrices={localeAllPrices} annotation={annotation} returnPage={'account'} />
+            </Box>
+            <Box>
+              <Text w='full' fontSize='xl' fontWeight='bold' mb={5} textAlign={{ base: 'center', sm: 'left' }}>{locale === 'en' ? 'One-Pay Plan' : 'ワンペイプラン'}</Text>
+              <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
+            </Box>
           </VStack>
         </Box>
       </PageShell>)

@@ -87,7 +87,7 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
                             price.currency
                         )
                     }}>
-                    {user ? '購入' : 'サインアップ・購入'}
+                    {user ? (locale === 'en' ? 'Purchase' : '購入') : (locale === 'en' ? 'Sign up / Purchase' : 'サインアップ・購入')}
                 </MotionButton>
             )
         }
@@ -117,6 +117,7 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
                         borderColor={price.type === "recurring" ? priceCardColor : oneTimeCardColor}
                         borderRadius={14}
                         align='center'
+                        maxW='260px'
                     >
                         <HStack spacing={1} align='baseline' py={{ base: 2, md: 4 }}>
                             {currencyUSDChecker(userFavoriteCurrency, locale) && <Text fontSize={{ base: '2xl' }}>$</Text>}
@@ -128,7 +129,7 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
                             <Text>{price.type === "recurring" ? currencyUSDChecker(userFavoriteCurrency, locale) ? '/ month' : '円／月' : currencyUSDChecker(userFavoriteCurrency, locale) ? '' : '円'}</Text>
                         </HStack>
                         <Center fontSize='md' py={0} color='#fff' w='full' bg={price.type === "recurring" ? priceCardColor : oneTimeCardColor}>
-                            {price.type === "recurring" ? 'サブスクリプション' : price.tierTitle}
+                            {price.type === "recurring" ? (locale === 'en' ? 'Subscription' : 'サブスクリプション') : price.tierTitle}
                         </Center>
                         <Box px={6} py={6} flexGrow={1}>{price.nickname}</Box>
                         <Box pb={6}><SignupPurchaseButton price={price} /></Box>

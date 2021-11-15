@@ -65,16 +65,16 @@ export default function Archive(
           <VideoVimeoLT vimeoId={vimeoId} aspect={null} autoplay={false} borderRadius={null} />
         </Box>
         <ArchiveMeritList meritListItems={meritListItems} />
-        <VStack spacing={10}>
-          <Text w='full' whiteSpace='pre-wrap'>{explain[locale]}</Text>
+        <VStack spacing={16}>
+          <Text whiteSpace='pre-wrap'>{explain[locale]}</Text>
           {subscription_state === 'unsubscribe' &&
             <Box>
-              <Text w='full' fontSize='xl' fontWeight='bold' mb={3}>{locale === 'en' ? 'Subscription Plan' : 'サブスクリプションプラン'}</Text>
+              <Text w='full' fontSize='xl' fontWeight='bold' mb={5} textAlign={{ base: 'center', sm: 'left' }}>{locale === 'en' ? 'Subscription Plan' : 'サブスクリプションプラン'}</Text>
               <PriceList user={user} allPrices={localeAllPrices} annotation={annotation ?? null} returnPage={'archive'} />
             </Box>}
           {/* サブスクリプションもワンペイ永久ご視聴もご購入前 */}
           <Box>
-            <Text w='full' fontSize='xl' fontWeight='bold' mb={3}>{locale === 'en' ? 'One-Pay Plan' : 'ワンペイプラン'}</Text>
+            <Text w='full' fontSize='xl' fontWeight='bold' mb={5} textAlign={{ base: 'center', sm: 'left' }}>{locale === 'en' ? 'One-Pay Plan' : 'ワンペイプラン'}</Text>
             <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'archive'} />
           </Box>
           {/* サブスクリプションが一時停止の場合 */}
