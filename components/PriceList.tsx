@@ -120,7 +120,7 @@ export default function PriceList({ user, allPrices, annotation, returnPage }) {
                     >
                         <HStack spacing={1} align='baseline' py={{ base: 2, md: 4 }}>
                             {currencyUSDChecker(userFavoriteCurrency, locale) && <Text fontSize={{ base: '2xl' }}>$</Text>}
-                            <Text letterSpacing='-1px' fontSize={{ base: '3xl', lg: '4xl' }}>
+                            <Text letterSpacing='-1px' fontSize={{ base: '3xl', lg: '4xl' }} fontFamily={'Merriweather'} fontWeight='medium'>
                                 {price.type === 'one_time' ?
                                     price.currency === 'usd' ? (price.unit_amount / 100) - pastChargedFee : price.unit_amount - pastChargedFee :
                                     price.currency === 'usd' ? (price.unit_amount / 100) : price.unit_amount}

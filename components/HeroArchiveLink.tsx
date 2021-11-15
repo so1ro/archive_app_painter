@@ -33,8 +33,8 @@ export default function HeroArchiveLink({ introTextAvatar }) {
                     spacing={2} pl={user ? { base: 5, md: 7 } : { base: 5, md: 6 }} pr={3} py={2}
                     color={colorMode === 'light' ? '#FFF' : '#000'}
                     cursor='pointer'>
-                    {!user && <PlayVideoIcon color={colorMode === 'light' ? '#FFF' : '#000'} size={20} />}
-                    <Text fontSize={{ base: 'md', md: 'lg' }} pr={2}>{user ? (locale === 'en' ? 'Go to Archive' : 'アーカイブへ') : (locale === 'en' ? 'About Archive' : 'アーカイブについて')}</Text>
+                    {isLargerThan480 && !user && <PlayVideoIcon color={colorMode === 'light' ? '#FFF' : '#000'} size={20} />}
+                    <Text fontSize={{ base: 'xs', sm: 'sm', md: 'md' }} pr={2}>{user ? (locale === 'en' ? 'Go to Archive' : 'アーカイブへ') : (locale === 'en' ? 'About Archive' : 'アーカイブについて')}</Text>
                     {isLargerThan480 && <Box w={avatarSize} h={avatarSize} borderRadius='full' overflow='hidden' mx="auto">
                         <Image
                             src={introTextAvatar.avatar.url}

@@ -31,13 +31,13 @@ export default function ArchiveMeritList({ meritListItems }) {
         return (
             <GridItem gridColumn={((num === meritGroup.length) && (num % 2 != 0)) && '1 / -1'}>
                 <HStack align='center' mb={{ base: 3, md: 6 }} spacing={3}>
-                    <Heading as='h3' fontSize='xl'>{title[locale]}</Heading>
+                    <Heading as='h3' fontSize={{ base: 'lg', sm: 'xl' }}>{title[locale]}</Heading>
                     {iconHandler(icon)}
                 </HStack>
                 {list[locale].map((text, j) => (
-                    <HStack align='baseline' key={j} mb={{ base: 1, md: 3 }}>
+                    <HStack align='baseline' key={j} mb={{ base: 3, md: 3 }}>
                         <CheckIcon w={3} h={3} color={checkIconColor} />
-                        <Text color={colorMode === 'light' ? '#6c6c6c' : '#fff'}>{text}</Text>
+                        <Text color={colorMode === 'light' ? '#6c6c6c' : '#fff'} fontSize={{ base: 'sm', sm: 'md' }}>{text}</Text>
                     </HStack>))}
             </GridItem>
         )
@@ -46,7 +46,7 @@ export default function ArchiveMeritList({ meritListItems }) {
     return (
         <Grid
             w='full'
-            p={12}
+            p={{ base: 8, md: 12 }}
             gridTemplateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
             gap={{ base: 10, md: 8 }}
             boxShadow={colorMode === 'light' ? boxShadowLight : boxShadowDark}

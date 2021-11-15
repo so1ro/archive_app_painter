@@ -49,27 +49,34 @@ export default function Archive(
     (!user || ((!!subscription_state && (subscription_state === 'unsubscribe' || subscription_state === 'paused')) && !One_Pay_Detail))) {
 
     return (
-      <PageShell customPT={null} customSpacing={null}>
+      <PageShell customPT={null} customSpacing={{ base: 20, lg: 32 }}>
         <Box w='full'>
           <Heading
             as='h2'
-            size="lg"
-            textAlign={{ base: 'left', md: 'center' }}
+            // size="lg"
+            fontSize={{ base: 'xl', sm: "2xl", lg: '3xl' }}
+            textAlign={{ base: 'left', sm: 'center' }}
             whiteSpace='pre-wrap'
             lineHeight={{ base: '32px', md: '42px' }}
-            mb={{ base: 8, md: 20 }}
+            mb={{ base: 4, sm: 8, lg: 20 }}
           >
             {!isLargerThan768 ? messageWithoutNewline : message[locale]}
           </Heading>
-          <VideoVimeoLT vimeoId={vimeoId} aspect={'52.7%'} autoplay={false} borderRadius={null} />
+          <VideoVimeoLT vimeoId={vimeoId} aspect={null} autoplay={false} borderRadius={null} />
         </Box>
         <ArchiveMeritList meritListItems={meritListItems} />
         <VStack spacing={10}>
           <Text w='full' whiteSpace='pre-wrap'>{explain[locale]}</Text>
           {subscription_state === 'unsubscribe' &&
-            <PriceList user={user} allPrices={localeAllPrices} annotation={annotation ?? null} returnPage={'archive'} />}
+            <Box>
+              <Text w='full' fontSize='xl' fontWeight='bold' mb={3}>{locale === 'en' ? 'Subscription Plan' : 'サブスクリプションプラン'}</Text>
+              <PriceList user={user} allPrices={localeAllPrices} annotation={annotation ?? null} returnPage={'archive'} />
+            </Box>}
           {/* サブスクリプションもワンペイ永久ご視聴もご購入前 */}
-          <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'archive'} />
+          <Box>
+            <Text w='full' fontSize='xl' fontWeight='bold' mb={3}>{locale === 'en' ? 'One-Pay Plan' : 'ワンペイプラン'}</Text>
+            <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'archive'} />
+          </Box>
           {/* サブスクリプションが一時停止の場合 */}
           {subscription_state === 'paused' &&
             <NextLink href={'/account'}>
