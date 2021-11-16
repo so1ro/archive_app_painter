@@ -310,6 +310,7 @@ export default function ArchiveRoute({
                         <Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }} w='full'>
                             <Box d={{ base: 'none', lg: 'block' }}><ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} /></Box>
                             <VStack spacing={8} px={{ base: 4, lg: 8 }} pt={8} pb={24} w='full'>
+                                <Box onClick={() => router.reload()}>Reload</Box>
                                 <Flex justify={{ base: 'none', md: 'space-between' }} flexDirection={{ base: 'column', md: 'row' }} w='full' align='center'>
                                     <HStack spacing={4} mb={{ base: 2, md: 0 }}>
                                         <BreadcrumbNav paths={breadCrumbPaths} />
