@@ -23,6 +23,7 @@ import PageShell from '@/components/PageShell'
 
 export default function Archive1({ archive, path, tiers }:
 	{ archive: AllArchives2Interface, path: string, tiers: TierInterface[], }) {
+	if (!archive) return null // Avoiding getStaticPaths Fallback: true Error in build time
 
 	// Hook
 	const { user, error, isLoading } = useUser()
