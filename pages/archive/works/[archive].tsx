@@ -124,6 +124,10 @@ export default function Archive1({ archive, path, tiers }:
 			}} />
 	)
 
+	if (router.isFallback) {
+		return <div>Loading...</div>
+	}
+
 	if (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail) && !isArchiveNotInTierPeriod_userIsNotSubscriber) {
 		return (
 			<>
@@ -270,7 +274,7 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
 		items.map(obj => paths.push({ params: { archive: obj.archiveNumber }, locale }))
 	})
 
-	return { paths, fallback: false }
+	return { paths, fallback: true }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
