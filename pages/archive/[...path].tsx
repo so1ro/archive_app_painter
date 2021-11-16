@@ -48,6 +48,8 @@ export default function ArchiveRoute({
         tiers: TierInterface[],
     }) {
 
+    if (!filteredDescArchive || !filteredAscArchive || !pathObj) return null // Avoiding getStaticPaths Fallback: true Error in build time
+
     // Hook
     const { user, error, isLoading } = useUser()
     const router = useRouter()
@@ -295,6 +297,10 @@ export default function ArchiveRoute({
 
 
     // Main Component
+    if (router.isFallback) {
+        return <div>Loading...</div>
+    }
+
     if (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail)) {
         return (
             <>
@@ -382,7 +388,7 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
         })
     })
 
-    return { paths, fallback: false }
+    return { paths, fallback: true }
 }
 
 
