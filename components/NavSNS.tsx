@@ -23,7 +23,7 @@ export default function NavSNS({ items }: { items?: NavItem[] }) {
             // justify={{ base: '', lg: 'space-between' }}
             // w='full'
             pt={{ base: 12, lg: 16 }}
-            pb={{ base: 0 }}
+            pb={{ base: 12 }}
             spacing={4} w='full' maxW={root === 'twitter' ? '550px' : null}>
             {root === 'twitter' && <TwitterIcon width={iconSize} height={iconSize} color={useColorModeValue('gray.600', '#fff')} />}
             {root === 'instagram' && <InstagramIcon width={iconSize} height={iconSize} color={useColorModeValue('gray.600', '#fff')} />}
@@ -41,9 +41,9 @@ export default function NavSNS({ items }: { items?: NavItem[] }) {
                     </NextLink>)
                 ))
                 }</HStack>}
-            <RepeatIcon
+            {/* <RepeatIcon
                 width={repeatIconSize} height={repeatIconSize} cursor='pointer' alignSelf='flex-end'
-                color={textHumbleColor} onClick={() => router.reload()} />
+                color={textHumbleColor} onClick={() => router.reload()} /> */}
         </Stack>
     )
 }
