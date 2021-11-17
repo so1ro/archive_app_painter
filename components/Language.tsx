@@ -1,6 +1,7 @@
-import { Select } from "@chakra-ui/react"
+import { Menu, MenuButton, MenuList, MenuItem, } from "@chakra-ui/react"
 import { upperCase } from "lodash"
 import { useRouter } from 'next/router'
+import { ChevronDownIcon } from "@chakra-ui/icons"
 
 export default function Language() {
 	const router = useRouter()
@@ -11,13 +12,22 @@ export default function Language() {
 	}
 
 	return (
-		<Select
-			onChange={handleLanguage}
-			placeholder={upperCase(locale)}
-			w='none' border='0'
-			style={{ paddingInlineStart: '0' }}>
-			<option value="en">EN</option>
-			<option value="ja">JA</option>
-		</Select>
+		<Menu autoSelect={false}>
+			<MenuButton
+				aria-label="Options"
+				pr={{ base: 0, lg: 2 }}
+				transform={{ base: 'translateX(8%)', lg: 'none' }}
+				bg='none'
+				alignItems='center'
+				_expanded={{ bg: "none" }}
+				_focus={{ bg: "none" }}
+			>
+				{upperCase(locale)} <ChevronDownIcon />
+			</MenuButton>
+			<MenuList zIndex='3' w='60px'>
+				<MenuItem onClick={handleLanguage} value="en">EN</MenuItem>
+				<MenuItem onClick={handleLanguage} value="ja">JA</MenuItem>
+			</MenuList>
+		</Menu>
 	)
 }

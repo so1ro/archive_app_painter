@@ -10,7 +10,7 @@ export default function UserMenu() {
     const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
     return (
-        <Menu>
+        <Menu autoSelect={false}>
             <MenuButton
                 as={IconButton}
                 aria-label="Options"

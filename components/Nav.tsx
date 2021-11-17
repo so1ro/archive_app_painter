@@ -58,7 +58,7 @@ export default function Nav() {
             </Stack>
             <Flex alignItems="center">
                 <NavLinks />
-                <Stack spacing={[2, 3]} isInline align="center" ml={6}>
+                <Stack spacing={3} isInline align="center" ml={5}>
                     {isLargerThan480 && <Language />}
                     {isLargerThan992 && <SnsIcons animation={false} type={'nav'} onHandler={null} />}
                     {isLoading ? <UserIcon width={7} height={7} py={2} /> : (user ? <UserMenu /> : <UserLoginSignup />)}
