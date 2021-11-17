@@ -13,10 +13,11 @@ export default function Language() {
 	return (
 		<Select
 			onChange={handleLanguage}
-			placeholder={upperCase(locale)} w='none' border='0'
+			placeholder={upperCase(locale)}
+			w='none' border='0'
 			style={{ paddingInlineStart: '0' }}>
-			{locale !== 'en' && <option value="en">EN</option>}
-			{locale !== 'ja' && <option value="ja">JA</option>}
+			<option value="en">EN</option>
+			<option value="ja">JA</option>
 		</Select>
 	)
 }
