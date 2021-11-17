@@ -6808,6 +6808,11 @@ public-encrypt@^4.0.0:
     randombytes "^2.0.1"
     safe-buffer "^5.1.2"
 
+pulljs@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/pulljs/-/pulljs-0.1.2.tgz#206e40763fc147caddff44e820eb8a2f96e2bd3d"
+  integrity sha1-IG5Adj/BR8rd/0ToIOuKL5bivT0=
+
 pump@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/pump/-/pump-2.0.1.tgz#12399add6e4cf7526d973cbc8b5ce2e2908b3909"

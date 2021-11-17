@@ -1,6 +1,7 @@
 import { extendTheme } from "@chakra-ui/react"
 import { text_color } from '@/styles/colorModeValue'
 import { createBreakpoints } from "@chakra-ui/theme-tools"
+import { keyframes } from "@chakra-ui/react";
 
 const breakpoints = createBreakpoints({
     sm: "480px",
@@ -44,6 +45,24 @@ const theme = extendTheme({
             "a:hover": {
                 textDecoration: "none!important",
             },
+
+            // CSS for pulljs loadingSpinner
+            ".ptr--ptr": {
+                color: props.colorMode === "dark" ? text_color.d : text_color.l,
+                background: props.colorMode === "dark" ? "#1D2932" : "#fff",
+            },
+            ".ptr--ptr .spinner": {
+                animation: `${rotate_loadingSpinner} 2s linear infinite`,
+                zIndex: 2,
+                margin: "-25px auto 0px",
+                width: "24px",
+                height: "24px",
+            },
+            ".ptr--ptr .spinner .path": {
+                stroke: props.colorMode === "dark" ? "#F79F22" : "#E63946",
+                strokeLinecap: "round",
+                animation: `${dash_loadingSpinner} 1.5s ease-in-out infinite`,
+            },
         }),
     },
     fontWeights: {
@@ -58,6 +77,27 @@ const theme = extendTheme({
         black: 900,
     },
 });
+
+const rotate_loadingSpinner = keyframes`
+100% {
+    transform: rotate(360deg);
+  }
+`
+
+const dash_loadingSpinner = keyframes`
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+    }
+`
 
 export default theme;
 
