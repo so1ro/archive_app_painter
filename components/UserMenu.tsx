@@ -7,6 +7,7 @@ import { highlight_color } from '@/styles/colorModeValue'
 export default function UserMenu() {
 
     const router = useRouter()
+    const { locale } = router
     const highLightColor = useColorModeValue(highlight_color.l, highlight_color.d)
 
     return (
@@ -20,8 +21,8 @@ export default function UserMenu() {
                 _focus={{ bg: "none" }}
             />
             <MenuList zIndex='3'>
-                <MenuItem><NextLink href="/account" passHref><Link w='full'>アカウント</Link></NextLink></MenuItem>
-                <MenuItem><Link href="/api/auth/logout" w='full'>ログアウト</Link></MenuItem>
+                <MenuItem><NextLink href="/account" passHref><Link w='full'>{locale === 'en' ? 'Account' : 'アカウント'}</Link></NextLink></MenuItem>
+                <MenuItem><Link href="/api/auth/logout" w='full'>{locale === 'en' ? 'Logout' : 'ログアウト'}</Link></MenuItem>
             </MenuList>
         </Menu>
     );

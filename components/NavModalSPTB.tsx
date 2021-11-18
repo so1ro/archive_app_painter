@@ -114,7 +114,11 @@ export default function NavModalSPTB() {
                                             href="/api/auth/login?param=signup"
                                             onClick={() => {
                                                 toast({ duration: 3000, render: () => (<Toast text={"サインアップに移動中..."} />) })
-                                            }}>{locale === 'en' ? "if you're new" : '初めての方は'}<br /><Text color={highlighColor} textAlign='center'>{locale === 'en' ? 'Sign up' : 'サインアップ'}</Text>
+                                            }}>
+                                            {locale === 'en' ? "if you're new" : '初めての方は'}<br />
+                                            <Text color={highlighColor} textAlign='center'>
+                                                {locale === 'en' ? 'Sign up' : 'サインアップ'}
+                                            </Text>
                                         </MotionLink>
                                     </>)
                             }

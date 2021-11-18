@@ -2,6 +2,7 @@
 import { Box, Button, HStack, Link, Text, useBreakpointValue, useColorMode, useToast, useColorModeValue } from '@chakra-ui/react'
 import { highlight_color } from '@/styles/colorModeValue'
 import { Toast } from '@/components/Toast'
+import { useRouter } from 'next/router'
 
 export default function UserLoginSignup() {
 
@@ -9,6 +10,7 @@ export default function UserLoginSignup() {
     const buttonSize = useBreakpointValue({ base: 'xs', md: 'sm' })
     const { colorMode } = useColorMode()
     const toast = useToast()
+    const { locale } = useRouter()
 
     return (
         <>
@@ -18,7 +20,11 @@ export default function UserLoginSignup() {
                     lineHeight='14px'
                     onClick={() => {
                         toast({ duration: 3000, render: () => (<Toast text={"サインアップに移動中..."} />) })
-                    }}>初めての方は<br /><Text color={highlighColor}>サインアップ</Text>
+                    }}>
+                    {locale === 'en' ? "if you're new" : '初めての方は'}<br />
+                    <Text color={highlighColor} textAlign='left'>
+                        {locale === 'en' ? 'Sign up' : 'サインアップ'}
+                    </Text>
                 </Link>
                 <Link href="/api/auth/login"><Button
                     size={buttonSize}
@@ -28,7 +34,7 @@ export default function UserLoginSignup() {
                     borderColor={colorMode === 'light' ? "gray.300" : 'gray.600'}
                     onClick={() => {
                         toast({ duration: 3000, render: () => (<Toast text={"ログインに移動中..."} />) })
-                    }}>ログイン</Button></Link>
+                    }}>{locale === 'en' ? 'Login' : 'ログイン'}</Button></Link>
             </HStack>
         </>
     )
