@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import Image from 'next/image'
 import HeroSnsIcons from '@/components/HeroSnsIcons'
 import HeroArchiveLink from '@/components/HeroArchiveLink'
+import SlickSlider from '@/components/SlickSlider'
 import { useWindowSizeResize } from '@/utils/useWindowSize'
 import { useMediaQuery } from '@/utils/useMediaQuery'
 
@@ -14,9 +15,6 @@ import { useRouter } from 'next/router'
 import { PlayVideoIcon } from '@/styles/icons'
 import { ArrowDownIcon } from '@chakra-ui/icons'
 
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
-import SlickSlider from '@/components/SlickSlider'
 
 export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
 

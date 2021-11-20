@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import { Box } from "@chakra-ui/layout"
 import Slider from "react-slick"
-
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
 
 export default function SlickSlider({ imgs, h }) {
 	const settings = {
