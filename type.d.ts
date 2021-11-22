@@ -7,7 +7,7 @@ interface AllArchives2Interface {
   image?: { url: string }
   youtubeId?: string
   vimeoId?: string
-  timestamp: { time?: string, indexText?: string }[]
+  timestamp: { time?: string, indexText?: { en: string, ja: string } }[]
   publishDate?: string
   color?: string[]
   season?: string[]
