@@ -180,7 +180,7 @@ export default function Archive1({ archive, path, tiers }:
 																					mr={2} color={highLightColor}
 																					onClick={() => stopSkipPlayVideoHandler(TimeFormat.toS(stamp.time), true)}
 																				>{stamp.time}</Link>
-																				{stamp.indexText}
+																				{stamp.indexText[locale]}
 																			</ListItem>
 																		</List>
 																	))}
@@ -203,7 +203,7 @@ export default function Archive1({ archive, path, tiers }:
 								</TabPanel>
 
 								<TabPanel p={0}>
-									<VStack w='full' spacing={archive?.learningVideoId ? 24 : 0} pt={20}>
+									<VStack w='full' spacing={archive?.learningVideoId ? { base: 10, lg: 16 } : 0} pt={archive?.learningVideoId ? { base: 10, md: 20 } : 0}>
 										<VStack w='full' spacing={archive?.learningVideoTimestamp ? 6 : 0}>
 											{archive?.learningVideoId && <VideoYouTube
 												youtubeId={archive?.learningVideoId}
@@ -221,7 +221,7 @@ export default function Archive1({ archive, path, tiers }:
 																mr={2} color={highLightColor}
 																onClick={() => stopSkipPlayLearningVideoHandler(TimeFormat.toS(stamp.time), true)}
 															>{stamp.time}</Link>
-															{stamp.indexText}
+															{stamp.indexText[locale]}
 														</ListItem>
 													</List>
 												))}

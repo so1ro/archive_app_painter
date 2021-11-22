@@ -18,7 +18,7 @@ export default function Twitter({ twitterAST }) {
     // const navItems = items.map(item => ({ id: item.sys.id, name: item.name, path: item.path }))
     const twitterBlockquoteWrap = css`
     .static-tweet{
-        margin-bottom: 50px;
+        margin-bottom: 30px;
     }
     .static-tweet:first-of-type {
         margin-top: 12px;
