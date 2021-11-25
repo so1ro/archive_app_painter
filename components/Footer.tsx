@@ -22,8 +22,8 @@ export default function Footer() {
             p={{ base: 4, lg: 9 }}
             borderTop={colorMode === 'dark' ? `1px #2F4351 solid` : 0}>
             <VStack spacing={1} align={{ base: "center", lg: "flex-start" }} order={{ base: 2, lg: 1 }}>
-                <Text fontSize={{ base: "md", sm: "xl" }} isTruncated>{locale === 'en' ? 'Michiko Shibata Botanical Art' : '芝田美智子 ボタニカルアート'}</Text>
-                <Text fontSize="xs">&#xA9; {year} {locale === 'en' ? 'Michiko Shibata' : '芝田美智子'} All rights reserved.</Text>
+                <Text fontSize={{ base: "md", sm: "xl" }} isTruncated>{locale === 'en' ? 'Painter Botanical Art' : 'Painter ボタニカルアート'}</Text>
+                <Text fontSize="xs">&#xA9; {year} {locale === 'en' ? 'Painter' : 'Painter'} All rights reserved.</Text>
             </VStack>
             <VStack mb={{ base: 4, lg: 0 }} spacing={3} align={{ base: "center", lg: "flex-end" }} order={{ base: 1, lg: 2 }}>
                 {/* <NavLinks /> */}

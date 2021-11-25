@@ -22,7 +22,7 @@ export default function SlickSlider({ imgs, h }) {
 						objectFit="cover"
 						quality={100}
 						priority={true}
-						alt='芝田美智子 ボタニカルアート' />
+						alt='Painter ボタニカルアート' />
 				</Box>
 			))}
 		</Slider>
@@ -37,5 +37,5 @@ export default function SlickSlider({ imgs, h }) {
 // 					// objectFit="cover"
 // 					quality={100}
 // 					priority={true}
-// 					alt='芝田美智子 ボタニカルアート' />
+// 					alt='Painter ボタニカルアート' />
 // 			</Box>

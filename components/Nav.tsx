@@ -50,9 +50,9 @@ export default function Nav() {
             <Stack spacing={4} isInline alignItems="center">
                 <NextLink href={'/'} passHref>
                     <Link>
-                        <Text as="h1" fontSize={["lg", "xl"]} d={{ base: 'none', smd: 'none', lg: 'inline-block' }}>{locale === 'en' ? 'Michiko Shibata Botanical Art' : '芝田美智子 ボタニカルアート'}</Text>
-                        <Text as="h1" fontSize={["lg", "xl"]} d={{ base: 'none', smd: 'inline-block', lg: 'none' }}>{locale === 'en' ? 'Michiko Shibata' : '芝田美智子 ボタニカルアート'}</Text>
-                        <Text as="h1" fontSize={["lg", "xl"]} d={{ base: 'inline-block', smd: 'none', lg: 'none' }}>{locale === 'en' ? 'Michiko' : '芝田美智子'}</Text>
+                        <Text as="h1" fontSize={["lg", "xl"]} d={{ base: 'none', smd: 'none', lg: 'inline-block' }}>{locale === 'en' ? 'Painter Botanical Art' : 'Painter ボタニカルアート'}</Text>
+                        <Text as="h1" fontSize={["lg", "xl"]} d={{ base: 'none', smd: 'inline-block', lg: 'none' }}>{locale === 'en' ? 'Painter' : 'Painter ボタニカルアート'}</Text>
+                        <Text as="h1" fontSize={["lg", "xl"]} d={{ base: 'inline-block', smd: 'none', lg: 'none' }}>{locale === 'en' ? 'Painter' : 'Painter'}</Text>
                     </Link>
                 </NextLink>
             </Stack>

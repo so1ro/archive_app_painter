@@ -17,7 +17,7 @@ import { css } from "@emotion/react"
 export default function Layout({ children }: { children: ReactNode }) {
 
     const router = useRouter()
-    const currentHeadData = headData.find(data => data.path === router.pathname.split('/')[1]) ?? { path: '404', title: '404 | 芝田美智子 ボタニカルアート' }
+    const currentHeadData = headData.find(data => data.path === router.pathname.split('/')[1]) ?? { path: '404', title: '404 | Painter ボタニカルアート' }
 
     // pulljs loadingSpinner
     if (typeof window !== 'undefined') {
@@ -58,14 +58,14 @@ export default function Layout({ children }: { children: ReactNode }) {
 }
 
 const headData = [
-    { path: '', title: '芝田美智子 ボタニカルアート' },
-    { path: 'archive', title: 'アーカイブ | 芝田美智子 ボタニカルアート' },
-    { path: 'youtube', title: 'YouTube | 芝田美智子 ボタニカルアート' },
-    { path: 'twitter', title: 'ツイッター | 芝田美智子 ボタニカルアート' },
-    { path: 'instagram', title: 'インスタグラム | 芝田美智子 ボタニカルアート' },
-    { path: 'account', title: 'アカウント | 芝田美智子 ボタニカルアート' },
-    { path: 'facebook', title: 'Facebook | 芝田美智子 ボタニカルアート' },
-    { path: 'contact', title: 'お問い合わせ | 芝田美智子 ボタニカルアート' },
-    { path: 'contact_success', title: 'お問い合わせ | 芝田美智子 ボタニカルアート' },
-    { path: '404', title: '404 | 芝田美智子 ボタニカルアート' },
+    { path: '', title: 'Painter ボタニカルアート' },
+    { path: 'archive', title: 'アーカイブ | Painter ボタニカルアート' },
+    { path: 'youtube', title: 'YouTube | Painter ボタニカルアート' },
+    { path: 'twitter', title: 'ツイッター | Painter ボタニカルアート' },
+    { path: 'instagram', title: 'インスタグラム | Painter ボタニカルアート' },
+    { path: 'account', title: 'アカウント | Painter ボタニカルアート' },
+    { path: 'facebook', title: 'Facebook | Painter ボタニカルアート' },
+    { path: 'contact', title: 'お問い合わせ | Painter ボタニカルアート' },
+    { path: 'contact_success', title: 'お問い合わせ | Painter ボタニカルアート' },
+    { path: '404', title: '404 | Painter ボタニカルアート' },
 ]

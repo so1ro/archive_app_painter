@@ -13,7 +13,7 @@ export default function TopIntro({ introTextAvatar }) {
                     src={introTextAvatar.avatar.url}
                     width='192px'
                     height='192px'
-                    alt='芝田美智子 ボタニカルアート' />
+                    alt='Painter ボタニカルアート' />
             </Box>
             <Box fontSize={{ base: 'md', lg: 'xl' }}>
                 <Text maxW='600px'>{introTextAvatar.text}</Text>
