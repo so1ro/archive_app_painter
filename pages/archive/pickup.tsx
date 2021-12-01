@@ -6,16 +6,13 @@ import { useUser } from "@auth0/nextjs-auth0"
 import { useUserMetadata } from "@/context/useUserMetadata"
 import { useArchiveState } from "@/context/useArchiveState"
 import { useMediaQuery } from '@/utils/useMediaQuery'
-import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { compareAsc } from 'date-fns'
 
 import { query_archiveRoute, limitSkipNum, query_archiveTier } from "@/hook/contentful-queries"
 import { fetchContentful, generateSearchQuery } from '@/hook/contentful'
-import { format, parseISO, compareDesc } from "date-fns"
+import { isPast, add } from "date-fns"
 
 import { List, ListItem, Code, VStack, Box, Flex, Grid, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, HStack, Center, Link, useToast, Spinner } from '@chakra-ui/react'
-import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons'
-import { ChevronRightIcon } from '@chakra-ui/icons'
 import { css } from "@emotion/react"
 
 import Video from '@/components/Video'
@@ -29,7 +26,6 @@ import ArchiveSearch from '@/components/ArchiveSearch'
 import Alert from '@/components/AlertDialog'
 import { periodCurrentUserTierFinder, postData } from '@/utils/helpers'
 import { ToastError } from '@/components/Toast'
-import { arch } from 'os'
 
 export default function Pickup({
 	allDescLatestArchives,
@@ -50,14 +46,6 @@ export default function Pickup({
 		tiers: TierInterface[],
 	}) {
 
-	const pickupArchives = allPickupArchives.map(arc => {
-		const randomNum = getRandomInt(arc.paths.length)
-		return { ...arc, paths: arc.paths[randomNum] }
-	})
-
-	function getRandomInt(max) {
-		return Math.floor(Math.random() * max);
-	}
 
 	// Hook
 	const {
@@ -85,19 +73,32 @@ export default function Pickup({
 		scrollY,
 		setScrollY,
 		isShowingTierArchiveOnly,
-		setIsShowingTierArchiveOnly, } = useArchiveState()
+		setIsShowingTierArchiveOnly,
+		pickupArchives,
+		setPickupArchives,
+		nextPickUp_StartAt,
+		setNextPickUp_StartAt, } = useArchiveState()
 	const { user, error, isLoading } = useUser()
 	const router = useRouter()
 	const { locale } = useRouter()
 	const toast = useToast()
 	const isLargerThan992 = useMediaQuery("(min-width: 992px)")
 
-	// State
-	const [{ descArchive }, setDescArchive] = useState<{ descArchive: AllArchives2Interface[] | null }>({ descArchive: null })
-	const [{ ascArchive }, setAscArchive] = useState<{ ascArchive: AllArchives2Interface[] | null }>({ ascArchive: null })
-	const [{ favoriteArchive }, setFavoriteArchive] = useState<{ favoriteArchive: AllArchives2Interface[] | null }>({ favoriteArchive: null })
-	const [{ skipNum }, setSkipNum] = useState<{ skipNum: number }>({ skipNum: limitSkipNum })
-	const [{ isFavoriteArchiveLoading }, setIsFavoriteArchiveLoading] = useState<{ isFavoriteArchiveLoading: boolean }>({ isFavoriteArchiveLoading: false })
+	// Pickup randamly
+	if (!pickupArchives || isPast(nextPickUp_StartAt)) {
+		const pickupArchives = allPickupArchives.map(arc => {
+			const currentTime = new Date()
+			setNextPickUp_StartAt({ nextPickUp_StartAt: add(currentTime, { hours: 1 }) })
+			const randomNum = getRandomInt(arc.paths.length)
+			return { ...arc, paths: arc.paths[randomNum] }
+		})
+		setPickupArchives({ pickupArchives: pickupArchives })
+	}
+
+	// Function
+	function getRandomInt(max) {
+		return Math.floor(Math.random() * max);
+	}
 
 	// // Archive select
 	// const filteredArchive = isArchiveDesc ? descArchive : ascArchive
@@ -403,7 +404,7 @@ export default function Pickup({
 
 export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
 
-	// Fetch Latest 5 Archives
+	// Fetch Latest 20 Archives
 	const descSearchQuery = generateSearchQuery(true, null, null, 20, true)
 	const { archive2Collection: { items: allDescArchives } } = await fetchContentful(descSearchQuery)
 	const allDescLatestArchives = allDescArchives.filter(ar => ar.archiveNumber)

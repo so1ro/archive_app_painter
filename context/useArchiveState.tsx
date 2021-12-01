@@ -18,6 +18,9 @@ export const ArchiveStateProvider = (props) => {
   const [{ isFetchingMoreContent }, setIsFetchingMoreContent] = useState<{ isFetchingMoreContent: boolean }>({ isFetchingMoreContent: false })
   const [{ scrollY }, setScrollY] = useState<{ scrollY: number }>({ scrollY: 0 })
   const [{ isShowingTierArchiveOnly }, setIsShowingTierArchiveOnly] = useState<{ isShowingTierArchiveOnly: boolean }>({ isShowingTierArchiveOnly: true })
+  const [{ pickupArchives }, setPickupArchives] = useState<{ pickupArchives }>({ pickupArchives: null })
+  const [{ nextPickUp_StartAt }, setNextPickUp_StartAt] = useState<{ nextPickUp_StartAt: Date }>({ nextPickUp_StartAt: null })
+
 
   // Effect
   // useEffect(() => { }, []);
@@ -47,6 +50,10 @@ export const ArchiveStateProvider = (props) => {
     setScrollY,
     isShowingTierArchiveOnly,
     setIsShowingTierArchiveOnly,
+    pickupArchives,
+    setPickupArchives,
+    nextPickUp_StartAt,
+    setNextPickUp_StartAt,
   }
   return <ArchiveStateContext.Provider value={value} {...props} />;
 };
