@@ -13,6 +13,7 @@ import { fetchContentful, generateSearchQuery } from '@/hook/contentful'
 import { isPast, add } from "date-fns"
 
 import { List, ListItem, Code, VStack, Box, Flex, Grid, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useColorModeValue, HStack, Center, Link, useToast, Spinner } from '@chakra-ui/react'
+import { ChevronRightIcon } from '@chakra-ui/icons'
 import { css } from "@emotion/react"
 
 import Video from '@/components/Video'
@@ -288,7 +289,9 @@ export default function Pickup({
 							<Box d={{ base: 'none', lg: 'block' }}><ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} /></Box>
 							<VStack spacing={20} px={{ base: 4, md: 8 }} pt={8} pb={24} overflow='hidden'>
 								<VStack w='full' spacing={6} align='flex-start'>
-									<Flex align='center' h='40px'>{locale === 'en' ? 'Latest' : '最新'}</Flex>
+									<NextLink href='/archive/all' >
+										<Flex align='center' h='40px' fontSize='lg'>{locale === 'en' ? 'Latest' : '最新'}<ChevronRightIcon ml={4} /></Flex>
+									</NextLink>
 									<List w='full' overflowX='auto' whiteSpace='nowrap' mt={12} pb={4} borderTopWidth='0' css={thumbnailAreaScrollCss}>
 										{allDescLatestArchives.slice(0, 5).map((i, j) => (
 											<ListItem
@@ -314,7 +317,9 @@ export default function Pickup({
 								<VStack w='full' spacing={12} align='flex-start'>
 									{pickupArchives.map((arc, i) =>
 										<VStack w='full' alignItems='flex-start' spacing={6}>
-											<Box>{arc.categoryName[locale] + ' : ' + arc.paths.name[locale]}</Box>
+											<NextLink href={`/archive/${arc.id}/${arc.paths.link}`} >
+												<Flex align='center' fontSize='lg'>{arc.categoryName[locale] + ' : ' + arc.paths.name[locale]}<ChevronRightIcon ml={4} /></Flex>
+											</NextLink>
 											{/* <HStack w='full' overflowX='auto'>{arc.paths.archives.map((i, j) => <Box w='300px'><ArchiveThumbnail
 													key={j}
 													archive={i}
