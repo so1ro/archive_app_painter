@@ -12,7 +12,6 @@ export const ArchiveStateProvider = (props) => {
   const [{ isWaitingSearchResult }, setIsWaitingSearchResult] = useState<{ isWaitingSearchResult: boolean }>({ isWaitingSearchResult: false })
   const [{ isShowingSearchResult }, setIsShowingSearchResult] = useState<{ isShowingSearchResult: boolean }>({ isShowingSearchResult: false })
   const [{ searchedArchiveResult }, setSearchedArchiveResult] = useState<{ searchedArchiveResult: SearchedArchiveResultInterface[] }>({ searchedArchiveResult: [] })
-  const [{ isVideoMode }, setIsVideoMode] = useState<{ isVideoMode: boolean }>({ isVideoMode: false })
   const [{ isArchiveDesc }, setIsArchiveDesc] = useState<{ isArchiveDesc: boolean }>({ isArchiveDesc: true })
   const [{ currentDisplayArchive }, setCurrentDisplayArchive] = useState<{ currentDisplayArchive: AllArchivesInterface | null }>({ currentDisplayArchive: null })
   const [{ isFetchingMoreContent }, setIsFetchingMoreContent] = useState<{ isFetchingMoreContent: boolean }>({ isFetchingMoreContent: false })
@@ -20,6 +19,7 @@ export const ArchiveStateProvider = (props) => {
   const [{ isShowingTierArchiveOnly }, setIsShowingTierArchiveOnly] = useState<{ isShowingTierArchiveOnly: boolean }>({ isShowingTierArchiveOnly: true })
   const [{ pickupArchives }, setPickupArchives] = useState<{ pickupArchives: AllPickupArchives[] }>({ pickupArchives: null })
   const [{ nextPickUp_StartAt }, setNextPickUp_StartAt] = useState<{ nextPickUp_StartAt: Date }>({ nextPickUp_StartAt: null })
+  // const [{ isVideoMode }, setIsVideoMode] = useState<{ isVideoMode: boolean }>({ isVideoMode: false })
 
 
   // Effect
@@ -38,8 +38,6 @@ export const ArchiveStateProvider = (props) => {
     setIsShowingSearchResult,
     searchedArchiveResult,
     setSearchedArchiveResult,
-    isVideoMode,
-    setIsVideoMode,
     isArchiveDesc,
     setIsArchiveDesc,
     currentDisplayArchive,
@@ -54,6 +52,8 @@ export const ArchiveStateProvider = (props) => {
     setPickupArchives,
     nextPickUp_StartAt,
     setNextPickUp_StartAt,
+    // isVideoMode,
+    // setIsVideoMode,
   }
   return <ArchiveStateContext.Provider value={value} {...props} />;
 };

@@ -70,8 +70,6 @@ export default function ArchiveRoute({
         setSearchedArchiveResult,
         isShowingSearchResult,
         setIsShowingSearchResult,
-        isVideoMode,
-        setIsVideoMode,
         isArchiveDesc,
         setIsArchiveDesc,
         isFetchingMoreContent,
@@ -85,7 +83,7 @@ export default function ArchiveRoute({
     useBottomScrollListener(() => {
         // When Searching, not fetch
         if (checkFavoriteRoute() && (skipNum >= favoriteWork.length)) return
-        if (!checkFavoriteRoute() && isSeaching || (skipNum >= totalNumOfArchives) || isVideoMode) return
+        if (!checkFavoriteRoute() && isSeaching || (skipNum >= totalNumOfArchives)) return
         fetchContentHandler()
     }, { offset: 300 })
 
@@ -112,31 +110,12 @@ export default function ArchiveRoute({
 
     // Effect
     useEffect(() => {
-        // Only when you find router.query.id changing route, set isVideoMode true 
-        router.query.id && setIsVideoMode({ isVideoMode: true })
-        if (!router.query.id) {
-            window.scrollTo({ top: scrollY })
-            setScrollY({ scrollY: 0 })
-        }
-    }, [router.query.id])
-
-    useEffect(() => {
         setDescArchive({ descArchive: filteredDescArchive })
         setAscArchive({ ascArchive: filteredAscArchive })
         setSkipNum({ skipNum: limitSkipNum })
         setScrollY({ scrollY: 0 })
         setIsArchiveDesc({ isArchiveDesc: true })
     }, [currentPaths.join('/')])
-
-    // useEffect(() => {
-    // }, [router.asPath])
-
-    useEffect(() => {
-        // Always before changing route, set isVideoMode false 
-        const handleHistoryChange = (url, { shallow }) => { !url.includes('id=') && setIsVideoMode({ isVideoMode: false }) }
-        router.events.on('routeChangeStart', handleHistoryChange)
-        return () => { router.events.off('routeChangeStart', handleHistoryChange) }
-    }, [])
 
     // favorite
     useEffect(() => {
@@ -304,54 +283,53 @@ export default function ArchiveRoute({
     if (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail)) {
         return (
             <>
-                {!isVideoMode && !isLargerThan992 && <ArchiveDrawer pathObj={pathObj} />}
-                {!isVideoMode &&
-                    <Flex flexGrow={1} direction='row' bg={bgColor}>
-                        <Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }} w='full'>
-                            <Box d={{ base: 'none', lg: 'block' }}><ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} /></Box>
-                            <VStack spacing={8} px={{ base: 4, lg: 8 }} pt={8} pb={24} w='full'>
-                                <Flex justify={{ base: 'none', md: 'space-between' }} flexDirection={{ base: 'column', md: 'row' }} w='full' align='center'>
-                                    <HStack spacing={4} mb={{ base: 2, md: 0 }}>
-                                        <BreadcrumbNav paths={breadCrumbPaths} />
-                                        {checkFavoriteRoute() && <Alert buttonText='リセット' onDelete={deleteFavorite} />}
-                                    </HStack>
-                                    <HStack spacing={{ base: 3, sm: 6, md: 8 }}>
-                                        <SortArrow />
-                                        {totalNumOfArchives <= 1000 && <ArchiveSearch filter={!checkFavoriteRoute() ? filter : generateFavoriteFilter(favoriteWork)} />}
-                                    </HStack>
-                                </Flex>
-                                {isFavoriteArchiveLoading ? <SmallLoadingSpinner /> :
-                                    !!selectedArchive?.length ?
-                                        <>
-                                            <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', xl: 'repeat(4, 1fr)', '4xl': 'repeat(5, 1fr)' }} gap={{ base: 6, md: 8 }} cursor='pointer' w='full'>
-                                                {selectedArchive.map((archive) =>
-                                                    <ArchiveThumbnail
-                                                        key={archive.sys.id}
-                                                        archive={archive}
-                                                        inVideoCompo={false}
-                                                        setSkipTime={null} playing={false}
-                                                        userTierPeriod={periodCurrentUserTier}
-                                                        tierLableInfo={tierLableInfo} />)}
-                                            </Grid>
-                                            {isSeaching && isShowingSearchResult && (searchedArchiveResult.length === limitSkipNum) &&
-                                                <Box>{`上位${limitSkipNum}件の結果を表示しています。`}</Box>}
-                                            {isFetchingMoreContent && <Center>
-                                                <Spinner thickness="3px" speed="0.65s" emptyColor="gray.200"
-                                                    color={useColorModeValue(highlight_color.l, highlight_color.d)} size="md" />
-                                            </Center>}
-                                        </>
-                                        : <Flex flexGrow={1}>
-                                            {!isSeaching && <Center>該当する作品は見つかりませんでした。</Center>}
-                                            {isSeaching && !isShowingSearchResult && !isWaitingSearchResult && <Center>入力中...</Center>}
-                                            {isSeaching && !isShowingSearchResult && isWaitingSearchResult && <SmallLoadingSpinner />}
-                                            {isSeaching && isShowingSearchResult && !isWaitingSearchResult &&
-                                                <Center>検索の結果、該当する作品は見つかりませんでした。</Center>}
-                                        </Flex>}
-                                {isShowingTierArchiveOnly && !isSelectedArchiveInTierPeriod && !checkFavoriteRoute() &&
-                                    <ErrowMessageNotUserTierIncludingArchives />}
-                            </VStack>
-                        </Grid>
-                    </Flex>}
+                {!isLargerThan992 && <ArchiveDrawer pathObj={pathObj} />}
+                <Flex flexGrow={1} direction='row' bg={bgColor}>
+                    <Grid templateColumns={{ base: '1fr', lg: '240px 1fr', xl: '300px 1fr' }} w='full'>
+                        <Box d={{ base: 'none', lg: 'block' }}><ArchiveSideNav pathObj={pathObj} onCloseDrawer={null} /></Box>
+                        <VStack spacing={8} px={{ base: 4, lg: 8 }} pt={8} pb={24} w='full'>
+                            <Flex justify={{ base: 'none', md: 'space-between' }} flexDirection={{ base: 'column', md: 'row' }} w='full' align='center'>
+                                <HStack spacing={4} mb={{ base: 2, md: 0 }}>
+                                    <BreadcrumbNav paths={breadCrumbPaths} />
+                                    {checkFavoriteRoute() && <Alert buttonText='リセット' onDelete={deleteFavorite} />}
+                                </HStack>
+                                <HStack spacing={{ base: 3, sm: 6, md: 8 }}>
+                                    <SortArrow />
+                                    {totalNumOfArchives <= 1000 && <ArchiveSearch filter={!checkFavoriteRoute() ? filter : generateFavoriteFilter(favoriteWork)} />}
+                                </HStack>
+                            </Flex>
+                            {isFavoriteArchiveLoading ? <SmallLoadingSpinner /> :
+                                !!selectedArchive?.length ?
+                                    <>
+                                        <Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', xl: 'repeat(4, 1fr)', '4xl': 'repeat(5, 1fr)' }} gap={{ base: 6, md: 8 }} cursor='pointer' w='full'>
+                                            {selectedArchive.map((archive) =>
+                                                <ArchiveThumbnail
+                                                    key={archive.sys.id}
+                                                    archive={archive}
+                                                    inVideoCompo={false}
+                                                    setSkipTime={null} playing={false}
+                                                    userTierPeriod={periodCurrentUserTier}
+                                                    tierLableInfo={tierLableInfo} />)}
+                                        </Grid>
+                                        {isSeaching && isShowingSearchResult && (searchedArchiveResult.length === limitSkipNum) &&
+                                            <Box>{`上位${limitSkipNum}件の結果を表示しています。`}</Box>}
+                                        {isFetchingMoreContent && <Center>
+                                            <Spinner thickness="3px" speed="0.65s" emptyColor="gray.200"
+                                                color={useColorModeValue(highlight_color.l, highlight_color.d)} size="md" />
+                                        </Center>}
+                                    </>
+                                    : <Flex flexGrow={1}>
+                                        {!isSeaching && <Center>該当する作品は見つかりませんでした。</Center>}
+                                        {isSeaching && !isShowingSearchResult && !isWaitingSearchResult && <Center>入力中...</Center>}
+                                        {isSeaching && !isShowingSearchResult && isWaitingSearchResult && <SmallLoadingSpinner />}
+                                        {isSeaching && isShowingSearchResult && !isWaitingSearchResult &&
+                                            <Center>検索の結果、該当する作品は見つかりませんでした。</Center>}
+                                    </Flex>}
+                            {isShowingTierArchiveOnly && !isSelectedArchiveInTierPeriod && !checkFavoriteRoute() &&
+                                <ErrowMessageNotUserTierIncludingArchives />}
+                        </VStack>
+                    </Grid>
+                </Flex>
             </>
         )
     }
