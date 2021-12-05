@@ -139,7 +139,7 @@ export default function Archive1({ archive, path, tiers }:
 							borderRadius={40}
 							align='center'
 							justify='flex-start'
-							colorScheme='blackAlpha' color={textColor}>
+							color={textColor}>
 							<ArrowBackIcon w={6} h={6} cursor='pointer' />
 						</Flex>
 					</Box>

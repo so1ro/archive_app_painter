@@ -92,7 +92,7 @@ export default function ZoomImgModal({ archive, path, setIsQuitVideo }: { archiv
                         bgColor='rgba(0,0,0, 0.6)'
                         align='center'
                         justify='center'
-                        pos='absolute' top={ArrowIconPosition} left={ArrowIconPosition} colorScheme='blackAlpha' color='#fff'>
+                        pos='absolute' top={ArrowIconPosition} left={ArrowIconPosition} color='#fff'>
                         <ArrowBackIcon w={6} h={6} />
                     </Flex>
                 </ModalContent>
