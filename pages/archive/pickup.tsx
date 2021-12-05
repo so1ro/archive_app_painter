@@ -86,15 +86,17 @@ export default function Pickup({
 	const isLargerThan992 = useMediaQuery("(min-width: 992px)")
 
 	// Pickup randamly
-	if (!pickupArchives || isPast(nextPickUp_StartAt)) {
-		const pickupArchives = allPickupArchives.map(arc => {
-			const currentTime = new Date()
-			setNextPickUp_StartAt({ nextPickUp_StartAt: add(currentTime, { hours: 1 }) })
-			const randomNum = getRandomInt(arc.paths.length)
-			return { ...arc, paths: arc.paths[randomNum] }
-		})
-		setPickupArchives({ pickupArchives: pickupArchives })
-	}
+	useEffect(() => {
+		if (!pickupArchives || isPast(nextPickUp_StartAt)) {
+			const pickupArchives = allPickupArchives.map(arc => {
+				const currentTime = new Date()
+				setNextPickUp_StartAt({ nextPickUp_StartAt: add(currentTime, { hours: 1 }) })
+				const randomNum = getRandomInt(arc.paths.length)
+				return { ...arc, paths: arc.paths[randomNum] }
+			})
+			setPickupArchives({ pickupArchives: pickupArchives })
+		}
+	}, [])
 
 	// Function
 	function getRandomInt(max) {
@@ -196,8 +198,8 @@ export default function Pickup({
 								</List>
 							</VStack>
 							<VStack w='full' spacing={12} align='flex-start'>
-								{pickupArchives.map((arc, i) =>
-									<VStack w='full' alignItems='flex-start' spacing={6}>
+								{pickupArchives?.map((arc) =>
+									<VStack w='full' alignItems='flex-start' spacing={6} key={arc.id}>
 										<NextLink href={`/archive/${arc.id}/${arc.paths.link}`} >
 											<Flex align='center' fontSize='lg'>{arc.categoryName[locale] + ' : ' + arc.paths.name[locale]}<ChevronRightIcon ml={4} /></Flex>
 										</NextLink>

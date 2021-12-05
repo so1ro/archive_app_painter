@@ -90,7 +90,7 @@ export default function ArchiveSideNav(
                                 </h2>
                                 {obj.paths.map(p => (
                                     <ArchiveActiveLink href={`/${route}/${obj.id}/${p.link}`} key={`${obj.id} /${p.link}`}>
-                                        <Link Link onClick={() => {
+                                        <Link onClick={() => {
                                             setIsExpanding({ isExpanding: true })
                                             if (onCloseDrawer !== null) onCloseDrawer()
                                             setSearchKeyword({ searchKeyword: '' })
