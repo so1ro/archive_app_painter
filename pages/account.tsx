@@ -108,14 +108,20 @@ export default function Account({
 
   const UsernameTotalPayment = () => (
     <>
-      <Box mb={2}>{user.email} 様</Box>
-      <HStack mb={24}>
-        <Box>{locale === 'en' ? 'Total payment' : 'これまでのお支払い（累積）'}</Box>
+      <Box mb={8}>{user.email}{locale === 'en' ? '' : ' 様'}</Box>
+      <HStack mb={2}>
+        <Box>{locale === 'en' ? 'Total payment : ' : 'これまでのお支払い（累積） : '}</Box>
         <Box>{currencyUSDChecker(User_Detail?.userCurrency, locale) ?
-          `$${User_Detail?.past_charged_fee} ／ ` : `${User_Detail?.past_charged_fee}円 ／ `}
+          `$${User_Detail?.past_charged_fee}` : `${User_Detail?.past_charged_fee}円`}
+        </Box>
+      </HStack>
+      <HStack mb={24}>
+        <Box>{locale === 'en' ? 'Current Tier : ' : '現在の Tier : '}</Box>
+        <Box>
           {currentUserTierFinder(tiers, User_Detail, locale) ?
             currentUserTierFinder(tiers, User_Detail, locale)?.tierTitle :
-            locale === 'en' ? "No Tier" : 'まだ Tier に達していません。'}</Box>
+            locale === 'en' ? "No Tier" : 'まだ Tier に達していません。'}
+        </Box>
       </HStack>
     </>
   )
