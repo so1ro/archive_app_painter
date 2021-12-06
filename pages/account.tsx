@@ -95,7 +95,7 @@ export default function Account({
 
   // Component
   const CustomerPortalButton = () => (
-    !Subscription_Detail?.canceled_at && <Center mb={24}>
+    <Center mb={24}>
       <Button color='#fff' bg='#69b578' fontSize={{ base: 'xs', sm: 'md' }} onClick={() => {
         handleCustomerPortal(Subscription_Detail.customer_Id)
         toast({ duration: 3000, render: () => (<Toast text={"カスタマーポータルに移動中..."} />) })
@@ -127,7 +127,7 @@ export default function Account({
   if ((!isLoading && !isMetadataLoading) && (subscription_state === 'subscribe' || One_Pay_Detail) && subscription_state !== 'paused') {
 
     // Subscription Status Table contents
-    const subscription_status = Subscription_Detail && [
+    const subscription_table = Subscription_Detail && [
       {
         name: locale === 'en' ? 'Plan' : 'プラン',
         value: currencyUSDChecker(User_Detail?.userCurrency, locale) ?
@@ -157,17 +157,17 @@ export default function Account({
           <UsernameTotalPayment />
 
           {/* Subscription status table */}
-          {subscription_status && <Box mb={24}>
+          {subscription_table && <Box mb={24}>
             <Box border='1px' borderColor={indexBgColor} borderRadius={12} mb={8} pt={2} pb={4} bg={bgColor}>
               <Table variant="striped" colorScheme="gray" size={tableSize} whiteSpace='pre-wrap'>
                 <TableCaption placement='top' mt={0} mb={2}>{locale === 'en' ? 'Subscription detail' : 'サブスクリプション詳細'}</TableCaption>
                 <Tbody>
-                  {subscription_status.map((s, i) => (s.display && (<Tr key={i}><Td w={{ base: '100px', sm: '200px' }}>{s.name}</Td><Td>{s.value}</Td></Tr>)))}
+                  {subscription_table.map((s, i) => (s.display && (<Tr key={i}><Td w={{ base: '100px', sm: '200px' }}>{s.name}</Td><Td>{s.value}</Td></Tr>)))}
                 </Tbody>
               </Table>
             </Box>
             {/* <Center mb={4}>サブスクリプションの詳細は、次のボタンからご確認いただけます。</Center> */}
-            <CustomerPortalButton />
+            {subscription_state !== 'unsubscribe' && <CustomerPortalButton />}
           </Box>}
           {/* {subscription_state !== 'unsubscribe' && <> </>} */}
 
