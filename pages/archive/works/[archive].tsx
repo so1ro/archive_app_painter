@@ -72,9 +72,9 @@ export default function Archive1({ archive, path, tiers }:
 	// Function
 	const stopSkipPlayVideoHandler = async (skipTime: number, isAutoPlay: boolean) => {
 		setIsQuitVideo({ isQuitVideo: true })
+		setIsAutoPlay({ isAutoPlay })
 		await setSkipTime({ skipTime })
 		setIsQuitVideo({ isQuitVideo: false })
-		setIsAutoPlay({ isAutoPlay })
 	}
 
 	const stopSkipPlayLearningVideoHandler = async (skipTimeLearnVideo: number, isAutoPlayLearnVideo: boolean) => {
