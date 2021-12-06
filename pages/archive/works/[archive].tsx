@@ -79,9 +79,9 @@ export default function Archive1({ archive, path, tiers }:
 
 	const stopSkipPlayLearningVideoHandler = async (skipTimeLearnVideo: number, isAutoPlayLearnVideo: boolean) => {
 		setIsQuitLearnVideo({ isQuitLearnVideo: true })
+		setIsAutoPlayLearnVideo({ isAutoPlayLearnVideo })
 		await setSkipTimeLearnVideo({ skipTimeLearnVideo })
 		setIsQuitLearnVideo({ isQuitLearnVideo: false })
-		setIsAutoPlayLearnVideo({ isAutoPlayLearnVideo })
 	}
 
 	const favoriteHandler = async (id) => {
@@ -194,7 +194,7 @@ export default function Archive1({ archive, path, tiers }:
 												<Box w='full' textAlign='right'><FavoriteButton /></Box>}
 
 										</VStack>
-										<ZoomImgModal archive={archive} path={path} setIsQuitVideo={setIsQuitVideo} />
+										<ZoomImgModal archive={archive} path={path} setIsQuitVideo={setIsQuitVideo} setIsAutoPlay={setIsAutoPlay} />
 										{!archive?.youtubeId &&
 											<Box w='full' textAlign='left'>
 												<FavoriteButton />

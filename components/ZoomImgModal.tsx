@@ -20,7 +20,16 @@ import { bg_color, highlight_color } from '@/styles/colorModeValue'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { ZoomIcon } from '@/styles/icons'
 
-export default function ZoomImgModal({ archive, path, setIsQuitVideo }: { archive: AllArchives2Interface, path: string, setIsQuitVideo?: ({ isQuitVideo: boolean }) => void }) {
+export default function ZoomImgModal(
+    { archive,
+        path,
+        setIsQuitVideo,
+        setIsAutoPlay }: {
+            archive: AllArchives2Interface,
+            path: string,
+            setIsQuitVideo?: ({ isQuitVideo: boolean }) => void,
+            setIsAutoPlay?: ({ isAutoPlay: boolean }) => void,
+        }) {
 
     // Hook
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -44,6 +53,7 @@ export default function ZoomImgModal({ archive, path, setIsQuitVideo }: { archiv
             pos='relative' borderRadius={archive?.youtubeId ? '12px' : '0px'} cursor='zoom-in'
             onClick={() => {
                 setIsQuitVideo({ isQuitVideo: true })
+                setIsAutoPlay({ isAutoPlay: false })
                 onOpen()
             }}>
             <Image
