@@ -46,7 +46,10 @@ export default function Archive(
   //// Landing Page ////
   if (
     (!isLoading && !isMetadataLoading) &&
-    (!user || ((!!subscription_state && (subscription_state === 'unsubscribe' || subscription_state === 'paused')) && !One_Pay_Detail))) {
+    (!user || (
+      (!!subscription_state && (subscription_state === 'unsubscribe' || subscription_state === 'paused')) &&
+      (!One_Pay_Detail || One_Pay_Detail?.length === 0)))
+  ) {
 
     return (
       <PageShell customPT={null} customSpacing={{ base: 20, lg: 32 }}>
@@ -90,7 +93,7 @@ export default function Archive(
   //// Redirect to Archive Page ////
   if (
     (!isLoading && !isMetadataLoading) &&
-    (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail))) {
+    (user && ((!!subscription_state && subscription_state === 'subscribe') || (!!One_Pay_Detail && One_Pay_Detail?.length !== 0)))) {
     if (typeof window !== 'undefined') router.push('/archive/pickup')
     return <LoadingSpinner />
   }

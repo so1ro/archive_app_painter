@@ -300,10 +300,10 @@ export default function Account({
           <CustomerPortalButton />
 
           {/* Tierプロモーション */}
-          <Box mt={{ base: 24, lg: 32 }}>
+          {localeAllTiers.length > 0 && <Box mt={{ base: 24, lg: 32 }}>
             <Text mb={4}>Tier を追加購入することも可能です。</Text>
             <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'account'} />
-          </Box>
+          </Box>}
         </Box>
       </PageShell>
     )
