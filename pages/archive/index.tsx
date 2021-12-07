@@ -34,7 +34,7 @@ export default function Archive(
   const { sys: { id }, message, content, functions, merit, vimeoId, explain, annotation } = landingPageText[0]
   const meritListItems = [content, functions, merit]
   const { user, error, isLoading } = useUser()
-  const { User_Detail, isMetadataLoading, subscription_state, One_Pay_Detail, error_metadata } = useUserMetadata()
+  const { User_Detail, isMetadataLoading, Subscription_Detail, subscription_state, One_Pay_Detail, error_metadata } = useUserMetadata()
   const isLargerThan768 = useMediaQuery("(min-width: 768px)")
   const messageWithoutNewline = message[locale].replace('\n', '')
   const localeAllPrices = allPrices.filter(price => locale === 'en' ? price.currency === 'usd' : price.currency === 'jpy')
@@ -76,15 +76,20 @@ export default function Archive(
               <PriceList user={user} allPrices={localeAllPrices} annotation={annotation ?? null} returnPage={'archive'} />
             </Box>}
           {/* サブスクリプションもワンペイ永久ご視聴もご購入前 */}
-          <Box>
+          {subscription_state !== 'paused' && <Box>
             <Text w='full' fontSize='xl' fontWeight='bold' mb={5} textAlign={{ base: 'center', sm: 'left' }}>{locale === 'en' ? 'One-Pay Plan' : 'ワンペイプラン'}</Text>
             <PriceList user={user} allPrices={localeAllTiers} annotation={null} returnPage={'archive'} />
-          </Box>
+          </Box>}
           {/* サブスクリプションが一時停止の場合 */}
-          {subscription_state === 'paused' &&
-            <NextLink href={'/account'}>
-              <Button color='#fff' bg='#69b578' fontSize={{ base: 'xs', sm: 'md' }} >アカウントページへ</Button>
-            </NextLink>}
+          {subscription_state === 'paused' && Subscription_Detail.pause_collection &&
+            <VStack spacing={4}>
+              {Subscription_Detail.pause_collection.resumes_at ?
+                <Box>サブスクリプションは、{Subscription_Detail.pause_collection.resumes_at}に再開されます。</Box> :
+                <Box>サブスクリプションは、現在停止中です。</Box>}
+              <NextLink href={'/account'}>
+                <Button color='#fff' bg='#69b578' fontSize={{ base: 'xs', sm: 'md' }} >アカウントページへ</Button>
+              </NextLink>
+            </VStack>}
         </VStack>
       </PageShell>
     )
