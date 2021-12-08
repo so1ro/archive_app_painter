@@ -24,11 +24,10 @@ export default function Home(
   }) {
 
   const { user, error, isLoading } = useUser()
-
   return (
     <>
       <Hero heroSlideImgs={heroSlideImgs[0].imageCollection.items} introTextAvatar={introTextAvatar} newArchives={newArchives} />
-      {newArchives &&
+      {!!newArchives?.length &&
         <PageShell customPT={{ base: 24, lg: 32 }} customSpacing={null} id={'news'}>
           <News newArchives={newArchives} />
         </PageShell>}

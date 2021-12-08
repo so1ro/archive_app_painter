@@ -87,7 +87,7 @@ export default function Hero({ heroSlideImgs, introTextAvatar, newArchives }) {
                             alt='Author' />
                     </Box>
                 </HStack> */}
-                {newArchives && isLargerThan600 &&
+                {!!newArchives?.length && isLargerThan600 &&
                     <a href="#news">
                         <HStack spacing={2} pos='absolute' px={6} py={3} bottom={{ base: 7, lg: 5 }} right={5} bgColor={bgColorNav} borderRadius={48} cursor='pointer'>
                             <Text>{locale === 'en' ? 'News' : '新着'}</Text>
