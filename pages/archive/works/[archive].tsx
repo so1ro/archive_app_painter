@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import { useUser } from '@auth0/nextjs-auth0'
 import { useLayoutEffect, useState } from 'react'
 import { useUserMetadata } from '@/context/useUserMetadata'
@@ -133,9 +132,6 @@ export default function Archive1({ archive, path, tiers }:
 	if (user && ((subscription_state === 'subscribe') || !!One_Pay_Detail) && !isArchiveNotInTierPeriod_userIsNotSubscriber) {
 		return (
 			<>
-				<Head>
-					<link rel="preload" href={`${path}/index.html?z=${archive.archiveNumber}`} as="document" />
-				</Head>
 				{/* <VStack w='full' maxW={{ base: '1000px' }} py={{ base: 12, lg: 12 }} margin='0 auto'> */}
 				<PageShell customPT={{ base: 6, lg: 10 }} customSpacing={archive?.learningVideoId ? { base: 0, lg: 0 } : { base: 6, lg: 6 }} id={null}>
 					<Box w='full'>
