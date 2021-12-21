@@ -40,3 +40,6 @@ workbox-*.js
 # /public/sw.js.map
 # /public/workbox-6b19f60b.js
 # /public/workbox-6b19f60b.js.map
+
+# vscode
+/.vscode/settings.json
